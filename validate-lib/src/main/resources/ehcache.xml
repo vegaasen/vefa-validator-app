@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache name="Default">
+  <defaultCache
+      maxElementsInMemory="10000"
+      eternal="false"
+      timeToIdleSeconds="1200"
+      timeToLiveSeconds="1200"
+      overflowToDisk="true"
+      diskSpoolBufferSizeMB="30"
+      maxElementsOnDisk="10000000"
+      diskPersistent="false"
+      diskExpiryThreadIntervalSeconds="120"
+      memoryStoreEvictionPolicy="LRU"/>
+
+  <cache name="transformer"
+         maxElementsInMemory="100"
+         maxElementsOnDisk="0"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="0"
+         memoryStoreEvictionPolicy="LFU">
+  </cache>
+
+</ehcache>
