@@ -54,6 +54,11 @@ public class Validate {
 	public List<Message> messages = new ArrayList<Message>();
 
 	/**
+	 * Is the current XML valid?.
+	 */		
+	public boolean valid;
+	
+	/**
 	 * Properties file as PropertiesFile object.
 	 */	
 	private PropertiesFile propertiesFile;
@@ -108,8 +113,11 @@ public class Validate {
 			message.description = "No entry is found in configuration for version '" + this.version+ "' and identificator '" + this.schema + "', unable to perform validation!";			
 			this.messages.add(message);
 		}
+		
+		// Set valid attribute
+		this.setIsValid();
 	}
-
+	
 	/**
 	 * Perform Difi validation of XML based on Difi configuration.
 	 * 
@@ -228,4 +236,22 @@ public class Validate {
 		Utils utils = new Utils();				
 		return utils.xmlDOMToString(doc);
 	}
+	
+	/**
+	 * Sets attribute valid. That is if the current XML is valid.
+	 * Does this by looping the message collection and checking for
+	 * messages with fatal message type.
+	 * 
+	 * @throws Exception
+	 */	
+	private void setIsValid() throws Exception {
+		this.valid = true;
+		
+		for (Message message : this.messages) {
+			if (message.messageType == MessageType.Fatal) {
+				this.valid = false;
+				return;
+			}
+		}
+	}	
 }
