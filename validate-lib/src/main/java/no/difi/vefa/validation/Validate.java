@@ -16,6 +16,7 @@ import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.properties.PropertiesFile;
+import no.difi.vefa.ws.logging.StatLogger;
 import no.difi.vefa.xml.Utils;
 
 /**
@@ -116,6 +117,11 @@ public class Validate {
 		
 		// Set valid attribute
 		this.setIsValid();
+		
+		// Log statistics
+		if (this.propertiesFile.logStatistics == true) {
+			StatLogger.info(this.schema, this.version, this.valid, this.messages);	
+		}		
 	}
 	
 	/**

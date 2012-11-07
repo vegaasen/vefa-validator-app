@@ -18,6 +18,11 @@ public class PropertiesFile {
 	public Boolean suppressWarnings;
 	
 	/**
+	 * Enable logging of usage.
+	 */	
+	public Boolean logStatistics;
+	
+	/**
 	 * Load properties file and set variables.
 	 * 
 	 * @param propertiesFile Path to properties file as String
@@ -28,5 +33,6 @@ public class PropertiesFile {
 		configFile.load(new FileInputStream(propertiesFile));
 		this.dataDir = configFile.getProperty("DATA_DIR");
 		this.suppressWarnings = "true".equals(configFile.getProperty("SUPPRESS_WARNINGS"));
+		this.logStatistics = "true".equals(configFile.getProperty("LOG_STATISTICS"));
 	}
 }
