@@ -20,13 +20,18 @@ public class Message {
 	/**
 	 * Message title.
 	 */
-	public String title;
+	public String title = "";
 	
 	/**
 	 * Message description.
 	 */
-	public String description;
-	
+	public String description = "";
+
+	/**
+	 * Schematron rule id.
+	 */
+	public String schematronRuleId = "";
+
 	/**
 	 * Collection of message hints.
 	 */

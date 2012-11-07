@@ -3,6 +3,9 @@ package no.difi.vefa.validation;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -52,7 +55,8 @@ public class SchematronTransformation {
 					message.messageType = MessageType.Warning;
 				}								
 				message.title = text;
-				message.description = "Test: " + test + ", Location: " + location; 
+				message.description = "Test: " + test + ", Location: " + location;
+				message.schematronRuleId = getSchematronRule(text);				
 				messages.add(message);				
 			}
 			
@@ -68,5 +72,23 @@ public class SchematronTransformation {
 			message.description = exceptionAsString;			
 			messages.add(message);
 		}
+	}
+
+	/**
+	 * Tries to extract SCHEMATRON rule id from text
+	 * 
+	 * @param text Text to search for SCHEMATRON rule
+	 * @return SCHEMATRON rule id as String
+	 */	
+	private String getSchematronRule(String text) {
+		String r = "";
+		
+		Pattern p = Pattern.compile("\\[(.*?)\\]");
+		Matcher m = p.matcher(text);
+		while(m.find()) {
+			r = m.group().replace("[", "").replace("]", "");
+		}
+		
+		return r;
 	}
 }

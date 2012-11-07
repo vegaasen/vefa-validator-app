@@ -207,7 +207,12 @@ public class Validate {
 				// Add description
 				Element desc = doc.createElement("description");
 				desc.appendChild(doc.createTextNode(message.description));
-				msg.appendChild(desc);	
+				msg.appendChild(desc);
+				
+				// Add schematron rule id
+				Element schematronRuleId = doc.createElement("schematronRuleId");
+				schematronRuleId.appendChild(doc.createTextNode(message.schematronRuleId));
+				msg.appendChild(schematronRuleId);
 				
 				// Add hints to message
 				if (message.hints != null) {
