@@ -9,6 +9,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import no.difi.vefa.message.Message;
+import no.difi.vefa.properties.PropertiesFile;
 
 /**
  * This class is used to log usage of the validator mainly for statistic use.
@@ -22,15 +23,16 @@ public class StatLogger {
 	 * @param version Version as String
 	 * @param valid Is document valid as Boolean
 	 * @param  messages  List of messages
+	 * @param propertiesFile PropertiesFile
 	 * @throws Exception
 	 */		
-	public static void info(String schema, String version, Boolean valid, List<Message> messages) throws Exception {
+	public static void info(String schema, String version, Boolean valid, List<Message> messages, PropertiesFile propertiesFile) throws Exception {
 	      LogManager logManager = LogManager.getLogManager();
 	      Logger logger = Logger.getLogger("StatLogger");
 	      
 	      logManager.addLogger(logger);
   
-	      String pattern = "VEFAvalidator%g.log";
+	      String pattern = propertiesFile.dataDir + "/LOG/VEFAvalidator%g.log";
 	      int limit = 1000000;
 	      int numLogFiles = 50000;
   
