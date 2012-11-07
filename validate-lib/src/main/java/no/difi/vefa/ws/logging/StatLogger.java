@@ -9,6 +9,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import no.difi.vefa.message.Message;
+import no.difi.vefa.message.MessageType;
 import no.difi.vefa.properties.PropertiesFile;
 
 /**
@@ -50,8 +51,29 @@ public class StatLogger {
 	      logger.setLevel(Level.INFO);
 	      logger.setUseParentHandlers(false);
 	      
-	      logger.log(Level.INFO, schema + ";" + version + ";" + valid);
+	      logger.log(Level.INFO, schema + ";" + version + ";" + valid + ";" + getSchematronRules(messages));
   
 	      fileHandler.close();
-	}		
+	}
+	
+	/**
+	 * Extracts fatal SCHEMATRON errors
+	 * 
+	 * @param  messages  List of messages
+	 * @return String of SCHEMATRON rules as comma separated list
+	 */		
+	private static String getSchematronRules(List<Message> messages) {
+		String r = "";
+		
+		for (Message message : messages) {
+			if (message.messageType == MessageType.Fatal && message.schematronRuleId != "") {
+				r += message.schematronRuleId + ",";
+			}
+		}
+		
+		if (r.length() > 0) {
+			r = r.substring(0, r.length() - 1);
+		}
+		return r;
+	}
 }
