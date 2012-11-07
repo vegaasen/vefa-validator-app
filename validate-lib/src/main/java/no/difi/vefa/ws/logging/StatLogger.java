@@ -16,28 +16,24 @@ import no.difi.vefa.properties.PropertiesFile;
  * This class is used to log usage of the validator mainly for statistic use.
  */
 public class StatLogger {
-
+	private static Logger logger = Logger.getLogger("StatLogger");
+	private static FileHandler fileHandler = null;
+	
 	/**
-	 * Writes a log message to log the files.
+	 * Set up logger.
 	 * 
-	 * @param schema Schema identificator as String
-	 * @param version Version as String
-	 * @param valid Is document valid as Boolean
-	 * @param  messages  List of messages
 	 * @param propertiesFile PropertiesFile
 	 * @throws Exception
 	 */		
-	public static void info(String schema, String version, Boolean valid, List<Message> messages, PropertiesFile propertiesFile) throws Exception {
-	      LogManager logManager = LogManager.getLogManager();
-	      Logger logger = Logger.getLogger("StatLogger");
-	      
+	public StatLogger(PropertiesFile propertiesFile) throws Exception {
+	      LogManager logManager = LogManager.getLogManager();	      	      
 	      logManager.addLogger(logger);
   
 	      String pattern = propertiesFile.dataDir + "/LOG/VEFAvalidator%g.log";
 	      int limit = 1000000;
 	      int numLogFiles = 50000;
   
-	      FileHandler fileHandler = new FileHandler(pattern, limit, numLogFiles, true);      		      	      
+	      fileHandler = new FileHandler(pattern, limit, numLogFiles, true);      		      	      
 	      
 	      fileHandler.setFormatter(new Formatter() {
 
@@ -49,11 +45,20 @@ public class StatLogger {
 	      
 	      logger.addHandler(fileHandler);  
 	      logger.setLevel(Level.INFO);
-	      logger.setUseParentHandlers(false);
-	      
-	      logger.log(Level.INFO, schema + ";" + version + ";" + valid + ";" + getSchematronRules(messages));
-  
-	      fileHandler.close();
+	      logger.setUseParentHandlers(false);	      
+	}
+
+	/**
+	 * Writes a log message to log the files.
+	 * 
+	 * @param schema Schema identificator as String
+	 * @param version Version as String
+	 * @param valid Is document valid as Boolean
+	 * @param  messages  List of messages
+	 */	
+	public void logStats(String schema, String version, Boolean valid, List<Message> messages) {
+	      logger.log(Level.INFO, schema + ";" + version + ";" + valid + ";" + getSchematronRules(messages));	      
+	      fileHandler.close();		
 	}
 	
 	/**
@@ -62,7 +67,7 @@ public class StatLogger {
 	 * @param  messages  List of messages
 	 * @return String of SCHEMATRON rules as comma separated list
 	 */		
-	private static String getSchematronRules(List<Message> messages) {
+	private String getSchematronRules(List<Message> messages) {
 		String r = "";
 		
 		for (Message message : messages) {

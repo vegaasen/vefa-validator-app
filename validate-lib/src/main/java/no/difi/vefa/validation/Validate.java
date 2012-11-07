@@ -120,7 +120,8 @@ public class Validate {
 		
 		// Log statistics
 		if (this.propertiesFile.logStatistics == true) {
-			StatLogger.info(this.schema, this.version, this.valid, this.messages, this.propertiesFile);	
+			StatLogger statLogger = new StatLogger(this.propertiesFile);
+			statLogger.logStats(this.schema, this.version, this.valid, this.messages);
 		}		
 	}
 	
