@@ -17,7 +17,7 @@
 
 	<div class="row">
 		<div class="twelvecol last">
-			<p>The VEFA Validator is a program used to validate EHF xml files. The validator reads an XML and validates it 
+			<p>AAAAThe VEFA Validator is a program used to validate EHF xml files. The validator reads an XML and validates it 
 			against a set of validation steps. For each of these validation steps the validator accumulates potential warnings and errors. 
 			After the validator is finished validating the XML it returns a XML of potential messages.</p>
 		</div><!-- /.twelvecol -->
