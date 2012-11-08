@@ -10,6 +10,7 @@
   <packaging>war</packaging>
   
   <build>
+  	<finalName>validate-web</finalName>
   	<plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>

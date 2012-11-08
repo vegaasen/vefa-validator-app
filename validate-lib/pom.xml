@@ -9,6 +9,7 @@
   <artifactId>validate-lib</artifactId>
   
   <build>
+  	<finalName>validate-lib</finalName>
   	<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
