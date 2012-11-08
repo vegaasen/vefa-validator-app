@@ -107,6 +107,14 @@
 		
 		// Send XML to ws and prosess result
 		$("#readFileButton").click(function() {
+			// Empty result and display wait text
+			var r = '<div style="height: 20px;"></div>';
+			r += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
+			r += '<h3>Waiting for transformation result!</h3>';
+			r += '<p>Please be patient:-)</p>';			
+			$('#transformResult').html(r);
+			
+			// Get result
 			var url = wsUrl + '/' + escape($('#xsltSelect :selected').val());
 			
 			$.ajax({
