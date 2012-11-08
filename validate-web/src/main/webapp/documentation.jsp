@@ -17,7 +17,7 @@
 
 	<div class="row">
 		<div class="twelvecol last">
-			<p>Dokumentasjonsside. Primært om web service.</p>
+			<p>Documentation is available <a href="documentation/Documentation.rtf">here</a>.</p>
 		</div><!-- /.ninecol -->
 	</div><!-- /.row -->
 
