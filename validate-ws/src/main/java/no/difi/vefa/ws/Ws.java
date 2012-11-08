@@ -27,8 +27,7 @@ public class Ws
 		ListVersions listVersions = new ListVersions();
 		listVersions.baseUri = uri.getBaseUri().toString();
 		
-		//return listVersions.getVersions();
-		return "<test>ASD</test>";
+		return listVersions.getVersions();
 	}	
 
 	@GET
