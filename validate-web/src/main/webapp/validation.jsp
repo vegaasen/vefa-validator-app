@@ -64,9 +64,25 @@
 		});				
 		
 		function getVersions(xml){
+			// Get versions and add to array
+			var versions = [];
+			
 			$(xml).find('version').each(function(){
 				var version = $(this).text();
 				
+				versions.push({
+					version: version
+				});
+			});
+			
+			// Sort array descending to get highest versions first, eg. 1.5, 1.4 etc
+			versions.sort();
+			versions.reverse();
+			
+			// For each version get available schemas
+		    jQuery.each(versions, function(i, val) {
+				var version = versions[i].version;
+
 				// Get available schemas for version
 				$.ajax({
 					url: wsUrl + '/' + version,
@@ -86,8 +102,7 @@
 						});
 					});			
 				};
-				
-			});
+		    });									
 		}		
 		
 		// Send XML to ws and prosess result
