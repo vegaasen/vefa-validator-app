@@ -143,15 +143,20 @@
 				var description = $(this).find('description').text();	
 				
 				var style = '';
+				var messageTypeTitle = '';
+				
 				if (messageType == 'FatalError') {
-					style = 'color: red;'	
+					style = 'color: red;'
+						messageTypeTitle = 'Error';
 				} else if (messageType == 'Fatal') {
 					style = 'color: red;'
+						messageTypeTitle = 'Error';
 				} else if (messageType == 'Warning') {
 					style = 'color: black;'
+						messageTypeTitle = 'Warning';
 				}
 				
-				r += '<h3 style="' + style + '" title="' + messageType + '">' + title + '</h3>';
+				r += '<h3 style="' + style + '" title="' + messageTypeTitle + '">' + messageTypeTitle + ': ' + title + '</h3>';
 				r += '<p>' + description + '</p>';
 			});
 			
