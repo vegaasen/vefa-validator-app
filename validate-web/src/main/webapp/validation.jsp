@@ -93,13 +93,14 @@
 				function getSchemas(xml){
 					$(xml).find('schema').each(function(){
 						var id = $(this).attr('id');
-						var href = $(this).attr('xlink:href');
+						var href = $(this).attr('xlink:href');												
 						
+						var name = '';
 						$(this).find('name').each(function(){
-							var value = $(this).find('en').text();
-							
-							$('#xsltSelect').append($("<option></option>").attr("value",version + '/' + id).text(version + ' - ' + value)); 
+							name = $(this).find('en').text();														 
 						});
+						
+						$('#xsltSelect').append($("<option></option>").attr("value",version + '/' + id).text(version + ' - ' + name));
 					});			
 				};
 		    });									
