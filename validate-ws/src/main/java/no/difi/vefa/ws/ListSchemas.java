@@ -1,7 +1,7 @@
 package no.difi.vefa.ws;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import no.difi.vefa.configuration.Configuration;
 import no.difi.vefa.properties.PropertiesFile;
@@ -42,7 +42,7 @@ public class ListSchemas {
 		propFile.main(validate.pathToPropertiesFile);
 		
 		// Hastable to hold schemas
-		Hashtable<String, String> table = new Hashtable<String, String>();
+		LinkedHashSet<String[][]> table = new LinkedHashSet<String[][]>();
 			
 		// Add schema to table from Standard configuration file
 		Document standardConfig = configuration.fileToXMLDOM(propFile.dataDir + "/STANDARD/config.xml", propFile);
@@ -54,10 +54,10 @@ public class ListSchemas {
 			
 		String v = "<schemas version=\"" + this.version + "\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
 		
-		Enumeration<String> e = table.keys();
-		while (e.hasMoreElements()) {
-			String key = (String) e.nextElement();
-			v += table.get(key);	
+		Iterator<String[][]> itr = table.iterator();
+		while(itr.hasNext()) {
+			String[][] result = (String[][]) itr.next(); 
+			v += result[1][0];
 		}
 		
 		v += "</schemas>";
@@ -72,7 +72,7 @@ public class ListSchemas {
 	 * @param table HashTable to hold schemas
 	 * @throws Exception
 	 */	
-	private void addSchemaToList(Document document, Hashtable<String, String> table) throws Exception{
+	private void addSchemaToList(Document document, LinkedHashSet<String[][]> table) throws Exception{
 		// Setup
 		Utils utils = new Utils();
 		
@@ -94,7 +94,9 @@ public class ListSchemas {
 			s += "</name>";
 			s += "</schema>";
 			
-			table.put(schema.getAttribute("id"), s);
+			String[][] result = {{schema.getAttribute("id")},{s}};
+			
+			table.add(result);
 		}
 	}
 }
