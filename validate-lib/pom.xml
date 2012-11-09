@@ -45,13 +45,12 @@
 		<artifactId>jcl-over-slf4j</artifactId>
 		<version>1.6.1</version>
 		<scope>runtime</scope>
-	</dependency>
-	<!-- Xalan -->
-    <dependency> 
-	    <groupId>xalan</groupId> 
-	    <artifactId>xalan</artifactId> 
-	    <version>2.7.1</version> 
-	    <scope>runtime</scope> 
-    </dependency>		 
+	</dependency>   
+    <!-- Saxon -->
+	<dependency>
+		<groupId>net.sf.saxon</groupId>
+		<artifactId>Saxon-HE</artifactId>
+		<version>9.4</version>
+	</dependency>                		 
   </dependencies>
 </project>

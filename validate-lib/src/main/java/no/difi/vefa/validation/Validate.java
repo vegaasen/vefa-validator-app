@@ -71,7 +71,10 @@ public class Validate {
 	 * 
 	 * @throws Exception 
 	 */
-	public void main() throws Exception {		
+	public void main() throws Exception {
+		// Set Saxon as XML parser
+		System.setProperty("javax.xml.transform.TransformerFactory","net.sf.saxon.TransformerFactoryImpl");
+		
 		// Load properties file
 		PropertiesFile propFile = new PropertiesFile();
 		propFile.main(this.pathToPropertiesFile);
