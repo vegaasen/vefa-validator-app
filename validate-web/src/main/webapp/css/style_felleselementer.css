@@ -528,7 +528,8 @@ nav .orange {
 	overflow: hidden;
 }
 
-.main p {
+.main .ninecol p,
+.main .eightcol p {
 	margin-bottom: 10px;
 }
 
@@ -718,7 +719,8 @@ nav .orange {
 	color: #222;
 }
 
-.box p {
+.box .threecol p,
+.box .fourcol p {
 	padding-bottom: 5px;
 }
 

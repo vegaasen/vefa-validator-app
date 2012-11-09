@@ -16,11 +16,29 @@
 	</div><!-- /.row submenues -->
 
 	<div class="row">
-		<div class="twelvecol last">
+		<div class="eightcol">
 			<p>The VEFA Validator is a program used to validate EHF xml files. The validator reads an XML and validates it 
 			against a set of validation steps. For each of these validation steps the validator accumulates potential warnings and errors. 
 			After the validator is finished validating the XML it returns a XML of potential messages.</p>
 		</div><!-- /.twelvecol -->
+		
+		<div class="fourcol last">
+		
+			<section class="mod box standardbox">
+				<div class="mod-wrap">
+					<div class="mod-hd">
+						<h1>See also</h1>
+					</div><!-- /.mod-hd -->
+					<div class="mod-bd">
+						<h2 class="first">Links</h2>
+						<p><a href="http://anskaffelser.no/e-handel/faktura">Electronic invoice</a></p>
+						<p><a href="http://anskaffelser.no/e-handel/faktura/teknisk-informasjon">Technical information</a></p>
+						<p><a href="http://anskaffelser.no/e-handel/faktura/nyheter">News</a></p>						
+					</div><!-- /.mod-bd -->
+				</div><!-- /.mod-wrap -->
+			</section>
+					
+		</div>
 	</div><!-- /.row -->
 
 </div><!-- /.container main -->
