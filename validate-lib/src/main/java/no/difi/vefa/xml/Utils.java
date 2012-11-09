@@ -93,15 +93,12 @@ public class Utils {
 	 * @return innerXML of Node as String
 	 * @throws Exception
 	 */
-	public String innerXml(Node node) throws Exception {
-	    DOMImplementationLS lsImpl = (DOMImplementationLS)node.getOwnerDocument().getImplementation().getFeature("LS", "3.0");
-	    LSSerializer lsSerializer = lsImpl.createLSSerializer();
-	    lsSerializer.getDomConfig().setParameter("xml-declaration", false);
-	    NodeList childNodes = node.getChildNodes();
-	    StringBuilder sb = new StringBuilder();
-	    for (int i = 0; i < childNodes.getLength(); i++) {
-	       sb.append(lsSerializer.writeToString(childNodes.item(i)));
-	    }
-	    return sb.toString(); 
+	public String innerXml(Node node) throws Exception {	    
+	    StringWriter sw = new StringWriter();
+		Transformer t = TransformerFactory.newInstance().newTransformer();
+		t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		t.setOutputProperty(OutputKeys.INDENT, "yes");
+		t.transform(new DOMSource(node), new StreamResult(sw));	    
+		return sw.toString(); 
 	}	
 }
