@@ -7,7 +7,6 @@ import java.util.List;
 
 import no.difi.vefa.xml.Utils.XMLNamespace;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -55,10 +54,6 @@ public class UtilsTest {
 				"<cbc:ID>K987654321</cbc:ID>" +
 				"</cac:ContractDocumentReference>" +
 				"</Invoice>";
-	}
-
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	@Test
