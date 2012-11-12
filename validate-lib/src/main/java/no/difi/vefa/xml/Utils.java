@@ -2,7 +2,10 @@ package no.difi.vefa.xml;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.List;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -85,6 +88,53 @@ public class Utils {
 	}
 
 	/**
+	 * Performs XPath Query on XMLDOM with XML namespace
+	 * 
+	 * @param document XML Document
+	 * @param xPath XPath as String
+	 * @param namespaces List of XML namespaces
+	 * @return NodeLIst Result of XPath Query as NodeList
+	 * @throws Exception
+	 */	
+	public NodeList xmlDOMXPathQueryWithNS(Document document, String xPath, final List<XMLNamespace> namespaces) throws Exception {
+		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+		domFactory.setNamespaceAware(true); 
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		
+		// Set namespaces
+		xpath.setNamespaceContext(new NamespaceContext() {
+			
+			@SuppressWarnings("rawtypes")
+			@Override
+			public Iterator getPrefixes(String namespaceURI) {
+				return null;
+			}
+			
+			@Override
+			public String getPrefix(String namespaceURI) {
+				return null;
+			}
+			
+			@Override
+			public String getNamespaceURI(String prefix) {
+				for (XMLNamespace ns : namespaces) {
+					if (ns.prefix.equals(prefix)) {
+						return ns.url;
+					}						
+				}
+				return null;			
+			}
+		});
+		
+		// XPath Query for showing all nodes value
+		XPathExpression expr = xpath.compile(xPath);
+		Object result = expr.evaluate(document, XPathConstants.NODESET);
+		NodeList nodeList = (NodeList) result;
+		
+		return nodeList;
+	}	
+
+	/**
 	 * Returns innerXML of Node
 	 * 
 	 * @param node XML Node
@@ -98,5 +148,20 @@ public class Utils {
 		t.setOutputProperty(OutputKeys.INDENT, "yes");
 		t.transform(new DOMSource(node), new StreamResult(sw));	    
 		return sw.toString(); 
+	}	
+	
+	/**
+	 * This class is used to store an XML namespace element.
+	 */	
+	public class XMLNamespace {
+		/**
+		 * XML namespace prefix.
+		 */		
+		public String prefix;
+		
+		/**
+		 * XML namespace URL
+		 */		
+		public String url;
 	}	
 }

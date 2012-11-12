@@ -60,7 +60,6 @@ public class XSDValidation {
 			try {
 				stream = new FileInputStream(this.propertiesFile.dataDir + systemId);				
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	        	    	
 			return new Input(publicId, systemId, stream);

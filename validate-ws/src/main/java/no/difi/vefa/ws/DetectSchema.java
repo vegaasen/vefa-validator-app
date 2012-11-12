@@ -2,11 +2,13 @@ package no.difi.vefa.ws;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.validation.WellFormed;
 import no.difi.vefa.xml.Utils;
+import no.difi.vefa.xml.Utils.XMLNamespace;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -48,10 +50,17 @@ public class DetectSchema {
 		// Load xml to DOM
 		Document document = utils.stringToXMLDOM(xml);
 
+		// Add XML Namespace
+		List<XMLNamespace> namespaces = new ArrayList<XMLNamespace>();		
+		XMLNamespace ns = utils.new XMLNamespace();
+		ns.prefix = "cbc";
+		ns.url = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2";
+		namespaces.add(ns);
+		
 		// Get ProfileID and CustomizationID from xml
-		Node pId = utils.xmlDOMXPathQuery(document, "*/ProfileID").item(0);
-		Node cId = utils.xmlDOMXPathQuery(document, "*/CustomizationID").item(0);
-				
+		Node pId = utils.xmlDOMXPathQueryWithNS(document, "*/cbc:ProfileID", namespaces).item(0);
+		Node cId = utils.xmlDOMXPathQueryWithNS(document, "*/cbc:CustomizationID", namespaces).item(0);
+
 		if (pId == null) {
 			Message message = new Message();
 			message.validationType = ValidationType.XMLWellFormed;
@@ -75,6 +84,6 @@ public class DetectSchema {
 		}
 		
 		// Build schema id				
-		this.schema = profileId + "#" + customizationId;
-	}
+		this.schema = profileId + "#" + customizationId;				
+	}	
 }
