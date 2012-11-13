@@ -11,12 +11,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import no.difi.vefa.configuration.Configuration;
+import no.difi.vefa.logging.StatLogger;
 import no.difi.vefa.message.Hint;
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.properties.PropertiesFile;
-import no.difi.vefa.ws.logging.StatLogger;
 import no.difi.vefa.xml.Utils;
 
 /**

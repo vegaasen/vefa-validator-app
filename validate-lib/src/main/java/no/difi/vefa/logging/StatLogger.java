@@ -1,4 +1,4 @@
-package no.difi.vefa.ws.logging;
+package no.difi.vefa.logging;
 
 import java.util.List;
 
