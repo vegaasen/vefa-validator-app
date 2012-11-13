@@ -1,7 +1,7 @@
 package no.difi.vefa.message;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used to describe a message.
@@ -35,5 +35,5 @@ public class Message {
 	/**
 	 * Collection of message hints.
 	 */
-	public Set<Hint> hints = new HashSet<Hint>();
+	public List<Hint> hints = new ArrayList<Hint>();
 }
