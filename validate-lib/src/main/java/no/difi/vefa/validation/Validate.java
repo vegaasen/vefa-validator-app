@@ -73,7 +73,7 @@ public class Validate {
 	 */
 	public void main() throws Exception {
 		// Set Saxon as XML parser
-		System.setProperty("javax.xml.transform.TransformerFactory","net.sf.saxon.TransformerFactoryImpl");
+		System.setProperty("javax.xml.transform.TransformerFactory","net.sf.saxon.TransformerFactoryImpl");		
 		
 		// Load properties file
 		PropertiesFile propFile = new PropertiesFile();
@@ -123,7 +123,11 @@ public class Validate {
 		
 		// Log statistics
 		if (this.propertiesFile.logStatistics == true) {
-			StatLogger statLogger = new StatLogger(this.propertiesFile);
+			// Set path where to place log files
+			System.setProperty("statLoggerFilePath", this.propertiesFile.dataDir + "/LOG");
+			
+			// Perform logging
+			StatLogger statLogger = new StatLogger();
 			statLogger.logStats(this.schema, this.version, this.valid, this.messages);
 		}		
 	}
