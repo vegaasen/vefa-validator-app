@@ -40,9 +40,14 @@ public class Ws
 	@Path("/{version}")
 	@Produces({MediaType.APPLICATION_XML})
 	public String listSchemasForCurrentVersion(@PathParam("version") String version) throws Exception {
+		Validate validate = new Validate();
+		PropertiesFile propFile = new PropertiesFile();
+		propFile.main(validate.pathToPropertiesFile);
+
 		ListSchemas listSchemas = new ListSchemas();
 		listSchemas.version = version;
 		listSchemas.baseUri = uri.getBaseUri().toString();
+		listSchemas.propertiesFile = propFile;
 		
 		return listSchemas.getSchemas();
 	}

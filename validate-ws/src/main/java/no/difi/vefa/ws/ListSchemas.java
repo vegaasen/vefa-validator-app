@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 
 import no.difi.vefa.configuration.Configuration;
 import no.difi.vefa.properties.PropertiesFile;
-import no.difi.vefa.validation.Validate;
 import no.difi.vefa.xml.Utils;
 
 import org.w3c.dom.Document;
@@ -26,7 +25,12 @@ public class ListSchemas {
 	 * Version to get schemas for
 	 */	
 	public String version;
-	
+
+	/**
+	 * Properties file.
+	 */	
+	public PropertiesFile propertiesFile;
+
 	/**
 	 * Gets available schema for current version from configuration files as string.
 	 * 
@@ -34,22 +38,17 @@ public class ListSchemas {
 	 */	
 	public String getSchemas() throws Exception {
 		// Setup
-		Validate validate = new Validate();		
 		Configuration configuration = new Configuration();
-		
-		// Load properties file
-		PropertiesFile propFile = new PropertiesFile();
-		propFile.main(validate.pathToPropertiesFile);
-		
+				
 		// Hastable to hold schemas
 		LinkedHashSet<String[][]> table = new LinkedHashSet<String[][]>();
 			
 		// Add schema to table from Standard configuration file
-		Document standardConfig = configuration.fileToXMLDOM(propFile.dataDir + "/STANDARD/config.xml", propFile);
+		Document standardConfig = configuration.fileToXMLDOM(propertiesFile.dataDir + "/STANDARD/config.xml", propertiesFile);
 		this.addSchemaToList(standardConfig, table);
 		
 		// Add schema to table from Custom configuration file
-		Document customConfig = configuration.fileToXMLDOM(propFile.dataDir + "/CUSTOM/config.xml", propFile);		
+		Document customConfig = configuration.fileToXMLDOM(propertiesFile.dataDir + "/CUSTOM/config.xml", propertiesFile);		
 		this.addSchemaToList(customConfig, table);
 			
 		String v = "<schemas version=\"" + this.version + "\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
@@ -86,12 +85,10 @@ public class ListSchemas {
 			
 			NodeList names = schema.getElementsByTagName("name");
 	
-			s += "<name>";
 			for(int x=0; x<names.getLength(); x++){
 				Node lang = (Node) names.item(x);				
 				s += utils.innerXml(lang);							
 			}
-			s += "</name>";
 			s += "</schema>";
 			
 			String[][] result = {{schema.getAttribute("id")},{s}};

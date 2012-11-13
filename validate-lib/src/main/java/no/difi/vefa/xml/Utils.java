@@ -40,7 +40,7 @@ public class Utils {
 		TransformerFactory transfac = TransformerFactory.newInstance();
 		Transformer trans = transfac.newTransformer();
 		trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		//trans.setOutputProperty(OutputKeys.INDENT, "yes");
+		trans.setOutputProperty(OutputKeys.INDENT, "no");
 		
 		// Create string from xml tree
 		StringWriter sw = new StringWriter();
@@ -145,7 +145,7 @@ public class Utils {
 	    StringWriter sw = new StringWriter();
 		Transformer t = TransformerFactory.newInstance().newTransformer();
 		t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		//t.setOutputProperty(OutputKeys.INDENT, "yes");
+		t.setOutputProperty(OutputKeys.INDENT, "no");
 		t.transform(new DOMSource(node), new StreamResult(sw));	    
 		return sw.toString(); 
 	}	

@@ -2,8 +2,10 @@ package no.difi.vefa.xml;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import no.difi.vefa.xml.Utils.XMLNamespace;
 
@@ -22,44 +24,20 @@ public class UtilsTest {
 	@Before
 	public void setUp() throws Exception {
 		utils = new Utils();
-		
-		xmlTestString = "<config xmlns:xi=\"http://www.w3.org/2001/XInclude\"><validate " +
-				"id=\"urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1\" " +
-				"version=\"1.4\">" +
-				"<name>" +
-				"<en>EHF invoice in Norway, profile invoice only</en>" +
-				"<no>EHF faktura i Norge, profil kun faktura</no>" +
-				"</name>" +
-				"</validate>" +
-				"</config>";
-		
-		xmlTestInvoice = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-				"<Invoice " +
-				"xsi:schemaLocation=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 UBL-Invoice-2.0.xsd\" " +
-				"xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" " +
-				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-				"xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" " +
-				"xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" " +
-				"xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\">" +
-				"<cbc:UBLVersionID>2.0</cbc:UBLVersionID>" +
-				"<cbc:CustomizationID>urn:www.cenbii.eu:transaction:BiiCoreTrdm001:ver1.0:extentionId</cbc:CustomizationID>" +
-				"<cbc:ProfileID>urn:www.cenbii.eu:profile:bii05:ver1.0</cbc:ProfileID>" +
-				"<cbc:ID>123456</cbc:ID>" +
-				"<cbc:IssueDate>2009-11-12</cbc:IssueDate>" +
-				"<cbc:DocumentCurrencyCode>NOK</cbc:DocumentCurrencyCode>" +
-				"<cac:OrderReference>" +
-				"<cbc:ID>Prosjekt 13</cbc:ID>" +
-				"</cac:OrderReference>" +
-				"<cac:ContractDocumentReference>" +
-				"<cbc:ID>K987654321</cbc:ID>" +
-				"</cac:ContractDocumentReference>" +
-				"</Invoice>";
+
+		String basePath = new java.io.File("src/test/java/no/difi/vefa/xml/").getCanonicalPath();
+		xmlTestString = new Scanner(new File(basePath + "/Config.xml")).useDelimiter("\\Z").next();
+		xmlTestInvoice = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();						
 	}
 
 	@Test
-	public void testXmlDOMToString() throws Exception {		
-		Document xmlDoc = utils.stringToXMLDOM(xmlTestString);
-		assertEquals(xmlTestString, utils.xmlDOMToString(xmlDoc));
+	public void testXmlDOMToString() throws Exception {				
+		Document xmlDoc = utils.stringToXMLDOM("<data><test>This is a test</test></data>");
+		
+		String expected = "<data><test>This is a test</test></data>";
+		String result = utils.xmlDOMToString(xmlDoc);
+		
+		assertEquals(expected, result);
 	}
 
 	@Test
@@ -96,10 +74,10 @@ public class UtilsTest {
 		Document xmlDoc1 = utils.stringToXMLDOM(xmlTestString);
 		Node name = utils.xmlDOMXPathQuery(xmlDoc1, "/config/validate[@id='urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1' and @version='1.4']/name").item(0);
 
-		String myXML = "<name xmlns:xi=\"http://www.w3.org/2001/XInclude\">" +
-				"<en>EHF invoice in Norway, profile invoice only</en>" +
-				"<no>EHF faktura i Norge, profil kun faktura</no>" +
-				"</name>";
+		String myXML = "<name xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n" +
+				"\t\t\t<en>EHF invoice in Norway, profile invoice only</en>\n" +
+				"\t\t\t<no>EHF faktura i Norge, profil kun faktura</no>\n" +
+				"\t\t</name>";		
 		
 		assertEquals(myXML, utils.innerXml(name));
 	}
