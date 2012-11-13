@@ -7,7 +7,6 @@ import java.util.Set;
 
 import no.difi.vefa.configuration.Configuration;
 import no.difi.vefa.properties.PropertiesFile;
-import no.difi.vefa.validation.Validate;
 import no.difi.vefa.xml.Utils;
 
 import org.w3c.dom.Document;
@@ -23,28 +22,28 @@ public class ListVersions {
 	public String baseUri;
 
 	/**
+	 * Properties file.
+	 */	
+	public PropertiesFile propertiesFile;
+
+	/**
 	 * Gets available version from configuration files as string.
 	 * 
 	 * @throws Exception
 	 */
 	public String getVersions() throws Exception  {
 		// Setup
-		Validate validate = new Validate();
-		PropertiesFile propFile = new PropertiesFile();
 		Configuration configuration = new Configuration();
-		
-		// Load properties file		
-		propFile.main(validate.pathToPropertiesFile);
-		
+				
 		// List to hold versions
 		ArrayList<String> list = new ArrayList<String>();
 		
 		// Add versions to list from Standard configuration file
-		Document standardConfig = configuration.fileToXMLDOM(propFile.dataDir + "/STANDARD/config.xml", propFile);
+		Document standardConfig = configuration.fileToXMLDOM(propertiesFile.dataDir + "/STANDARD/config.xml", propertiesFile);
 		this.addVersionToList(standardConfig, list);
 		
 		// Add versions to list from Custom configuration file
-		Document customConfig = configuration.fileToXMLDOM(propFile.dataDir + "/CUSTOM/config.xml", propFile);
+		Document customConfig = configuration.fileToXMLDOM(propertiesFile.dataDir + "/CUSTOM/config.xml", propertiesFile);
 		this.addVersionToList(customConfig, list);
 
 		// Convert list to set (to get unique values)

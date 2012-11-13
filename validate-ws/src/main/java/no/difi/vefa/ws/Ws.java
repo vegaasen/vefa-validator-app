@@ -11,6 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import no.difi.vefa.properties.PropertiesFile;
 import no.difi.vefa.validation.Validate;
 
 @Path("/")
@@ -24,8 +25,13 @@ public class Ws
 	@Path("/")
 	@Produces({MediaType.APPLICATION_XML})
 	public String listVersions() throws Exception {
+		Validate validate = new Validate();
+		PropertiesFile propFile = new PropertiesFile();
+		propFile.main(validate.pathToPropertiesFile);
+		
 		ListVersions listVersions = new ListVersions();
 		listVersions.baseUri = uri.getBaseUri().toString();
+		listVersions.propertiesFile = propFile;
 		
 		return listVersions.getVersions();
 	}	
