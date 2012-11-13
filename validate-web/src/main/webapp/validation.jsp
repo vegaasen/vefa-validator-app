@@ -131,8 +131,9 @@
 		});		
 		
 		function getResult(xml){
-			var r = '<div style="height: 20px;"></div>';
-			r += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
+			var rOuter = '<div style="height: 20px;"></div>';
+			rOuter += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
+			var rInner = '';
 			
 			$(xml).find('message').each(function(){								
 				var schema = $(this).attr('schema');
@@ -157,11 +158,15 @@
 						messageTypeTitle = 'Warning';
 				}
 				
-				r += '<h3 style="' + style + '" title="' + messageTypeTitle + '">' + messageTypeTitle + ': ' + title + '</h3>';
-				r += '<p>' + description + '</p>';
+				rInner += '<h3 style="' + style + '" title="' + messageTypeTitle + '">' + messageTypeTitle + ': ' + title + '</h3>';
+				rInner += '<p>' + description + '</p>';
 			});
 			
-			$('#transformResult').html(r);
+			if (rInner.length == 0) {
+				rInner = "<h3 style=\"color: green;\">Document is valid</h3>";
+			}
+			
+			$('#transformResult').html(rOuter + rInner);
 		};
 	});
 </script>
