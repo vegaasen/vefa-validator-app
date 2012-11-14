@@ -138,6 +138,11 @@ public class Validate {
 		
 		PropertiesFile propFile = new PropertiesFile();
 		propFile.main(this.pathToPropertiesFile);
+		
+		if (VEFAvalidatorDataDir != null) {
+			propFile.dataDir = VEFAvalidatorDataDir; 
+		}
+		
 		return propFile;
 	}
 	

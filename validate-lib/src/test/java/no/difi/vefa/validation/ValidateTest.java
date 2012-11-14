@@ -34,11 +34,9 @@ public class ValidateTest {
 	
 	@Test
 	public void testMain() throws Exception {
-		System.out.println(System.getProperty("no.difi.vefa.validation.configuration.datadir"));
-		
 		// Read properties
 		PropertiesFile propFile = validate.getPropertiesFile();
-		
+			
 		// Read test configuration
 		String configDoc = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml")).useDelimiter("\\Z").next();
 		Utils utils = new Utils();
