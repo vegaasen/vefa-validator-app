@@ -130,7 +130,7 @@ public class Validate {
 	 * @throws Exception 
 	 */	
 	public PropertiesFile getPropertiesFile() throws Exception {
-		String VEFAvalidatorDataDir = System.getProperty("VEFAvalidatorDataDir");
+		String VEFAvalidatorDataDir = System.getProperty("no.difi.vefa.validation.configuration.datadir");
 		
 		if (VEFAvalidatorDataDir != null) {
 			this.pathToPropertiesFile = VEFAvalidatorDataDir + "/validator.properties";
@@ -282,7 +282,7 @@ public class Validate {
 	private void logStat() {
 		if (this.propertiesFile.logStatistics == true) {
 			// Set path where to place log files
-			System.setProperty("VEFAvalidatorStatLoggerFilePath", this.propertiesFile.dataDir + "/LOG");
+			System.setProperty("no.difi.vefa.validation.logging.filepath", this.propertiesFile.dataDir + "/LOG");
 			
 			// Perform logging
 			StatLogger statLogger = new StatLogger();

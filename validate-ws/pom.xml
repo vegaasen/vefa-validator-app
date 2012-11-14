@@ -34,7 +34,7 @@
                 </connectors>
 				<systemProperties>
 					<systemProperty>
-					  <name>VEFAvalidatorDataDir</name>
+					  <name>no.difi.vefa.validation.configuration.datadir</name>
 					  <value>/etc/opt/VEFAvalidator</value>
 					</systemProperty>               
 				</systemProperties>
