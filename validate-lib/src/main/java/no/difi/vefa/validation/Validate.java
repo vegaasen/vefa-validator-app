@@ -232,7 +232,7 @@ public class Validate {
 				String id = step.getAttributes().getNamedItem("id").getNodeValue();
 				String file = step.getAttributes().getNamedItem("file").getNodeValue();				
 				
-				System.out.println(id + " " + file);
+				//System.out.println(id + " " + file);
 				
 				if (id.equals("XSD")) {					
 					// Perform XSD validation
