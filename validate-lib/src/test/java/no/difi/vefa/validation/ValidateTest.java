@@ -51,24 +51,45 @@ public class ValidateTest {
 			String schema = test.getElementsByTagName("schema").item(0).getTextContent();
 			String file = test.getElementsByTagName("file").item(0).getTextContent();
 			
-			System.out.println("Starting test of XML file no: " + nr);
+			System.out.println("\nStarting test of XML file no: " + nr);
 			
 			xml = new Scanner(new File(propFile.dataDir + file)).useDelimiter("\\Z").next();
-
+			
+			validate = new Validate();
 			validate.version = version;
 			validate.schema = schema;
 			validate.xml = xml;
 			validate.main();
+
+			// Get all rules
+			NodeList errors = test.getElementsByTagName("schematronrule");
+			
+			System.out.println("\tStarting errortesting based on result:");
+			
+			// Loop all errors in result and compare with configuration
+			for(int x=0; x<validate.messages.size(); x++){
+				Element error = (Element) errors.item(x);
+				String schematronrule = error.getTextContent();
+				
+				System.out.println("\t\tStarting assertion of error: " + schematronrule);
+				
+				assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
+			}
+			
+			System.out.println("\tStarting errortesting based on configuration:");
 			
 			// Loop all errors in configuration and compare with validation result
-			NodeList errors = test.getElementsByTagName("schematronrule");			
 			for(int x=0; x<errors.getLength(); x++){
 				Element error = (Element) errors.item(x);
 				String schematronrule = error.getTextContent();
 				
+				System.out.println("\t\tStarting assertion of error: " + schematronrule);
+				
 				assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
 			}			
 		}
+		
+		System.out.println("");
 	}
 
 	@Test
