@@ -17,7 +17,7 @@ public class XmlXslTransformationTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		basePath = new java.io.File("src/test/java/no/difi/vefa/xml/").getCanonicalPath();
+		basePath = new java.io.File("src/test/resources/").getCanonicalPath();
 		xslFile = basePath + "/Test.xsl";		
 		xmlFile = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();				
 	}

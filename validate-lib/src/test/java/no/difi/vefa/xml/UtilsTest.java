@@ -25,7 +25,7 @@ public class UtilsTest {
 	public void setUp() throws Exception {
 		utils = new Utils();
 
-		String basePath = new java.io.File("src/test/java/no/difi/vefa/xml/").getCanonicalPath();
+		String basePath = new java.io.File("src/test/resources/").getCanonicalPath();
 		xmlTestString = new Scanner(new File(basePath + "/config.xml")).useDelimiter("\\Z").next();
 		xmlTestInvoice = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();						
 	}

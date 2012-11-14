@@ -12,10 +12,10 @@ public class ListSchemasTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		String path = new java.io.File("src/test/java/no/difi/vefa/ws/validator.properties").getCanonicalPath();
+		String path = new java.io.File("src/test/resources/validator.properties").getCanonicalPath();
 		PropertiesFile propFile = new PropertiesFile();
 		propFile.main(path);
-		propFile.dataDir = new java.io.File("src/test/java/no/difi/vefa/ws/").getCanonicalPath();
+		propFile.dataDir = new java.io.File("src/test/resources/").getCanonicalPath();
 		
 		listSchemas = new ListSchemas();
 		listSchemas.version = "1.4";

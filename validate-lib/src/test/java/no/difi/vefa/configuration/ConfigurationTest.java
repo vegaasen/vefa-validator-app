@@ -11,13 +11,13 @@ public class ConfigurationTest {
 
 	@Test
 	public void testFileToXMLDOM() throws Exception {
-		String path = new java.io.File("src/test/java/no/difi/vefa/configuration/validator.properties").getCanonicalPath();
+		String path = new java.io.File("src/test/resources/validator.properties").getCanonicalPath();
 		PropertiesFile propFile = new PropertiesFile();
 		propFile.main(path);
 		propFile.dataDir = new java.io.File(".").getCanonicalPath();
 		
 		Configuration configuration = new Configuration();
-		Document configDoc = configuration.fileToXMLDOM(propFile.dataDir + "/src/test/java/no/difi/vefa/configuration/config.xml", propFile);
+		Document configDoc = configuration.fileToXMLDOM(propFile.dataDir + "/src/test/resources/config.xml", propFile);
 				
 		assertEquals(configDoc.getElementsByTagName("step").item(0).getAttributes().getNamedItem("id").getNodeValue(), "XSL");
 	}

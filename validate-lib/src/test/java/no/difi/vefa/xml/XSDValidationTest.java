@@ -20,11 +20,11 @@ public class XSDValidationTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		basePath = new java.io.File("src/test/java/no/difi/vefa/xml/").getCanonicalPath();
+		basePath = new java.io.File("src/test/resources/").getCanonicalPath();
 		xsdFile = basePath + "/TestXSD.xsd";		
 		xmlFile = new Scanner(new File(basePath + "/TestXSD.xml")).useDelimiter("\\Z").next();	
 		
-		String path = new java.io.File("src/test/java/no/difi/vefa/xml/validator.properties").getCanonicalPath();
+		String path = new java.io.File("src/test/resources/validator.properties").getCanonicalPath();
 		propFile = new PropertiesFile();
 		propFile.main(path);
 		propFile.dataDir = new java.io.File(".").getCanonicalPath();		

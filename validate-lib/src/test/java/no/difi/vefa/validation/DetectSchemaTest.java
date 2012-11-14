@@ -25,7 +25,7 @@ public class DetectSchemaTest {
 	@Before
 	public void setUp() throws Exception {
 		detectSchema = new DetectSchema();
-		basePath = new java.io.File("src/test/java/no/difi/vefa/validation/").getCanonicalPath();
+		basePath = new java.io.File("src/test/resources/").getCanonicalPath();
 	}
 
 	@After

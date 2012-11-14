@@ -8,7 +8,7 @@ public class PropertiesFileTest {
 
 	@Test
 	public void testMain() throws Exception {
-		String path = new java.io.File("src/test/java/no/difi/vefa/properties/validator.properties").getCanonicalPath();	
+		String path = new java.io.File("src/test/resources/validator.properties").getCanonicalPath();	
 		PropertiesFile propFile = new PropertiesFile();
 		propFile.main(path);
 		assertEquals(propFile.dataDir, "/etc/opt/VEFAvalidator");
