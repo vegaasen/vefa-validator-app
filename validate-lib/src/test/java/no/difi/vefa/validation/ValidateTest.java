@@ -34,6 +34,8 @@ public class ValidateTest {
 	
 	@Test
 	public void testMain() throws Exception {
+		System.out.println(System.getProperty("no.difi.vefa.validation.configuration.datadir"));
+		
 		// Read properties
 		PropertiesFile propFile = validate.getPropertiesFile();
 		
