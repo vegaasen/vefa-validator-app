@@ -276,7 +276,7 @@ public class Validate {
 	private void logStat() {
 		if (this.propertiesFile.logStatistics == true) {
 			// Set path where to place log files
-			System.setProperty("statLoggerFilePath", this.propertiesFile.dataDir + "/LOG");
+			System.setProperty("VEFAvalidatorStatLoggerFilePath", this.propertiesFile.dataDir + "/LOG");
 			
 			// Perform logging
 			StatLogger statLogger = new StatLogger();
