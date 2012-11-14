@@ -12,7 +12,6 @@ import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.xml.Utils;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -27,10 +26,6 @@ public class FilterMessageTest {
 	public void setUp() throws Exception {
 		basePath = new java.io.File("src/test/resources/").getCanonicalPath();
 		utils = new Utils();		
-	}
-
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	@Test
