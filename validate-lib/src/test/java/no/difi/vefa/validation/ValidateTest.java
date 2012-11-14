@@ -86,10 +86,10 @@ public class ValidateTest {
 				System.out.println("\t\tStarting assertion of error: " + schematronrule);
 				
 				assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
-			}			
-		}
-		
-		System.out.println("");
+			}
+			
+			System.out.println("");
+		}				
 	}
 
 	@Test

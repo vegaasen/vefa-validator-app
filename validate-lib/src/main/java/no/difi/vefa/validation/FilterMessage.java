@@ -48,7 +48,7 @@ public class FilterMessage {
 			    for (Iterator<Message> iterator = messages.iterator(); iterator.hasNext();) {
 			        Message message = iterator.next();
 			        
-			        if (message.title.contains("[" + rule + "]")) {
+			        if (message.schematronRuleId.equals(rule)) {
 			        	iterator.remove();
 			        }
 			    }			
