@@ -25,7 +25,6 @@
             <artifactId>maven-jetty-plugin</artifactId>
             <version>6.1.18</version>
             <configuration>
-                <!-- contextPath>blockpincode</contextPath-->
                 <scanIntervalSeconds>5</scanIntervalSeconds>                
                 <connectors>
                     <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
@@ -33,6 +32,12 @@
                         <maxIdleTime>60000</maxIdleTime>
                     </connector>
                 </connectors>
+				<systemProperties>
+					<systemProperty>
+					  <name>VEFAvalidatorDataDir</name>
+					  <value>/etc/opt/VEFAvalidator</value>
+					</systemProperty>               
+				</systemProperties>
             </configuration>
         </plugin>  	
   	</plugins>

@@ -35,8 +35,7 @@ public class ValidateTest {
 	@Test
 	public void testMain() throws Exception {
 		// Read properties
-		PropertiesFile propFile = new PropertiesFile();
-		propFile.main(validate.pathToPropertiesFile);
+		PropertiesFile propFile = validate.getPropertiesFile();
 		
 		// Read test configuration
 		String configDoc = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml")).useDelimiter("\\Z").next();

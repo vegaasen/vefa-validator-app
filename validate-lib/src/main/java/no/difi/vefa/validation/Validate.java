@@ -129,7 +129,13 @@ public class Validate {
 	 * @return PropertiesFile
 	 * @throws Exception 
 	 */	
-	private PropertiesFile getPropertiesFile() throws Exception {
+	public PropertiesFile getPropertiesFile() throws Exception {
+		String VEFAvalidatorDataDir = System.getProperty("VEFAvalidatorDataDir");
+		
+		if (VEFAvalidatorDataDir != null) {
+			this.pathToPropertiesFile = VEFAvalidatorDataDir + "/validator.properties";
+		}
+		
 		PropertiesFile propFile = new PropertiesFile();
 		propFile.main(this.pathToPropertiesFile);
 		return propFile;
