@@ -58,6 +58,11 @@ public class Validate {
 	 * Is the current XML valid?.
 	 */		
 	public boolean valid;
+
+	/**
+	 * Is the current XML valid? Default false;
+	 */
+	public boolean autodetectSchema = false;
 	
 	/**
 	 * Properties file as PropertiesFile object.
@@ -72,43 +77,130 @@ public class Validate {
 	 * @throws Exception 
 	 */
 	public void main() throws Exception {
+		// Setup
+		Utils utils = new Utils();
+		Configuration configuration = new Configuration();
+		
 		// Set Saxon as XML parser
 		System.setProperty("javax.xml.transform.TransformerFactory","net.sf.saxon.TransformerFactoryImpl");		
 		
 		// Load properties file
-		PropertiesFile propFile = new PropertiesFile();
-		propFile.main(this.pathToPropertiesFile);
-		this.propertiesFile = propFile;		
+		this.propertiesFile = this.getPropertiesFile();		
 		
 		// Always hide warnings?
-		if (this.propertiesFile.suppressWarnings == true) {
-			this.suppressWarnings = true;
-		}		
+		this.hideWarnings();		
 		
 		// Check if XML string is well formed
-		WellFormed wellFormed = new WellFormed();
-		if (wellFormed.main(this.xml, messages) == false) {
+		if (this.isXMLWellFormed() == false) {
+			return;
+		}
+						
+		// Load XML string as XML DOM		
+		Document xmlDoc = utils.stringToXMLDOM(this.xml);
+		
+		// Autodetect schema?
+		if (this.tryToAutodetectSchema(xmlDoc) == false) {
 			return;
 		}
 				
-		// Load XML string as XML DOM
-		Utils utils = new Utils();
-		Document xmlDoc = utils.stringToXMLDOM(this.xml);				
-		
-		// Load configuration
-		Configuration configuration = new Configuration();
-		
-		// Perform standard validation
-		Document standardConfigDoc = configuration.fileToXMLDOM(this.propertiesFile.dataDir + "/STANDARD/config.xml", this.propertiesFile);
-		NodeList standardValidates = utils.xmlDOMXPathQuery(standardConfigDoc, "/config/validate[@id='" + this.schema + "' and @version='" + this.version + "']");		
-		this.validation(standardValidates, xmlDoc);				
-		
-		// Perform custom validation
-		Document customConfigDoc = configuration.fileToXMLDOM(this.propertiesFile.dataDir + "/CUSTOM/config.xml", this.propertiesFile);
-		NodeList customValidates = utils.xmlDOMXPathQuery(customConfigDoc, "/config/validate[@id='" + this.schema + "' and @version='" + this.version + "']");		
-		this.validation(customValidates, xmlDoc);
-				
+		// Get validations from config files	
+		NodeList standardValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/STANDARD/config.xml");							
+		NodeList customValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/CUSTOM/config.xml");
+						
 		// We have not found anything in configuration to validate against
+		if (this.doesConfigurationContainValidationDefinitions(standardValidates, customValidates) == false) {
+			return;
+		}
+		
+		// Perform validation
+		this.validation(standardValidates, xmlDoc);
+		this.validation(customValidates, xmlDoc);
+		
+		// Set valid attribute
+		this.setIsValid();
+		
+		// Log statistics
+		this.logStat();
+	}
+	
+	/**
+	 * Loads the application properties file
+	 * 
+	 * @return PropertiesFile
+	 * @throws Exception 
+	 */	
+	private PropertiesFile getPropertiesFile() throws Exception {
+		PropertiesFile propFile = new PropertiesFile();
+		propFile.main(this.pathToPropertiesFile);
+		return propFile;
+	}
+	
+	/**
+	 * Checks if supperss warnings is set in properties files.
+	 * If so...set suppresswarning properties.
+	 */
+	private void hideWarnings() {
+		if (this.propertiesFile.suppressWarnings == true) {
+			this.suppressWarnings = true;
+		}
+	}
+	
+	/**
+	 * Checks if XML is well formed.
+	 * 
+	 * @return Boolean
+	 */	
+	private Boolean isXMLWellFormed() {
+		WellFormed wellFormed = new WellFormed();
+		if (wellFormed.main(this.xml, this.messages) == false) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Tries to read the XML file and auto detect schema.
+	 * 
+	 * @return Boolean
+	 * @throws Exception 
+	 */		
+	private Boolean tryToAutodetectSchema(Document xmlDoc) throws Exception {
+		Boolean r = true;
+		
+		if (this.autodetectSchema == true) {
+			DetectSchema detectSchema = new DetectSchema();
+			detectSchema.setSchemaIdentifier(xmlDoc, this.version, this.messages);
+			this.schema = detectSchema.schema;
+
+			// No schema is detected
+			if (detectSchema.detected == false) {
+				r = false;
+			}			
+		}
+		return r;		
+	}
+	
+	/**
+	 * Read a configuration file and extracts validations as NodeList
+	 * 
+	 * @return NodeList
+	 * @throws Exception 
+	 */		
+	private NodeList getConfigurationValidation(Configuration configuration, Utils utils, String config) throws Exception {
+		Document xmlDoc = configuration.fileToXMLDOM(config, this.propertiesFile);
+		NodeList validates = utils.xmlDOMXPathQuery(xmlDoc, "/config/validate[@id='" + this.schema + "' and @version='" + this.version + "']");
+		return validates;
+	}	
+	
+	/**
+	 * Checks if standard and custom validation files contain any validation definitions 
+	 * for given version and schema.
+	 * 
+	 * @return Boolean
+	 */		
+	private Boolean doesConfigurationContainValidationDefinitions(NodeList standardValidates, NodeList customValidates) {
+		Boolean r = true;
+		
 		if (standardValidates.getLength() == 0 && customValidates.getLength() == 0) {
 			Message message = new Message();
 			message.validationType = ValidationType.Configuration;
@@ -116,22 +208,12 @@ public class Validate {
 			message.title = "No validation definition is found in configuration.";
 			message.description = "No entry is found in configuration for version '" + this.version+ "' and identificator '" + this.schema + "', unable to perform validation!";			
 			this.messages.add(message);
+			r = false;
 		}
 		
-		// Set valid attribute
-		this.setIsValid();
-		
-		// Log statistics
-		if (this.propertiesFile.logStatistics == true) {
-			// Set path where to place log files
-			System.setProperty("statLoggerFilePath", this.propertiesFile.dataDir + "/LOG");
-			
-			// Perform logging
-			StatLogger statLogger = new StatLogger();
-			statLogger.logStats(this.schema, this.version, this.valid, this.messages);
-		}		
+		return r;
 	}
-	
+
 	/**
 	 * Perform Difi validation of XML based on Difi configuration.
 	 * 
@@ -168,6 +250,38 @@ public class Validate {
 				}			
 			}										
 		}
+	}
+	
+	/**
+	 * Sets attribute valid. That is if the current XML is valid.
+	 * Does this by looping the message collection and checking for
+	 * messages with fatal message type.
+	 * 
+	 * @throws Exception
+	 */	
+	private void setIsValid() throws Exception {
+		this.valid = true;
+		
+		for (Message message : this.messages) {
+			if (message.messageType == MessageType.Fatal) {
+				this.valid = false;
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Performs stat logging to file
+	 */
+	private void logStat() {
+		if (this.propertiesFile.logStatistics == true) {
+			// Set path where to place log files
+			System.setProperty("statLoggerFilePath", this.propertiesFile.dataDir + "/LOG");
+			
+			// Perform logging
+			StatLogger statLogger = new StatLogger();
+			statLogger.logStats(this.schema, this.version, this.valid, this.messages);
+		}		
 	}
 	
 	/**
@@ -254,23 +368,5 @@ public class Validate {
 		// Get XML utils and return DOM as string
 		Utils utils = new Utils();				
 		return utils.xmlDOMToString(doc);
-	}
-	
-	/**
-	 * Sets attribute valid. That is if the current XML is valid.
-	 * Does this by looping the message collection and checking for
-	 * messages with fatal message type.
-	 * 
-	 * @throws Exception
-	 */	
-	private void setIsValid() throws Exception {
-		this.valid = true;
-		
-		for (Message message : this.messages) {
-			if (message.messageType == MessageType.Fatal) {
-				this.valid = false;
-				return;
-			}
-		}
 	}	
 }

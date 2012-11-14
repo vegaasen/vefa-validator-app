@@ -57,25 +57,13 @@ public class Ws
 	@Produces({MediaType.APPLICATION_XML})
 	@Consumes({MediaType.APPLICATION_XML})
 	public String validateSchemaAuto(@PathParam("version") String version, String xml) throws Exception {
-		DetectSchema detectSchema = new DetectSchema();
-		detectSchema.setSchemaIdentifier(xml, version);
+		Validate validate = new Validate();
+		validate.autodetectSchema = true;
+		validate.version = version;
+		validate.xml = xml;
+		validate.main();						
 		
-		if (detectSchema.messages.size() > 0){
-			Validate validate = new Validate();
-			validate.version = version;
-			validate.messages = detectSchema.messages;
-			validate.suppressWarnings = false;
-
-			return validate.messagesAsXML();
-		} else {
-			Validate validate = new Validate();
-			validate.version = version;
-			validate.schema = detectSchema.schema;
-			validate.xml = xml;
-			validate.main();						
-			
-			return validate.messagesAsXML();
-		}					
+		return validate.messagesAsXML();
 	}
 
 	@POST
@@ -83,26 +71,14 @@ public class Ws
 	@Produces({MediaType.APPLICATION_XML})
 	@Consumes({MediaType.APPLICATION_XML})
 	public String validateSchemaAutoFilterWarnings(@PathParam("version") String version, String xml) throws Exception {	
-		DetectSchema detectSchema = new DetectSchema();
-		detectSchema.setSchemaIdentifier(xml, version);
-
-		if (detectSchema.messages.size() > 0){
-			Validate validate = new Validate();
-			validate.version = version;
-			validate.messages = detectSchema.messages;
-			validate.suppressWarnings = false;
-
-			return validate.messagesAsXML();
-		} else {
-			Validate validate = new Validate();
-			validate.version = version;
-			validate.schema = detectSchema.schema;
-			validate.xml = xml;
-			validate.suppressWarnings = true;
-			validate.main();						
-			
-			return validate.messagesAsXML();
-		}					
+		Validate validate = new Validate();
+		validate.autodetectSchema = true;
+		validate.version = version;
+		validate.xml = xml;
+		validate.suppressWarnings = true;
+		validate.main();						
+		
+		return validate.messagesAsXML();
 	}
 	
 	@POST
