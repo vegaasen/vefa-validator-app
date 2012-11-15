@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.dom.DOMSource;
-
 import no.difi.vefa.message.Hint;
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
