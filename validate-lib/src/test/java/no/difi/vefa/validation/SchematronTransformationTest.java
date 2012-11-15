@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
+import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.xml.Utils;
 
 import org.junit.Before;
@@ -44,7 +45,8 @@ public class SchematronTransformationTest {
 		messages = new ArrayList<Message>();
 		schematronTransformation.main(null, basePath + "/UBL-T10-EUgen.xsl", messages);
 		assertEquals(1, messages.size());
-		assertEquals(MessageType.Fatal, messages.get(0).messageType);		
+		assertEquals(MessageType.Fatal, messages.get(0).messageType);
+		assertEquals(ValidationType.XSL, messages.get(0).validationType);
 	}
 
 }

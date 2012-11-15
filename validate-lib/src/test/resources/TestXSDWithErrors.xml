@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addresses 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation='TestXSD.xsd'>
+
+  <addresses>
+    <name>Test Testesen</name>
+    <street>Test Street 5</street>
+  </addresses>
+
+</addresses>
