@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
+
 import no.difi.vefa.message.Hint;
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
@@ -46,50 +49,79 @@ public class ValidateTest {
 		// Loop all test cases and perform validation
 		for(int i=0; i<tests.getLength(); i++){
 			Element test = (Element) tests.item(i);
-			String nr = test.getAttributes().getNamedItem("nr").getNodeValue();
+			String id = test.getAttributes().getNamedItem("id").getNodeValue();
+			Boolean ignore = "true".equals(test.getAttributes().getNamedItem("ignore").getNodeValue());
 			String version = test.getElementsByTagName("version").item(0).getTextContent();
 			String schema = test.getElementsByTagName("schema").item(0).getTextContent();
 			String file = test.getElementsByTagName("file").item(0).getTextContent();
 			
-			System.out.println("\nStarting test of XML file no: " + nr);
-			
-			xml = new Scanner(new File(propFile.dataDir + file)).useDelimiter("\\Z").next();
-			
-			validate = new Validate();
-			validate.version = version;
-			validate.schema = schema;
-			validate.xml = xml;
-			validate.main();
+			if (ignore == false) {
+				System.out.println("\nStarting test of XML file no: " + id);
+				
+				xml = new Scanner(new File(propFile.dataDir + file)).useDelimiter("\\Z").next();
+				
+				validate = new Validate();
+				validate.version = version;
+				validate.schema = schema;
+				validate.xml = xml;
+				validate.main();
 
-			// Get all rules
-			NodeList errors = test.getElementsByTagName("schematronrule");
-			
-			System.out.println("\tStarting errortesting based on result:");
-			
-			// Loop all errors in result and compare with configuration
-			for(int x=0; x<validate.messages.size(); x++){
-				Element error = (Element) errors.item(x);
-				String schematronrule = error.getTextContent();
+				// Get all error rules
+				NodeList errors = utils.xmlDOMXPathQuery(xmlDoc, "/config/test[@id='" + id + "']/errors/schematronrule");												
+
+				System.out.println("\tStarting errortesting based on result:");
 				
-				System.out.println("\t\tStarting assertion of error: " + schematronrule);
+				// Loop all errors in result and compare with configuration
+				compareResultWithConfiguration(errors, "Starting assertion of error: ", MessageType.Fatal);
 				
-				assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
+				System.out.println("\tStarting errortesting based on configuration:");
+				
+				// Loop all errors in configuration and compare with validation result
+				compareConfigurationWithResult(errors, "Starting assertion of error: ");
+				
+				
+				// Get all warning rules
+				NodeList warnings = utils.xmlDOMXPathQuery(xmlDoc, "/config/test[@id='" + id + "']/warnings/schematronrule");												
+
+				System.out.println("\tStarting warningtesting based on result:");
+				
+				// Loop all warnings in result and compare with configuration
+				compareResultWithConfiguration(warnings, "Starting assertion of warning: ", MessageType.Warning);
+				
+				System.out.println("\tStarting warningtesting based on configuration:");
+				
+				// Loop all warnings in configuration and compare with validation result
+				compareConfigurationWithResult(warnings, "Starting assertion of warning: ");								
+				
+				System.out.println("");				
+			} else {
+				System.out.println("\nIgnoring test of XML file no: " + id);
 			}
-			
-			System.out.println("\tStarting errortesting based on configuration:");
-			
-			// Loop all errors in configuration and compare with validation result
-			for(int x=0; x<errors.getLength(); x++){
-				Element error = (Element) errors.item(x);
-				String schematronrule = error.getTextContent();
-				
-				System.out.println("\t\tStarting assertion of error: " + schematronrule);
-				
-				assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
-			}
-			
-			System.out.println("");
 		}				
+	}
+
+	private void compareResultWithConfiguration(NodeList errors, String msg, MessageType messageType) {
+		for(int x=0; x<validate.messages.size(); x++){
+			if (validate.messages.get(x).messageType == messageType) {				
+				System.out.println("\t\t" + msg + validate.messages.get(x).schematronRuleId);
+				
+				Element error = (Element) errors.item(x);
+				String schematronrule = error.getTextContent();			
+				
+				assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
+			}
+		}
+	}
+
+	private void compareConfigurationWithResult(NodeList errors, String msg) {
+		for(int x=0; x<errors.getLength(); x++){
+			Element error = (Element) errors.item(x);
+			String schematronrule = error.getTextContent();
+
+			System.out.println("\t\t" + msg + schematronrule);
+			
+			assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
+		}
 	}
 
 	@Test
