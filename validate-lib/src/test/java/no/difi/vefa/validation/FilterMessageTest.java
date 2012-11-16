@@ -49,6 +49,10 @@ public class FilterMessageTest {
 		this.addMessage();
 		filterMessage.main(xmlDoc, basePath + "/TestFilterMessageFalse.xsl", messages, "TEST-1234-TEST");				
 		assertEquals(1, messages.size());
+		
+		this.addMessage();
+		filterMessage.main(null, basePath + "/TestFilterMessageFalse.xsl", messages, "TEST-1234-TEST");				
+		assertEquals(2, messages.size());		
 	}
 	
 	private void addMessage() {
