@@ -108,8 +108,19 @@
 		
 		// Send XML to ws and prosess result
 		$("#readFileButton").click(function() {
+			var r = '';
+			
+			if ($('#xmlTextSource').val() == '') {
+				r = '<div style="height: 20px;"></div>';
+				r += '<h2>No XML data</h2>';
+				r += '<h3 style="color: red;">No xml data detected!</h3>';
+				r += '<p>Please enter some XML data to be validated!</p>';
+				$('#transformResult').html(r);
+				return false;
+			}
+			
 			// Empty result and display wait text
-			var r = '<div style="height: 20px;"></div>';
+			r = '<div style="height: 20px;"></div>';
 			r += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
 			r += '<h3>Waiting for transformation result!</h3>';
 			r += '<p>Please be patient:-)</p>';			
