@@ -50,6 +50,12 @@ public class DetectSchemaTest {
 		messages = new ArrayList<Message>();
 		detectSchema.setSchemaIdentifier(xmlDoc, version, messages);
 		assertEquals(1, messages.size());
+		
+		xml = new Scanner(new File(basePath + "/InvoiceMissingCustomizationID.xml")).useDelimiter("\\Z").next();
+		xmlDoc = utils.stringToXMLDOM(xml);
+		messages = new ArrayList<Message>();
+		detectSchema.setSchemaIdentifier(xmlDoc, version, messages);
+		assertEquals(1, messages.size());		
 	}
 
 }
