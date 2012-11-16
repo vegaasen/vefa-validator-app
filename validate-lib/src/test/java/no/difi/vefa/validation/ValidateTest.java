@@ -25,18 +25,52 @@ public class ValidateTest {
 	private Validate validate;
 	private List<Message> messages;
 	private String xml;
+	private PropertiesFile propFile;
+	private String basePath;
 	
 	@Before
 	public void setUp() throws Exception {
 		validate = new Validate();
 		messages = new ArrayList<Message>();
+		propFile = validate.getPropertiesFile();
+		basePath = new java.io.File("src/test/resources/").getCanonicalPath();
 	}
 	
 	@Test
-	public void testMain() throws Exception {
-		// Read properties
-		PropertiesFile propFile = validate.getPropertiesFile();
-			
+	public void testNotWellFormedXML() throws Exception {
+		validate = new Validate();
+		validate.version = "test";
+		validate.schema = "test";
+		validate.xml = "<test>notwellformed</testtest>";
+		validate.main();
+		
+		assertEquals(MessageType.Fatal, validate.messages.get(0).messageType);
+	}
+
+	@Test
+	public void testIfValidationDefinitionIsNotPresentInConfigurationFile() throws Exception {
+		validate = new Validate();
+		validate.version = "test";
+		validate.schema = "test";
+		validate.xml = "<test>we do not find any validation definition</test>";
+		validate.main();
+		
+		assertEquals(MessageType.Fatal, validate.messages.get(0).messageType);
+	}
+	
+	@Test
+	public void testAutoDetectionOfSchema() throws Exception {
+		xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
+		
+		validate = new Validate();
+		validate.autodetectSchema = true;
+		validate.version = "1.4";
+		validate.xml = xml;
+		validate.main();		
+	}	
+
+	@Test
+	public void testFilesFromTestConfiguration() throws Exception {					
 		// Read test configuration
 		String configDoc = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml")).useDelimiter("\\Z").next();
 		Utils utils = new Utils();
