@@ -108,7 +108,7 @@ public class ValidateTest {
 				System.out.println("\tStarting errortesting based on configuration:");
 				
 				// Loop all errors in configuration and compare with validation result
-				compareConfigurationWithResult(errors, "Starting assertion of error: ");
+				compareConfigurationWithResult(errors, "Starting assertion of error: ", MessageType.Fatal);
 				
 				
 				// Get all warning rules
@@ -122,7 +122,7 @@ public class ValidateTest {
 				System.out.println("\tStarting warningtesting based on configuration:");
 				
 				// Loop all warnings in configuration and compare with validation result
-				compareConfigurationWithResult(warnings, "Starting assertion of warning: ");								
+				compareConfigurationWithResult(warnings, "Starting assertion of warning: ", MessageType.Warning);								
 				
 				System.out.println("");				
 			} else {
@@ -132,26 +132,40 @@ public class ValidateTest {
 	}
 
 	private void compareResultWithConfiguration(NodeList errors, String msg, MessageType messageType) {
-		for(int x=0; x<validate.messages.size(); x++){
-			if (validate.messages.get(x).messageType == messageType) {				
-				System.out.println("\t\t" + msg + validate.messages.get(x).schematronRuleId);
+		List<Message> tmpMessages = new ArrayList<Message>();
+		for (int i = 0; i < validate.messages.size(); i++) {
+			if (validate.messages.get(i).messageType == messageType) {
+				tmpMessages.add(validate.messages.get(i));
+			}			
+		}
+
+		for(int x=0; x<tmpMessages.size(); x++){
+			if (tmpMessages.get(x).messageType == messageType) {				
+				System.out.println("\t\t" + msg + tmpMessages.get(x).schematronRuleId);
 				
 				Element error = (Element) errors.item(x);
 				String schematronrule = error.getTextContent();			
 				
-				assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
+				assertEquals(schematronrule, tmpMessages.get(x).schematronRuleId);
 			}
 		}
 	}
 
-	private void compareConfigurationWithResult(NodeList errors, String msg) {
+	private void compareConfigurationWithResult(NodeList errors, String msg, MessageType messageType) {
+		List<Message> tmpMessages = new ArrayList<Message>();
+		for (int i = 0; i < validate.messages.size(); i++) {
+			if (validate.messages.get(i).messageType == messageType) {
+				tmpMessages.add(validate.messages.get(i));
+			}			
+		}
+		
 		for(int x=0; x<errors.getLength(); x++){
 			Element error = (Element) errors.item(x);
 			String schematronrule = error.getTextContent();
 
 			System.out.println("\t\t" + msg + schematronrule);
 			
-			assertEquals(schematronrule, validate.messages.get(x).schematronRuleId);
+			assertEquals(schematronrule, tmpMessages.get(x).schematronRuleId);
 		}
 	}
 
