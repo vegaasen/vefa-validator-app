@@ -60,7 +60,8 @@ public class Validate {
 	public boolean valid;
 
 	/**
-	 * Is the current XML valid? Default false;
+	 * Should we try to autodetect what schema to validate against? If set to true,
+	 * validator will try to autodetect schema based on xml content. Default false;
 	 */
 	public boolean autodetectSchema = false;
 	

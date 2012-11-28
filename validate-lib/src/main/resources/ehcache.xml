@@ -22,4 +22,13 @@
          memoryStoreEvictionPolicy="LFU">
   </cache>
 
+  <cache name="properties"
+         maxElementsInMemory="1"
+         maxElementsOnDisk="0"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="0"
+         memoryStoreEvictionPolicy="LFU">
+  </cache>
+  
 </ehcache>
