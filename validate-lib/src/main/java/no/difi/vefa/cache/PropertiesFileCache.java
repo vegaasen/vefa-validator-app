@@ -7,7 +7,7 @@ import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 
 /**
- * This class can be used to cache an XSL Transformer
+ * This class can be used to cache the properties file
  */
 public class PropertiesFileCache {
     /**

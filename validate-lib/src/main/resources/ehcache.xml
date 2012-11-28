@@ -30,5 +30,14 @@
          timeToLiveSeconds="0"
          memoryStoreEvictionPolicy="LFU">
   </cache>
-  
+
+  <cache name="configuration"
+         maxElementsInMemory="5"
+         maxElementsOnDisk="0"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="0"
+         memoryStoreEvictionPolicy="LFU">
+  </cache>
+    
 </ehcache>

@@ -10,7 +10,7 @@ import no.difi.vefa.cache.PropertiesFileCache;
  */
 public class PropertiesFile {
     /**
-     * XSL Transformer cache
+     * Properties file cache
      */	
 	private PropertiesFileCache propertiesFileCache;
 	
