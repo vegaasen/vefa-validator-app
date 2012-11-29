@@ -60,7 +60,8 @@
 		$.ajax({
 			url: wsUrl,
 			dataType: 'xml',
-			success: getVersions
+			success: getVersions,
+			async: false
 		});				
 		
 		function getVersions(xml){
@@ -87,7 +88,8 @@
 				$.ajax({
 					url: wsUrl + '/' + version,
 					dataType: 'xml',
-					success: getSchemas
+					success: getSchemas,
+					async: false
 				});
 				
 				function getSchemas(xml){
