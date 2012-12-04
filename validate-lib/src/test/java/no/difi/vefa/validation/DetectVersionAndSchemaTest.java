@@ -1,0 +1,60 @@
+package no.difi.vefa.validation;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import no.difi.vefa.message.Message;
+import no.difi.vefa.validation.DetectVersionAndSchema;
+import no.difi.vefa.xml.Utils;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
+
+public class DetectVersionAndSchemaTest {
+	
+	private DetectVersionAndSchema detectSchema;
+	private String basePath;
+	private String xml;
+	
+	@Before
+	public void setUp() throws Exception {
+		detectSchema = new DetectVersionAndSchema();
+		basePath = new java.io.File("src/test/resources/").getCanonicalPath();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testSetVersionAndSchemaIdentifier() throws Exception {				
+		Document xmlDoc;
+		List<Message> messages;
+		Utils utils = new Utils();
+		
+		xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
+		xmlDoc = utils.stringToXMLDOM(xml);
+		messages = new ArrayList<Message>();
+		detectSchema.setVersionAndSchemaIdentifier(xmlDoc, messages);		
+		assertEquals(0, messages.size());
+				
+		xml = new Scanner(new File(basePath + "/InvoiceMissingProfileID.xml")).useDelimiter("\\Z").next();
+		xmlDoc = utils.stringToXMLDOM(xml);
+		messages = new ArrayList<Message>();
+		detectSchema.setVersionAndSchemaIdentifier(xmlDoc, messages);
+		assertEquals(2, messages.size());
+		
+		xml = new Scanner(new File(basePath + "/InvoiceMissingCustomizationID.xml")).useDelimiter("\\Z").next();
+		xmlDoc = utils.stringToXMLDOM(xml);
+		messages = new ArrayList<Message>();
+		detectSchema.setVersionAndSchemaIdentifier(xmlDoc, messages);
+		assertEquals(2, messages.size());		
+	}
+
+}

@@ -65,8 +65,8 @@ public class UtilsTest {
 		Document xmlDoc1 = utils.stringToXMLDOM(xmlTestInvoice);
 		Node pId = utils.xmlDOMXPathQueryWithNS(xmlDoc1, "*/cbc:ProfileID", namespaces).item(0);
 		Node cId = utils.xmlDOMXPathQueryWithNS(xmlDoc1, "*/cbc:CustomizationID", namespaces).item(0);
-		assertEquals("urn:www.cenbii.eu:profile:bii05:ver1.0", pId.getTextContent());
-		assertEquals("urn:www.cenbii.eu:transaction:BiiCoreTrdm001:ver1.0:extentionId", cId.getTextContent());		
+		assertEquals("urn:www.cenbii.eu:profile:bii04:ver1.0", pId.getTextContent());
+		assertEquals("urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1", cId.getTextContent());		
 	}
 
 	@Test

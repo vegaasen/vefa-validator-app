@@ -59,23 +59,36 @@ public class ValidateTest {
 	}
 	
 	@Test
-	public void testAutoDetectionOfSchema() throws Exception {
+	public void testAutoDetectionOfVersionAndSchema() throws Exception {
 		xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
 		
 		validate = new Validate();
-		validate.autodetectSchema = true;
-		validate.version = "1.4";
+		validate.autodetectVersionAndSchema = true;
 		validate.xml = xml;
-		validate.main();		
+		validate.main();	
 	}	
 
 	@Test
 	public void testFilesFromTestConfiguration() throws Exception {					
-		// Read test configuration
-		String configDoc = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml")).useDelimiter("\\Z").next();
 		Utils utils = new Utils();
-		Document xmlDoc = utils.stringToXMLDOM(configDoc);
-		NodeList tests = utils.xmlDOMXPathQuery(xmlDoc, "/config/test");
+		
+		// Read standard test configuration	
+		String standardConfigDoc = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml")).useDelimiter("\\Z").next();		
+		Document standardXmlDoc = utils.stringToXMLDOM(standardConfigDoc);
+		NodeList standardTests = utils.xmlDOMXPathQuery(standardXmlDoc, "/config/test");
+
+		// Read custom test configuration
+		String customConfigDoc = new Scanner(new File(propFile.dataDir + "/CUSTOM/configTestValidation.xml")).useDelimiter("\\Z").next();		
+		Document customXmlDoc = utils.stringToXMLDOM(customConfigDoc);
+		NodeList customTests = utils.xmlDOMXPathQuery(customXmlDoc, "/config/test");
+
+		// Run tests
+		this.validateTestFiles(standardTests, standardXmlDoc);
+		this.validateTestFiles(customTests, customXmlDoc);
+	}
+
+	private void validateTestFiles(NodeList tests, Document xmlDoc) throws Exception {
+		Utils utils = new Utils();
 		
 		// Loop all test cases and perform validation
 		for(int i=0; i<tests.getLength(); i++){
@@ -128,9 +141,9 @@ public class ValidateTest {
 			} else {
 				System.out.println("\nIgnoring test of XML file no: " + id);
 			}
-		}				
+		}		
 	}
-
+	
 	private void compareResultWithConfiguration(NodeList errors, String msg, MessageType messageType) {
 		List<Message> tmpMessages = new ArrayList<Message>();
 		for (int i = 0; i < validate.messages.size(); i++) {
@@ -191,7 +204,7 @@ public class ValidateTest {
 		validate.messages = this.messages;
 		validate.suppressWarnings = false;
 		
-		String expected = "<messages><message schema=\"testschema\" validationType=\"Configuration\" version=\"1.4\">" +
+		String expected = "<messages schema=\"testschema\" valid=\"false\" version=\"1.4\"><message validationType=\"Configuration\">" +
 				"<messageType>Fatal</messageType><title>My test title</title><description>My test description</description>" +
 				"<schematronRuleId>ASD-1234-BBB</schematronRuleId><hints><hint><title>My hint title</title>" +
 				"<description>My hint description</description></hint></hints></message></messages>";

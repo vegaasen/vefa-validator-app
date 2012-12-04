@@ -53,13 +53,12 @@ public class Ws
 	}
 	
 	@POST
-	@Path("/{version}")
+	@Path("/")
 	@Produces({MediaType.APPLICATION_XML})
 	@Consumes({MediaType.APPLICATION_XML})
-	public String validateSchemaAuto(@PathParam("version") String version, String xml) throws Exception {
+	public String validateVersionAndSchemaAuto(String xml) throws Exception {
 		Validate validate = new Validate();
-		validate.autodetectSchema = true;
-		validate.version = version;
+		validate.autodetectVersionAndSchema = true;
 		validate.xml = xml;
 		validate.main();						
 		
@@ -67,13 +66,12 @@ public class Ws
 	}
 
 	@POST
-	@Path("/{version}/suppresswarnings")
+	@Path("/suppresswarnings")
 	@Produces({MediaType.APPLICATION_XML})
 	@Consumes({MediaType.APPLICATION_XML})
-	public String validateSchemaAutoFilterWarnings(@PathParam("version") String version, String xml) throws Exception {	
+	public String validateVersionAndSchemaAutoFilterWarnings(String xml) throws Exception {	
 		Validate validate = new Validate();
-		validate.autodetectSchema = true;
-		validate.version = version;
+		validate.autodetectVersionAndSchema = true;
 		validate.xml = xml;
 		validate.suppressWarnings = true;
 		validate.main();						

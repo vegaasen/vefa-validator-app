@@ -60,10 +60,10 @@ public class Validate {
 	public boolean valid;
 
 	/**
-	 * Should we try to autodetect what schema to validate against? If set to true,
-	 * validator will try to autodetect schema based on xml content. Default false;
+	 * Should we try to autodetect what version of schema to validate against? If set to true,
+	 * validator will try to autodetect version and schema based on xml content. Default false;
 	 */
-	public boolean autodetectSchema = false;
+	public boolean autodetectVersionAndSchema = false;
 	
 	/**
 	 * Properties file as PropertiesFile object.
@@ -99,8 +99,8 @@ public class Validate {
 		// Load XML string as XML DOM		
 		Document xmlDoc = utils.stringToXMLDOM(this.xml);
 		
-		// Autodetect schema?
-		if (this.tryToAutodetectSchema(xmlDoc) == false) {
+		// Autodetect version and schema?
+		if (this.tryToAutodetectVersionAndSchema(xmlDoc) == false) {
 			return;
 		}
 				
@@ -171,21 +171,22 @@ public class Validate {
 	}
 	
 	/**
-	 * Tries to read the XML file and auto detect schema.
+	 * Tries to read the XML file and auto detect version and schema.
 	 * 
 	 * @return Boolean
 	 * @throws Exception 
 	 */		
-	private Boolean tryToAutodetectSchema(Document xmlDoc) throws Exception {
+	private Boolean tryToAutodetectVersionAndSchema(Document xmlDoc) throws Exception {
 		Boolean r = true;
 		
-		if (this.autodetectSchema == true) {
-			DetectSchema detectSchema = new DetectSchema();
-			detectSchema.setSchemaIdentifier(xmlDoc, this.version, this.messages);
-			this.schema = detectSchema.schema;
+		if (this.autodetectVersionAndSchema == true) {
+			DetectVersionAndSchema detectVersionAndSchema = new DetectVersionAndSchema();
+			detectVersionAndSchema.setVersionAndSchemaIdentifier(xmlDoc, this.messages);
+			this.schema = detectVersionAndSchema.schema;
+			this.version = detectVersionAndSchema.version;
 
-			// No schema is detected
-			if (detectSchema.detected == false) {
+			// No version or schema is detected
+			if (detectVersionAndSchema.detected == false) {
 				r = false;
 			}			
 		}
@@ -310,7 +311,16 @@ public class Validate {
 		Document doc = docBuilder.newDocument();
 		Element rootElement = doc.createElement("messages");
 		doc.appendChild(rootElement);
-		
+
+		// Add message attribute schema
+		rootElement.setAttribute("schema", this.schema);
+
+		// Add message attribute valid
+		rootElement.setAttribute("valid", new Boolean(this.valid).toString());
+
+		// Add message attribute version
+		rootElement.setAttribute("version", this.version);
+
 		// Iterate messages
 		for (Message message : this.messages) {
 			if (this.suppressWarnings == true && message.messageType == MessageType.Warning) {
@@ -319,12 +329,6 @@ public class Validate {
 				Element msg = doc.createElement("message");
 				rootElement.appendChild(msg);
 				
-				// Add message attribute schema
-				msg.setAttribute("schema", schema);
-
-				// Add message attribute version
-				msg.setAttribute("version", version);
-
 				// Add message attribute version
 				msg.setAttribute("validationType", message.validationType.toString());
 				
