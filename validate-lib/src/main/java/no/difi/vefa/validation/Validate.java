@@ -25,12 +25,14 @@ import no.difi.vefa.xml.Utils;
  */
 public class Validate {
 	/**
-	 * Schema to validate XML against.
+	 * Schema to validate XML against. Corresponds to attribute "id" given in the configuration files. This
+	 * "id" consists of a combination of "ProfileID" and "CustomizationID", and is used to uniquely identify 
+	 * the correct validation configuration.
 	 */
 	public String schema;
 	
 	/**
-	 * Version to validate XML against.
+	 * Version to validate XML against. Corresponds to attribute "version" given in the configuration files.
 	 */
 	public String version;
 	
