@@ -17,13 +17,13 @@ public class StatLogger {
 	/**
 	 * Writes a log message to log the files.
 	 * 
-	 * @param schema Schema identificator as String
+	 * @param id Configuration identificator as String
 	 * @param version Version as String
 	 * @param valid Is document valid as Boolean
 	 * @param  messages  List of messages
 	 */	
-	public void logStats(String schema, String version, Boolean valid, List<Message> messages) {
-		logger.info(schema + ";" + version + ";" + valid + ";" + getSchematronRules(messages));
+	public void logStats(String id, String version, Boolean valid, List<Message> messages) {
+		logger.info(id + ";" + version + ";" + valid + ";" + getSchematronRules(messages));
 	}
 	
 	/**

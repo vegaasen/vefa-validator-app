@@ -58,7 +58,7 @@ public class Ws
 	@Consumes({MediaType.APPLICATION_XML})
 	public String validateVersionAndSchemaAuto(String xml) throws Exception {
 		Validate validate = new Validate();
-		validate.autodetectVersionAndSchema = true;
+		validate.autodetectVersionAndIdentifier = true;
 		validate.xml = xml;
 		validate.main();						
 		
@@ -71,7 +71,7 @@ public class Ws
 	@Consumes({MediaType.APPLICATION_XML})
 	public String validateVersionAndSchemaAutoFilterWarnings(String xml) throws Exception {	
 		Validate validate = new Validate();
-		validate.autodetectVersionAndSchema = true;
+		validate.autodetectVersionAndIdentifier = true;
 		validate.xml = xml;
 		validate.suppressWarnings = true;
 		validate.main();						
@@ -86,7 +86,7 @@ public class Ws
 	public String validateSchema(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
 		Validate validate = new Validate();
 		validate.version = version;
-		validate.schema = schema;
+		validate.id = schema;
 		validate.xml = xml;
 		validate.main();				
 		
@@ -100,7 +100,7 @@ public class Ws
 	public String validateSchemaFilterWarnings(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
 		Validate validate = new Validate();
 		validate.version = version;
-		validate.schema = schema;
+		validate.id = schema;
 		validate.xml = xml;
 		validate.suppressWarnings = true;	
 		validate.main();				

@@ -40,7 +40,7 @@ public class ValidateTest {
 	public void testNotWellFormedXML() throws Exception {
 		validate = new Validate();
 		validate.version = "test";
-		validate.schema = "test";
+		validate.id = "test";
 		validate.xml = "<test>notwellformed</testtest>";
 		validate.main();
 		
@@ -51,7 +51,7 @@ public class ValidateTest {
 	public void testIfValidationDefinitionIsNotPresentInConfigurationFile() throws Exception {
 		validate = new Validate();
 		validate.version = "test";
-		validate.schema = "test";
+		validate.id = "test";
 		validate.xml = "<test>we do not find any validation definition</test>";
 		validate.main();
 		
@@ -63,7 +63,7 @@ public class ValidateTest {
 		xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
 		
 		validate = new Validate();
-		validate.autodetectVersionAndSchema = true;
+		validate.autodetectVersionAndIdentifier = true;
 		validate.xml = xml;
 		validate.main();	
 	}	
@@ -96,7 +96,7 @@ public class ValidateTest {
 			String id = test.getAttributes().getNamedItem("id").getNodeValue();
 			Boolean ignore = "true".equals(test.getAttributes().getNamedItem("ignore").getNodeValue());
 			String version = test.getElementsByTagName("version").item(0).getTextContent();
-			String schema = test.getElementsByTagName("schema").item(0).getTextContent();
+			String schemaId = test.getElementsByTagName("id").item(0).getTextContent();
 			String file = test.getElementsByTagName("file").item(0).getTextContent();
 			
 			if (ignore == false) {
@@ -106,7 +106,7 @@ public class ValidateTest {
 				
 				validate = new Validate();
 				validate.version = version;
-				validate.schema = schema;
+				validate.id = schemaId;
 				validate.xml = xml;
 				validate.main();
 
@@ -200,11 +200,11 @@ public class ValidateTest {
 		this.messages.add(message);
 		
 		validate.version = "1.4";
-		validate.schema = "testschema";
+		validate.id = "testschema";
 		validate.messages = this.messages;
 		validate.suppressWarnings = false;
 		
-		String expected = "<messages schema=\"testschema\" valid=\"false\" version=\"1.4\"><message validationType=\"Configuration\">" +
+		String expected = "<messages id=\"testschema\" valid=\"false\" version=\"1.4\"><message validationType=\"Configuration\">" +
 				"<messageType>Fatal</messageType><title>My test title</title><description>My test description</description>" +
 				"<schematronRuleId>ASD-1234-BBB</schematronRuleId><hints><hint><title>My hint title</title>" +
 				"<description>My hint description</description></hint></hints></message></messages>";

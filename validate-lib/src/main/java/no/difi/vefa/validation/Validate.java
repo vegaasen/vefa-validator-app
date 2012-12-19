@@ -25,11 +25,11 @@ import no.difi.vefa.xml.Utils;
  */
 public class Validate {
 	/**
-	 * Schema to validate XML against. Corresponds to attribute "id" given in the configuration files. This
+	 * Id to validate XML against. Corresponds to attribute "id" given in the configuration files. This
 	 * "id" consists of a combination of "ProfileID" and "CustomizationID", and is used to uniquely identify 
 	 * the correct validation configuration.
 	 */
-	public String schema;
+	public String id;
 	
 	/**
 	 * Version to validate XML against. Corresponds to attribute "version" given in the configuration files.
@@ -62,10 +62,10 @@ public class Validate {
 	public boolean valid;
 
 	/**
-	 * Should we try to autodetect what version of schema to validate against? If set to true,
-	 * validator will try to autodetect version and schema based on xml content. Default false;
+	 * Should we try to autodetect what version to validate against? If set to true,
+	 * validator will try to autodetect version and identifier based on xml content. Default false;
 	 */
-	public boolean autodetectVersionAndSchema = false;
+	public boolean autodetectVersionAndIdentifier = false;
 	
 	/**
 	 * Properties file as PropertiesFile object.
@@ -181,10 +181,10 @@ public class Validate {
 	private Boolean tryToAutodetectVersionAndSchema(Document xmlDoc) throws Exception {
 		Boolean r = true;
 		
-		if (this.autodetectVersionAndSchema == true) {
-			DetectVersionAndSchema detectVersionAndSchema = new DetectVersionAndSchema();
-			detectVersionAndSchema.setVersionAndSchemaIdentifier(xmlDoc, this.messages);
-			this.schema = detectVersionAndSchema.schema;
+		if (this.autodetectVersionAndIdentifier == true) {
+			DetectVersionAndIdentifier detectVersionAndSchema = new DetectVersionAndIdentifier();
+			detectVersionAndSchema.setVersionAndIdentifier(xmlDoc, this.messages);
+			this.id = detectVersionAndSchema.id;
 			this.version = detectVersionAndSchema.version;
 
 			// No version or schema is detected
@@ -203,7 +203,7 @@ public class Validate {
 	 */		
 	private NodeList getConfigurationValidation(Configuration configuration, Utils utils, String config) throws Exception {
 		Document xmlDoc = configuration.fileToXMLDOM(config, this.propertiesFile);
-		NodeList validates = utils.xmlDOMXPathQuery(xmlDoc, "/config/validate[@id='" + this.schema + "' and @version='" + this.version + "']");
+		NodeList validates = utils.xmlDOMXPathQuery(xmlDoc, "/config/validate[@id='" + this.id + "' and @version='" + this.version + "']");
 		return validates;
 	}	
 	
@@ -221,7 +221,7 @@ public class Validate {
 			message.validationType = ValidationType.Configuration;
 			message.messageType = MessageType.Fatal;
 			message.title = "No validation definition is found in configuration.";
-			message.description = "No entry is found in configuration for version '" + this.version+ "' and identificator '" + this.schema + "', unable to perform validation!";			
+			message.description = "No entry is found in configuration for version '" + this.version+ "' and identificator '" + this.id + "', unable to perform validation!";			
 			this.messages.add(message);
 			r = false;
 		}
@@ -295,7 +295,7 @@ public class Validate {
 			
 			// Perform logging
 			StatLogger statLogger = new StatLogger();
-			statLogger.logStats(this.schema, this.version, this.valid, this.messages);
+			statLogger.logStats(this.id, this.version, this.valid, this.messages);
 		}		
 	}
 	
@@ -314,8 +314,8 @@ public class Validate {
 		Element rootElement = doc.createElement("messages");
 		doc.appendChild(rootElement);
 
-		// Add message attribute schema
-		rootElement.setAttribute("schema", this.schema);
+		// Add message attribute id
+		rootElement.setAttribute("id", this.id);
 
 		// Add message attribute valid
 		rootElement.setAttribute("valid", new Boolean(this.valid).toString());

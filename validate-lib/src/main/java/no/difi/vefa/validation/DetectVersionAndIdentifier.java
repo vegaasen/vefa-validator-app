@@ -18,13 +18,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * This class is used to auto detect version and schema identifier.
+ * This class is used to auto detect version and validation identifier.
  */
-public class DetectVersionAndSchema {
+public class DetectVersionAndIdentifier {
 	/**
-	 * Schema to validate XML against.
+	 * Id to validate XML against.
 	 */	
-	public String schema;
+	public String id;
 	
 	/**
 	 * Version to validate XML against.
@@ -37,25 +37,25 @@ public class DetectVersionAndSchema {
 	public Boolean detected = true;
 
 	/**
-	 * Tries to detect version and schema identifier from XML.
+	 * Tries to detect version and validation identifier from XML.
 	 * 
 	 * @param xmlDoc XML as Document
 	 * @param  messages  List of messages
 	 * @throws Exception
 	 */
-	public void setVersionAndSchemaIdentifier(Document xmlDoc, List<Message> messages) throws Exception {
-		this.setSchemaIdentifier(xmlDoc, messages);
-		this.setVersionIdentifier(xmlDoc, messages);
+	public void setVersionAndIdentifier(Document xmlDoc, List<Message> messages) throws Exception {
+		this.setIdentifier(xmlDoc, messages);
+		this.setVersion(xmlDoc, messages);
 	}
 		
 	/**
-	 * Tries to detect schema identifier from XML. This consists of ProfileID and CustomizationID.
+	 * Tries to detect validation identifier from XML. This consists of ProfileID and CustomizationID.
 	 * 
 	 * @param xmlDoc XML as Document
 	 * @param  messages  List of messages
 	 * @throws Exception
 	 */		
-	private void setSchemaIdentifier(Document xmlDoc, List<Message> messages) throws Exception {
+	private void setIdentifier(Document xmlDoc, List<Message> messages) throws Exception {
 		// Setup
 		Utils utils = new Utils();
 		String profileId = "";
@@ -97,7 +97,7 @@ public class DetectVersionAndSchema {
 		}
 		
 		// Build schema id				
-		this.schema = profileId + "#" + customizationId;				
+		this.id = profileId + "#" + customizationId;				
 	}	
 	
 	/**
@@ -108,7 +108,7 @@ public class DetectVersionAndSchema {
 	 * @param  messages  List of messages
 	 * @throws Exception
 	 */	
-	private void setVersionIdentifier(Document xmlDoc, List<Message> messages) throws Exception {
+	private void setVersion(Document xmlDoc, List<Message> messages) throws Exception {
 		// Setup
 		Configuration configuration = new Configuration();
 		Validate validate = new Validate();
@@ -119,15 +119,15 @@ public class DetectVersionAndSchema {
 		// Select all schemas in configuration files
 		Document standardXmlDoc = configuration.fileToXMLDOM(propertiesFile.dataDir + "/STANDARD/config.xml", propertiesFile);
 		Document customXmlDoc = configuration.fileToXMLDOM(propertiesFile.dataDir + "/CUSTOM/config.xml", propertiesFile);
-		NodeList standardValidates = utils.xmlDOMXPathQuery(standardXmlDoc, "/config/validate[@id='" + this.schema + "']");
-		NodeList customValidates = utils.xmlDOMXPathQuery(customXmlDoc, "/config/validate[@id='" + this.schema + "']");
+		NodeList standardValidates = utils.xmlDOMXPathQuery(standardXmlDoc, "/config/validate[@id='" + this.id + "']");
+		NodeList customValidates = utils.xmlDOMXPathQuery(customXmlDoc, "/config/validate[@id='" + this.id + "']");
 				
 		if (standardValidates.getLength() == 0 && customValidates.getLength() == 0) {
 			Message message = new Message();
 			message.validationType = ValidationType.Configuration;
 			message.messageType = MessageType.Fatal;
 			message.title = "No validation definition is found in configuration.";
-			message.description = "No entry is found in configuration for identificator '" + this.schema + "', unable to perform validation!";			
+			message.description = "No entry is found in configuration for identificator '" + this.id + "', unable to perform validation!";			
 			messages.add(message);
 			this.detected = false;
 		} else {
