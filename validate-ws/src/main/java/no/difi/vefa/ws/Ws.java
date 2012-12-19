@@ -44,12 +44,12 @@ public class Ws
 		PropertiesFile propFile = new PropertiesFile();
 		propFile.main(validate.pathToPropertiesFile);
 
-		ListSchemas listSchemas = new ListSchemas();
+		ListIdentifier listSchemas = new ListIdentifier();
 		listSchemas.version = version;
 		listSchemas.baseUri = uri.getBaseUri().toString();
 		listSchemas.propertiesFile = propFile;
 		
-		return listSchemas.getSchemas();
+		return listSchemas.getIdentifier();
 	}
 	
 	@POST

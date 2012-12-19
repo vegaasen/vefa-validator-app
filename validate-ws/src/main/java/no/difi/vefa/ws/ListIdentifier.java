@@ -13,9 +13,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * This class is used to get available schemas from the configuration files.
+ * This class is used to get available identifiers from the configuration files.
  */
-public class ListSchemas {
+public class ListIdentifier {
 	/**
 	 * Base uri to webservice as string.
 	 */	
@@ -36,7 +36,7 @@ public class ListSchemas {
 	 * 
 	 * @throws Exception
 	 */	
-	public String getSchemas() throws Exception {
+	public String getIdentifier() throws Exception {
 		// Setup
 		Configuration configuration = new Configuration();
 				
@@ -45,11 +45,11 @@ public class ListSchemas {
 			
 		// Add schema to table from Standard configuration file
 		Document standardConfig = configuration.fileToXMLDOM(propertiesFile.dataDir + "/STANDARD/config.xml", propertiesFile);
-		this.addSchemaToList(standardConfig, table);
+		this.addIdentifierToList(standardConfig, table);
 		
 		// Add schema to table from Custom configuration file
 		Document customConfig = configuration.fileToXMLDOM(propertiesFile.dataDir + "/CUSTOM/config.xml", propertiesFile);		
-		this.addSchemaToList(customConfig, table);
+		this.addIdentifierToList(customConfig, table);
 			
 		String v = "<schemas version=\"" + this.version + "\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
 		
@@ -65,25 +65,25 @@ public class ListSchemas {
 	}
 	
 	/**
-	 * Adds schema to list.
+	 * Adds identifier to list.
 	 * 
 	 * @param document DOM document
 	 * @param table HashTable to hold schemas
 	 * @throws Exception
 	 */	
-	private void addSchemaToList(Document document, LinkedHashSet<String[][]> table) throws Exception{
+	private void addIdentifierToList(Document document, LinkedHashSet<String[][]> table) throws Exception{
 		// Setup
 		Utils utils = new Utils();
 		
 		// Get available schemas for given version
-		NodeList schemas = utils.xmlDOMXPathQuery(document, "/config/validate[@version='" + version + "']");
+		NodeList identifiers = utils.xmlDOMXPathQuery(document, "/config/validate[@version='" + version + "']");
 		
-		for(int i=0; i<schemas.getLength(); i++){						
-			Element schema = (Element) schemas.item(i);
+		for(int i=0; i<identifiers.getLength(); i++){						
+			Element identifier = (Element) identifiers.item(i);
 			String s = "";
-			s += "<schema id=\"" + schema.getAttribute("id") + "\" xlink:href=\"" + baseUri + schema.getAttribute("id") + "\">";
+			s += "<schema id=\"" + identifier.getAttribute("id") + "\" xlink:href=\"" + baseUri + identifier.getAttribute("id") + "\">";
 			
-			NodeList names = schema.getElementsByTagName("name");
+			NodeList names = identifier.getElementsByTagName("name");
 	
 			for(int x=0; x<names.getLength(); x++){
 				Node lang = (Node) names.item(x);				
@@ -91,7 +91,7 @@ public class ListSchemas {
 			}
 			s += "</schema>";
 			
-			String[][] result = {{schema.getAttribute("id")},{s}};
+			String[][] result = {{identifier.getAttribute("id")},{s}};
 			
 			table.add(result);
 		}

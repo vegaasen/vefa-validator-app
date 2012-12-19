@@ -6,9 +6,9 @@ import no.difi.vefa.properties.PropertiesFile;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ListSchemasTest {
+public class ListIdentifierTest {
 
-	private ListSchemas listSchemas;
+	private ListIdentifier listIdentifier;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -17,10 +17,10 @@ public class ListSchemasTest {
 		propFile.main(path);
 		propFile.dataDir = new java.io.File("src/test/resources/").getCanonicalPath();
 		
-		listSchemas = new ListSchemas();
-		listSchemas.version = "1.4";
-		listSchemas.baseUri = "http://www.test.com/validate-ws/";
-		listSchemas.propertiesFile = propFile;		
+		listIdentifier = new ListIdentifier();
+		listIdentifier.version = "1.4";
+		listIdentifier.baseUri = "http://www.test.com/validate-ws/";
+		listIdentifier.propertiesFile = propFile;		
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class ListSchemasTest {
 				"</schema>" +
 				"</schemas>";
 		
-		assertEquals(result, listSchemas.getSchemas());
+		assertEquals(result, listIdentifier.getIdentifier());
 	}
 
 }
