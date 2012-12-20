@@ -13,7 +13,7 @@ public class App
 	/**
 	 * Performs automatic validation of input xml file
 	 * 
-	 * @param args Argument 1 should be an XML file
+	 * @param args Argument 1 should be an XML file. Optional argument 2 should be version and optional argument 3 should be id.
 	 * @throws Exception 
 	 */
     public static void main( String[] args ) throws Exception
