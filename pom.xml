@@ -32,5 +32,6 @@
   <module>validate-web</module>
   <module>validate-ws</module>
   <module>validate-lib</module>
+  <module>validate-cli</module>
   </modules>
 </project>
