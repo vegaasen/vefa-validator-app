@@ -1,4 +1,4 @@
-This repository contains the [VEFA Validator Application](http://vefa.difi.no) which is being developed by [Difi](http://www.difi.no).
+This repository contains the application files for the [VEFA validator](http://vefa.difi.no) which is being developed by [Difi](http://www.difi.no).
 
 The validator consists of two Github projects:
 *  [VEFAvalidatorApp](https://github.com/difi/VEFAvalidatorApp) - The java application (this project)
