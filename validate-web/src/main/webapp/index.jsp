@@ -20,8 +20,6 @@
 			<p>The VEFA Validator is a program used to validate EHF xml files. The validator reads an XML and validates it 
 			against a set of validation steps. For each of these validation steps the validator accumulates potential warnings and errors. 
 			After the validator is finished validating the XML it returns a XML of potential messages.</p>
-			
-			<p style="font-weight: bold;">This application is still in beta version, and should not be used in a production environment!</p>
 		</div><!-- /.twelvecol -->
 		
 		<div class="fourcol last">
