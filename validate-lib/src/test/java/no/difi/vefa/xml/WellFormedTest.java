@@ -13,7 +13,7 @@ public class WellFormedTest {
 	@Before
 	public void setUp() throws Exception {
 		xmlTestString = "<config xmlns:xi=\"http://www.w3.org/2001/XInclude\"><validate " +
-				"id=\"urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1\" " +
+				"id=\"urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1\" " +
 				"version=\"1.4\">" +
 				"<name>" +
 				"<en>EHF invoice in Norway, profile invoice only</en>" +

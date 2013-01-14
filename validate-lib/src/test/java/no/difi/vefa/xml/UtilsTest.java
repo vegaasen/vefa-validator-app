@@ -1,19 +1,18 @@
 package no.difi.vefa.xml;
 
-import static org.junit.Assert.*;
+import no.difi.vefa.xml.Utils.XMLNamespace;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import no.difi.vefa.xml.Utils.XMLNamespace;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
 
@@ -50,7 +49,7 @@ public class UtilsTest {
 	@Test
 	public void testXmlDOMXPathQuery() throws Exception {
 		Document xmlDoc1 = utils.stringToXMLDOM(xmlTestString);
-		NodeList validate = utils.xmlDOMXPathQuery(xmlDoc1, "/config/validate[@id='urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1' and @version='1.4']");
+		NodeList validate = utils.xmlDOMXPathQuery(xmlDoc1, "/config/validate[@id='urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1' and @version='1.4']");
 		assertEquals(1, validate.getLength());
 	}
 
@@ -66,13 +65,13 @@ public class UtilsTest {
 		Node pId = utils.xmlDOMXPathQueryWithNS(xmlDoc1, "*/cbc:ProfileID", namespaces).item(0);
 		Node cId = utils.xmlDOMXPathQueryWithNS(xmlDoc1, "*/cbc:CustomizationID", namespaces).item(0);
 		assertEquals("urn:www.cenbii.eu:profile:bii04:ver1.0", pId.getTextContent());
-		assertEquals("urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1", cId.getTextContent());		
+		assertEquals("urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1", cId.getTextContent());
 	}
 
 	@Test
 	public void testInnerXml() throws Exception {
 		Document xmlDoc1 = utils.stringToXMLDOM(xmlTestString);
-		Node name = utils.xmlDOMXPathQuery(xmlDoc1, "/config/validate[@id='urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1' and @version='1.4']/name").item(0);
+		Node name = utils.xmlDOMXPathQuery(xmlDoc1, "/config/validate[@id='urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1' and @version='1.4']/name").item(0);
 
 		String myXML = "<name xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n" +
 				"\t\t\t<en>EHF invoice in Norway, profile invoice only</en>\n" +
