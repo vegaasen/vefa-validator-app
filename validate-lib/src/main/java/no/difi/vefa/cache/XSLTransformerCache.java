@@ -1,7 +1,5 @@
 package no.difi.vefa.cache;
 
-import javax.xml.transform.Transformer;
-
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -32,7 +30,7 @@ public class XSLTransformerCache {
      * @param id The ID of the widget
      * @param transformer The Transformer itself
      */
-    public void addTransformer( String id, Transformer transformer )
+    public void addTransformer( String id, SynchronisedTransformer transformer )
     {
         // Create an EHCache Element to hold the widget
         Element element = new Element( id, transformer );
@@ -47,7 +45,7 @@ public class XSLTransformerCache {
      * @param id        The ID of the Transformer to retrieve
      * @return          The requested Transformer or null if the Transformer is not in the cache
      */
-    public Transformer getTransformer( String id )
+    public SynchronisedTransformer getTransformer( String id )
     {
         // Retrieve the element that contains the requested Transformer
         Element element = transformerCache.get( id );
@@ -55,7 +53,7 @@ public class XSLTransformerCache {
         {
             // Get the value out of the element and cast it to a Transformer.
         	// Using getObjectValue instead of getValue since Transformer is not serializable.
-            return ( Transformer )element.getObjectValue();
+            return ( SynchronisedTransformer )element.getObjectValue();
         }
 
         // We don't have the object in the cache so return null

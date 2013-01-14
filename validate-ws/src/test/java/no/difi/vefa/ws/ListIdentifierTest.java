@@ -26,7 +26,7 @@ public class ListIdentifierTest {
 	@Test
 	public void testGetSchemas() throws Exception {
 		String result = "<schemas version=\"1.4\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" +
-				"<schema id=\"urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1\" xlink:href=\"http://www.test.com/validate-ws/urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1\">" +
+				"<schema id=\"urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1\" xlink:href=\"http://www.test.com/validate-ws/urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1\">" +
 				"<name xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n" +
 				"\t\t\t<en>EHF invoice in Norway, profile invoice only</en>\n" +
 				"\t\t\t<no>EHF faktura i Norge, profil kun faktura</no>\n" +
