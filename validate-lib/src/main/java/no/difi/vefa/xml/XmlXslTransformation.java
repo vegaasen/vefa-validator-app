@@ -56,12 +56,12 @@ public class XmlXslTransformation {
         return transform(xmlDoc);
 	}
 
-    private boolean notCached(String xslFile) throws TransformerConfigurationException {
+    private boolean notCached(String xslFile) {
         templates = fetchFromCache(xslFile);
         return templates == null;
     }
 
-    private Templates fetchFromCache(String xslFile) throws TransformerConfigurationException {
+    private Templates fetchFromCache(String xslFile) {
         return xslTransformerCache.getTemplate(xslFile);
     }
 
