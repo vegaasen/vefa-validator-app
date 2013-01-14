@@ -4,8 +4,12 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 
+import javax.xml.transform.Templates;
+
 /**
- * This class can be used to cache an XSL Transformer
+ * This class can be used to cache an XSL Templates object
+ * The XSL Templates object is thread safe by design and can be used to
+ * obtain a new instance of a Transformer which is not thread safe.
  */
 public class XSLTransformerCache {
     /**
@@ -25,35 +29,34 @@ public class XSLTransformerCache {
     }
 
     /**
-     * Adds a new Transformer to the Cache
+     * Adds a new Templates object to the Cache
      *
-     * @param id The ID of the widget
-     * @param transformer The Transformer itself
+     * @param xslFileName The name of the xsl file
+     * @param templates The thread safe templates object which contains the parsed version of the xslFile
      */
-    public void addTransformer( String id, SynchronisedTransformer transformer )
+    public void addTemplate(String xslFileName, Templates templates)
     {
         // Create an EHCache Element to hold the widget
-        Element element = new Element( id, transformer );
+        Element templatesElement = new Element( xslFileName, templates );
 
         // Add the element to the cache
-        transformerCache.put( element );
+        transformerCache.put( templatesElement );
     }
 
     /**
-     * Retrieves a Transformer from the cache
+     * Retrieves a Templates object from the cache
      *
-     * @param id        The ID of the Transformer to retrieve
-     * @return          The requested Transformer or null if the Transformer is not in the cache
+     * @param xslFileName   The name of the xsl file to retrieve
+     * @return The Templates object containing the parsed xslFile, or null if not in the cache.
      */
-    public SynchronisedTransformer getTransformer( String id )
-    {
-        // Retrieve the element that contains the requested Transformer
-        Element element = transformerCache.get( id );
+    public Templates getTemplate(String xslFileName) {
+        // Retrieve the element that contains the requested Templates object
+        Element element = transformerCache.get( xslFileName );
         if( element != null )
         {
-            // Get the value out of the element and cast it to a Transformer.
-        	// Using getObjectValue instead of getValue since Transformer is not serializable.
-            return ( SynchronisedTransformer )element.getObjectValue();
+        	// Using getObjectValue instead of getValue since Templates object is not serializable.
+            Templates objectValue = (Templates) element.getObjectValue();
+            return objectValue;
         }
 
         // We don't have the object in the cache so return null
