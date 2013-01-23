@@ -77,7 +77,7 @@
 			});
 			
 			// Sort array descending to get highest versions first, eg. 1.5, 1.4 etc
-			versions.sort();
+			//versions.sort();
 			versions.reverse();
 			
 			// For each version get available schemas
