@@ -60,31 +60,39 @@ public class ValidateTest {
 	
 	@Test
 	public void testAutoDetectionOfVersionAndSchema() throws Exception {
-		xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
+		Scanner scanner = new Scanner(new File(basePath + "/Invoice.xml"));
+		xml = scanner.useDelimiter("\\Z").next();
 		
 		validate = new Validate();
 		validate.autodetectVersionAndIdentifier = true;
 		validate.xml = xml;
 		validate.main();	
+		
+		scanner.close();
 	}	
 
 	@Test
 	public void testFilesFromTestConfiguration() throws Exception {					
 		Utils utils = new Utils();
+		Scanner scanner;
 		
 		// Read standard test configuration	
-		String standardConfigDoc = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml")).useDelimiter("\\Z").next();		
+		scanner = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml"));
+		String standardConfigDoc = scanner.useDelimiter("\\Z").next();		
 		Document standardXmlDoc = utils.stringToXMLDOM(standardConfigDoc);
 		NodeList standardTests = utils.xmlDOMXPathQuery(standardXmlDoc, "/config/test");
 
 		// Read custom test configuration
-		String customConfigDoc = new Scanner(new File(propFile.dataDir + "/CUSTOM/configTestValidation.xml")).useDelimiter("\\Z").next();		
+		scanner = new Scanner(new File(propFile.dataDir + "/CUSTOM/configTestValidation.xml"));
+		String customConfigDoc = scanner.useDelimiter("\\Z").next();		
 		Document customXmlDoc = utils.stringToXMLDOM(customConfigDoc);
 		NodeList customTests = utils.xmlDOMXPathQuery(customXmlDoc, "/config/test");
 
 		// Run tests
 		this.validateTestFiles(standardTests, standardXmlDoc);
 		this.validateTestFiles(customTests, customXmlDoc);
+		
+		scanner.close();
 	}
 
 	private void validateTestFiles(NodeList tests, Document xmlDoc) throws Exception {
@@ -102,7 +110,9 @@ public class ValidateTest {
 			if (ignore == false) {
 				System.out.println("\nStarting test of XML file no: " + id);
 				
-				xml = new Scanner(new File(propFile.dataDir + file)).useDelimiter("\\Z").next();
+				Scanner scanner = new Scanner(new File(propFile.dataDir + file));
+				xml = scanner.useDelimiter("\\Z").next();
+				scanner.close();
 				
 				validate = new Validate();
 				validate.version = version;

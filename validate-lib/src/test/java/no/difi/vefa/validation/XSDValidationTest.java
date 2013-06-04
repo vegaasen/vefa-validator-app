@@ -39,13 +39,17 @@ public class XSDValidationTest {
 
 	@Test
 	public void testMain() throws Exception {
-		xml = new Scanner(new File(basePath + "/TestXSD.xml")).useDelimiter("\\Z").next();
+		Scanner scanner;
+		
+		scanner = new Scanner(new File(basePath + "/TestXSD.xml"));
+		xml = scanner.useDelimiter("\\Z").next();
 		xmlDoc	= utils.stringToXMLDOM(xml);			
 		messages = new ArrayList<Message>();
 		xsdValidation.main(xmlDoc, basePath + "/TestXSD.xsd", messages, propFile);
 		assertEquals(0, messages.size());
 
-		xml = new Scanner(new File(basePath + "/TestXSDWithErrors.xml")).useDelimiter("\\Z").next();
+		scanner = new Scanner(new File(basePath + "/TestXSDWithErrors.xml"));
+		xml = scanner.useDelimiter("\\Z").next();
 		xmlDoc	= utils.stringToXMLDOM(xml);		
 		messages = new ArrayList<Message>();
 		xsdValidation.main(xmlDoc, basePath + "/TestXSD.xsd", messages, propFile);
@@ -57,7 +61,9 @@ public class XSDValidationTest {
 		xsdValidation.main(null, basePath + "/TestXSD.xsd", messages, propFile);
 		assertEquals(1, messages.size());
 		assertEquals(MessageType.Fatal, messages.get(0).messageType);
-		assertEquals(ValidationType.XSD, messages.get(0).validationType);			
+		assertEquals(ValidationType.XSD, messages.get(0).validationType);
+		
+		scanner.close();
 	}
 
 }

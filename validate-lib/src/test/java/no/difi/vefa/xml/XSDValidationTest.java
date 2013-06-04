@@ -22,7 +22,9 @@ public class XSDValidationTest {
 	public void setUp() throws Exception {
 		basePath = new java.io.File("src/test/resources/").getCanonicalPath();
 		xsdFile = basePath + "/TestXSD.xsd";		
-		xmlFile = new Scanner(new File(basePath + "/TestXSD.xml")).useDelimiter("\\Z").next();	
+		Scanner scanner = new Scanner(new File(basePath + "/TestXSD.xml"));
+		xmlFile = scanner.useDelimiter("\\Z").next();	
+		scanner.close();
 		
 		String path = new java.io.File("src/test/resources/validator.properties").getCanonicalPath();
 		propFile = new PropertiesFile();

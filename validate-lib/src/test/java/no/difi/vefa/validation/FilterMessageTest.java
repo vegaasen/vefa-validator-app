@@ -30,7 +30,8 @@ public class FilterMessageTest {
 
 	@Test
 	public void testMain() throws Exception {		
-		String xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
+		Scanner scanner = new Scanner(new File(basePath + "/Invoice.xml"));
+		String xml = scanner.useDelimiter("\\Z").next();
 		Document xmlDoc	= utils.stringToXMLDOM(xml);								
 		FilterMessage filterMessage = new FilterMessage();
 		
@@ -52,7 +53,9 @@ public class FilterMessageTest {
 		
 		this.addMessage();
 		filterMessage.main(null, basePath + "/TestFilterMessageFalse.xsl", messages, "TEST-1234-TEST");				
-		assertEquals(2, messages.size());		
+		assertEquals(2, messages.size());
+		
+		scanner.close();
 	}
 	
 	private void addMessage() {

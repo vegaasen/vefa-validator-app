@@ -34,7 +34,8 @@ public class SchematronTransformationTest {
 
 	@Test
 	public void testMain() throws Exception {
-		xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
+		Scanner scanner = new Scanner(new File(basePath + "/Invoice.xml"));
+		xml = scanner.useDelimiter("\\Z").next();
 		xmlDoc	= utils.stringToXMLDOM(xml);												
 				
 		messages = new ArrayList<Message>();
@@ -47,6 +48,8 @@ public class SchematronTransformationTest {
 		assertEquals(1, messages.size());
 		assertEquals(MessageType.Fatal, messages.get(0).messageType);
 		assertEquals(ValidationType.XSL, messages.get(0).validationType);
+		
+		scanner.close();
 	}
 
 }

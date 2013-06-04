@@ -24,7 +24,8 @@ public class App
     	}
 
 		String file = args[0];
-		String xml = new Scanner(new File(file)).useDelimiter("\\Z").next();
+		Scanner scanner = new Scanner(new File(file));
+		String xml = scanner.useDelimiter("\\Z").next();
 
 		Validate validate = new Validate();
 		
@@ -45,5 +46,7 @@ public class App
 			validate.main();
 			System.out.println(validate.messagesAsXML());			
 		}		
+		
+		scanner.close();
     }
 }

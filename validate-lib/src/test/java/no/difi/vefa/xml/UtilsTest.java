@@ -23,10 +23,16 @@ public class UtilsTest {
 	@Before
 	public void setUp() throws Exception {
 		utils = new Utils();
+		Scanner scanner;
 
 		String basePath = new java.io.File("src/test/resources/").getCanonicalPath();
-		xmlTestString = new Scanner(new File(basePath + "/config.xml")).useDelimiter("\\Z").next();
-		xmlTestInvoice = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();						
+		scanner = new Scanner(new File(basePath + "/config.xml"));
+		xmlTestString = scanner.useDelimiter("\\Z").next();
+		
+		scanner = new Scanner(new File(basePath + "/Invoice.xml"));
+		xmlTestInvoice = scanner.useDelimiter("\\Z").next();
+		
+		scanner.close();
 	}
 
 	@Test

@@ -37,24 +37,30 @@ public class DetectVersionAndIdentifierTest {
 		Document xmlDoc;
 		List<Message> messages;
 		Utils utils = new Utils();
+		Scanner scanner;
 		
-		xml = new Scanner(new File(basePath + "/Invoice.xml")).useDelimiter("\\Z").next();
+		scanner = new Scanner(new File(basePath + "/Invoice.xml"));
+		xml = scanner.useDelimiter("\\Z").next();
 		xmlDoc = utils.stringToXMLDOM(xml);
 		messages = new ArrayList<Message>();
 		detectIdentifier.setVersionAndIdentifier(xmlDoc, messages);		
 		assertEquals(0, messages.size());
-				
-		xml = new Scanner(new File(basePath + "/InvoiceMissingProfileID.xml")).useDelimiter("\\Z").next();
+
+		scanner = new Scanner(new File(basePath + "/InvoiceMissingProfileID.xml"));
+		xml = scanner.useDelimiter("\\Z").next();		
 		xmlDoc = utils.stringToXMLDOM(xml);
 		messages = new ArrayList<Message>();
 		detectIdentifier.setVersionAndIdentifier(xmlDoc, messages);
 		assertEquals(2, messages.size());
 		
-		xml = new Scanner(new File(basePath + "/InvoiceMissingCustomizationID.xml")).useDelimiter("\\Z").next();
+		scanner = new Scanner(new File(basePath + "/InvoiceMissingCustomizationID.xml"));
+		xml = scanner.useDelimiter("\\Z").next();		
 		xmlDoc = utils.stringToXMLDOM(xml);
 		messages = new ArrayList<Message>();
 		detectIdentifier.setVersionAndIdentifier(xmlDoc, messages);
-		assertEquals(2, messages.size());		
+		assertEquals(2, messages.size());	
+		
+		scanner.close();
 	}
 
 }
