@@ -60,6 +60,7 @@ public class Utils {
 	 */	
 	public Document stringToXMLDOM(String xml) throws Exception{
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		docFactory.setNamespaceAware(true);
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		Document doc = docBuilder.parse(new InputSource(new StringReader(xml)));
 		
