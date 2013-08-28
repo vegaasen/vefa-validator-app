@@ -40,6 +40,7 @@
 			</form>
 
 			<button id="readFileButton">Validate XML</button>
+			<button id="renderFileButton">Render XML as HTML</button>
 
 			<div id="transformResult"></div>
 
@@ -81,7 +82,7 @@
 			versions.reverse();
 			
 			// For each version get available schemas
-		    jQuery.each(versions, function(i, val) {
+		    $.each(versions, function(i, val) {
 				var version = versions[i].version;
 
 				// Get available schemas for version
@@ -95,21 +96,31 @@
 				function getSchemas(xml){
 					$(xml).find('schema').each(function(){
 						var id = $(this).attr('id');
-						var href = $(this).attr('xlink:href');												
-						
+						var href = $(this).attr('xlink:href');
+						var render = $(this).attr('render') == null? "false" : $(this).attr('render');
+
 						var name = '';
 						$(this).find('name').each(function(){
 							name = $(this).find('en').text();														 
 						});
 						
-						$('#xsltSelect').append($("<option></option>").attr("value",version + '/' + id).text(version + ' - ' + name));
+						var label = version + ' - ';
+						if (render == 'true')
+							label += '* ';
+						label += name;
+
+						$('#xsltSelect').append($("<option></option>").attr("value",version + '/' + id).attr("render", render).text(label));
 					});			
 				};
-		    });									
+		    });
+		    $('#xsltSelect').change(function() {
+				($("#xsltSelect option:selected").attr("render") == "true")?$("#renderFileButton").show() : $("#renderFileButton").hide();
+		    });
+		    $('#xsltSelect').change();
 		}		
 		
 		// Send XML to ws and prosess result
-		$("#readFileButton").click(function() {
+		$("#readFileButton,#renderFileButton").click(function() {
 			var r = '';
 			
 			if ($('#xmlTextSource').val() == '') {
@@ -127,13 +138,16 @@
 			r += '<h3>Waiting for transformation result!</h3>';
 			r += '<p>Please be patient:-)</p>';			
 			$('#transformResult').html(r);
-			
+
 			// Get result
 			var url = wsUrl + '/' + escape($('#xsltSelect :selected').val());
-			
+
+			// Render button clicked...
+			if ($(this).attr("id") == "renderFileButton")
+				url += "/render";
+
 			$.ajax({
 				url: url,
-				dataType: 'xml',
 				type: 'POST',
 				data: $('#xmlTextSource').val(),
 				//data: '<test></test>',
@@ -141,13 +155,13 @@
 				contentType: 'application/xml',
 				success: getResult
 			});			
-		});		
-		
+		});				
+
 		function getResult(xml){
-			var rOuter = '<div style="height: 20px;"></div>';
+			var rOuter = '<div style="height: 20px"></div>';
 			rOuter += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
 			var rInner = '';
-			
+
 			$(xml).find('message').each(function(){								
 				var schema = $(this).attr('schema');
 				var validationType = $(this).attr('validationType');
@@ -174,11 +188,15 @@
 				rInner += '<h3 style="' + style + '" title="' + messageTypeTitle + '">' + messageTypeTitle + ': ' + title + '</h3>';
 				rInner += '<p>' + description + '</p>';
 			});
+
+			if (xml.substring(1,5) == "html")
+				//Result of rendering;
+				rInner += xml;
 			
 			if (rInner.length == 0) {
 				rInner = "<h3 style=\"color: green;\">Document is valid</h3>";
 			}
-			
+
 			$('#transformResult').html(rOuter + rInner);
 		};
 	});
