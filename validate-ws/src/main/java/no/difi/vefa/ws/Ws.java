@@ -107,4 +107,24 @@ public class Ws
 
 		return validate.messagesAsXML();		
 	}	
+
+	@POST
+	@Path("/{version}/{schema}/render")
+	@Produces({MediaType.TEXT_HTML})
+	@Consumes({MediaType.APPLICATION_XML})
+	public String renderSchema(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
+		Validate validate = new Validate();
+		validate.version = version;
+		validate.id = schema;
+		validate.xml = xml;
+		validate.render();
+		
+		if (validate.renderResult != null) {
+			return validate.renderResult;	
+		} else {
+			return validate.messagesAsXML();
+		}
+			
+				
+	}
 }

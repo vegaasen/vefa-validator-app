@@ -1,16 +1,25 @@
 package no.difi.vefa.xml;
 
 import no.difi.vefa.cache.XSLTransformerCache;
+import no.difi.vefa.properties.PropertiesFile;
+import no.difi.vefa.validation.Validate;
+
 import org.w3c.dom.Document;
 
+import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 
@@ -71,7 +80,9 @@ public class XmlXslTransformation {
     }
 
     private Templates parse(String xslFile) throws FileNotFoundException, TransformerConfigurationException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();        
+        transformerFactory.setURIResolver(new XsltURIResolver());
+        
         FileReader fileReader = new FileReader(xslFile);
         return transformerFactory.newTemplates(new StreamSource(fileReader));
     }
@@ -89,4 +100,21 @@ public class XmlXslTransformation {
         // The writer contains the result of the transformation.
         return utils.stringToXMLDOM(writer.toString());
     }
+    
+    class XsltURIResolver implements URIResolver {
+
+        @Override
+        public Source resolve(String href, String base) throws TransformerException {        	
+            try{
+            	Validate validate = new Validate();
+            	PropertiesFile propFile = validate.getPropertiesFile();
+            	InputStream inputStream = new FileInputStream(propFile.dataDir + href);
+            	return new StreamSource(inputStream);
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+                return null;
+            }
+        }
+    }    
 }

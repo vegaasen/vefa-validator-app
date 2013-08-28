@@ -66,12 +66,105 @@ public class Validate {
 	 * validator will try to autodetect version and identifier based on xml content. Default false;
 	 */
 	public boolean autodetectVersionAndIdentifier = false;
+
+	/**
+	 * Result of rendering as String.
+	 */	
+	public String renderResult;
 	
 	/**
 	 * Properties file as PropertiesFile object.
 	 */	
 	private PropertiesFile propertiesFile;
+
+	/**
+	 * Executes a rendering according to the given configuration,
+	 * adds messages to the message collection if any and 
+	 * sets renderResult as HTML.
+	 * 
+	 * @throws Exception 
+	 */
+	public void render() throws Exception {
+		// Setup
+		Utils utils = new Utils();
+		Configuration configuration = new Configuration();
+		
+		// Set Saxon as XML parser
+		System.setProperty("javax.xml.transform.TransformerFactory","net.sf.saxon.TransformerFactoryImpl");		
+		
+		// Load properties file
+		this.propertiesFile = this.getPropertiesFile();		
+		
+		// Always hide warnings?
+		this.hideWarnings();		
+		
+		// Check if XML string is well formed
+		if (this.isXMLWellFormed() == false) {
+			return;
+		}
+						
+		// Load XML string as XML DOM		
+		Document xmlDoc = utils.stringToXMLDOM(this.xml);
+		
+		// Autodetect version and schema?
+		if (this.tryToAutodetectVersionAndSchema(xmlDoc) == false) {
+			return;
+		}
+				
+		// Get validations from config files	
+		NodeList standardValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/STANDARD/config.xml");							
+		NodeList customValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/CUSTOM/config.xml");
+						
+		// We have not found anything in configuration to validate against
+		if (this.doesConfigurationContainValidationDefinitions(standardValidates, customValidates) == false) {
+			return;
+		}
+		
+		// Perform validation
+		this.renderXML(standardValidates, xmlDoc);
+		this.renderXML(customValidates, xmlDoc);
+		
+		// Set valid attribute
+		this.setIsValid();
+		
+		// Log statistics
+		//this.logStat();
+	}	
+	
+	/**
+	 * Perform Difi rendering of XML based on Difi configuration.
+	 * 
+	 * @param validates Nodelist of validation definitions
+	 * @param xmlDoc XML as Document
+	 * @throws Exception
+	 */
+	private void renderXML(NodeList validates, Document xmlDoc) throws Exception {		
+		// Loop NodeList for validation steps
+		for(int i=0; i<validates.getLength(); i++){
+			Element validate = (Element) validates.item(i);
+			NodeList steps = validate.getElementsByTagName("render");
 			
+			for(int x=0; x<steps.getLength(); x++){
+				Node step = steps.item(x);			
+				String id = step.getAttributes().getNamedItem("id").getNodeValue();
+				String file = step.getAttributes().getNamedItem("file").getNodeValue();				
+				
+				//System.out.println(id + " " + file);
+				
+				if (id.equals("XSL")) {
+					// Perform XSL transformation
+					RenderXsl xmlXslTransformation = new RenderXsl();
+					xmlXslTransformation.main(xmlDoc, this.propertiesFile.dataDir + file, this.messages);
+					
+					// Get XML utils and return DOM as string
+					if (xmlXslTransformation.result != null) {
+						Utils utils = new Utils();
+						this.renderResult = utils.xmlDOMToString(xmlXslTransformation.result);
+					}
+				}		
+			}										
+		}
+	}	
 	
 	/**
 	 * Executes a validation according to the given configuration
