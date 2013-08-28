@@ -81,7 +81,12 @@ public class ListIdentifier {
 		for(int i=0; i<identifiers.getLength(); i++){						
 			Element identifier = (Element) identifiers.item(i);
 			String s = "";
-			s += "<schema id=\"" + identifier.getAttribute("id") + "\" xlink:href=\"" + baseUri + identifier.getAttribute("id") + "\">";
+			s += "<schema id=\"" + identifier.getAttribute("id") + "\" xlink:href=\"" + baseUri + identifier.getAttribute("id") + "\"";
+
+			if (identifier.hasAttribute("render"))
+				s += " render=\"" + identifier.getAttribute("render") + "\"";
+
+			s += ">";
 			
 			NodeList names = identifier.getElementsByTagName("name");
 	
