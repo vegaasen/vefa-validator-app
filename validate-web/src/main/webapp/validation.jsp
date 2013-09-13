@@ -189,7 +189,7 @@
 				rInner += '<p>' + description + '</p>';
 			});
 
-			if (xml.substring(1,5) == "html")
+			if (typeof xml == "string")
 				//Result of rendering;
 				rInner += xml;
 			
