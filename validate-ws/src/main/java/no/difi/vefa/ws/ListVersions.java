@@ -59,7 +59,7 @@ public class ListVersions {
 		String v = "<versions xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
 		for (Object version : uniqueList) {
 			String item = (String) version;
-			v += "<version xlink:href=\"" + this.baseUri + item + "\">" + item + "</version>";
+			v += "<version xlink:href=\"" + this.baseUri + "/" + item + "\">" + item + "</version>";
 		}
 		v += "</versions>";
 				

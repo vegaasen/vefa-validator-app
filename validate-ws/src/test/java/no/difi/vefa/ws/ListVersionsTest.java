@@ -24,7 +24,7 @@ public class ListVersionsTest {
 
 	@Test
 	public void testGetVersions() throws Exception {
-		assertEquals("<versions xmlns:xlink=\"http://www.w3.org/1999/xlink\"><version xlink:href=\"http://www.test.com/validate-ws/1.4\">1.4</version></versions>", listVersions.getVersions());		
+		assertEquals("<versions xmlns:xlink=\"http://www.w3.org/1999/xlink\"><version xlink:href=\"http://www.test.com/validate-ws//1.4\">1.4</version></versions>", listVersions.getVersions());		
 	}
 
 }
