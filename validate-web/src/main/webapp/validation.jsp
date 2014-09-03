@@ -81,6 +81,8 @@
 			//versions.sort();
 			versions.reverse();
 			
+			$('#xsltSelect').append($("<option>(Autodetect EHF version)</option>").attr("value",'AUTODETECT'));
+			
 			// For each version get available schemas
 		    $.each(versions, function(i, val) {
 				var version = versions[i].version;
@@ -141,6 +143,10 @@
 
 			// Get result
 			var url = wsUrl + '/' + escape($('#xsltSelect :selected').val());
+			
+			if (url=='/validate-ws/AUTODETECT') {
+				url = wsUrl + '/';
+			}			
 
 			// Render button clicked...
 			if ($(this).attr("id") == "renderFileButton")
@@ -159,8 +165,15 @@
 
 		function getResult(xml){
 			var rOuter = '<div style="height: 20px"></div>';
-			rOuter += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
-			var rInner = '';
+			
+						
+			if ($('#xsltSelect :selected').val()=='AUTODETECT') {
+				rOuter += '<h2>' + $("#xsltSelect option[value$='" + $(xml).find('messages').attr('id') + "']").text() + '</h2>';
+			} else {
+				rOuter += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';	
+			}
+						
+			var rInner = '';			
 
 			$(xml).find('message').each(function(){								
 				var schema = $(this).attr('schema');
