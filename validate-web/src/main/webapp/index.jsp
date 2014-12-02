@@ -47,8 +47,8 @@
                         <p><a href="documentation/Documentation.rtf">Documentation</a></p>
 
                         <h2>Services</h2>
-                        <p><a href="validate-ws">Web service</a></p>
-                        <p><a href="validate-ws/application.wadl">Web service WADL</a></p>
+                        <p><a href="/validate-ws">Web service</a></p>
+                        <p><a href="/validate-ws/application.wadl">Web service WADL</a></p>
                     </div><!-- /.mod-bd -->
                 </div><!-- /.mod-wrap -->
             </section>
