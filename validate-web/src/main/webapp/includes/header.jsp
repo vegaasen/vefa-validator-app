@@ -2,7 +2,7 @@
 	<div class="row whitespace"></div>
 	<header class="row">
 		<hgroup>
-			<h1><a href="index.jsp">Validation of formats</a></h1>
+			<h1><a href="index.jsp">VEFA Validator</a></h1>
 			<h2>Validation of the EHF format</h2>
 		</hgroup>
 		<div class="tools">
@@ -12,19 +12,6 @@
 						<span class="text">Hold Ctrl-key down. Press + to increase or - to decrease. </span>
 					</span><!-- /.box -->
             </a>
-
-			<a href="/rss.php?type=sevurss&id=1&location=1"><img class="rss_btn" src="img/rss_btn_blue.png" alt="rss"></a>
-
-			<div class="search">
-				<!--
-				<form id="searchform" action="http://sok.difi.no" method="get">
-					<label style="display: none" for="search">Søk</label>
-					<input id="query" name="query" size="25" placeholder="Søk" type="search" value="">
-					<input id="portal" type="hidden" value="www.difi.no" name="portal">
-					<input id="searchsubmit" class="button" type="submit" value="Søk">
-				</form>
-				-->
-			</div><!-- /.search -->
 
 		</div><!-- /.tools -->
 		<div class="minimenu">
