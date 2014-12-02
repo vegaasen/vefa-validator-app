@@ -44,7 +44,7 @@ public class DetectVersionAndIdentifierTest {
 		xmlDoc = utils.stringToXMLDOM(xml);
 		messages = new ArrayList<Message>();
 		detectIdentifier.setVersionAndIdentifier(xmlDoc, messages);		
-		assertEquals(0, messages.size());
+		assertEquals(1, messages.size());
 
 		scanner = new Scanner(new File(basePath + "/InvoiceMissingProfileID.xml"));
 		xml = scanner.useDelimiter("\\Z").next();		
