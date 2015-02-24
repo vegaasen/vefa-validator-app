@@ -15,7 +15,7 @@ public class WellFormedTest {
 	
 	@Test
 	public void testMain() throws Exception {		
-		List<Message> messages = new ArrayList<Message>();
+		List<Message> messages = new ArrayList<>();
 		WellFormed wellFormed = new WellFormed();
 		
 		wellFormed.main("<data><test>Hello world</test></data>", messages);		
@@ -23,8 +23,8 @@ public class WellFormedTest {
 		
 		wellFormed.main("<data><test>Hello world</test></data>error", messages);		
 		assertEquals(1, messages.size());
-		assertEquals(MessageType.Fatal, messages.get(0).messageType);
-		assertEquals(ValidationType.XMLWellFormed, messages.get(0).validationType);
+		assertEquals(MessageType.Fatal, messages.get(0).getMessageType());
+		assertEquals(ValidationType.XMLWellFormed, messages.get(0).getValidationType());
 	}
 
 }

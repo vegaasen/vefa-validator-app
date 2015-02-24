@@ -20,10 +20,7 @@ public class SchematronTransformationTest {
 	
 	private String basePath;
 	private Utils utils;
-	private String xml;
-	private Document xmlDoc;
-	private List<Message> messages;
-	private SchematronTransformation schematronTransformation;
+    private SchematronTransformation schematronTransformation;
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,19 +32,19 @@ public class SchematronTransformationTest {
 	@Test
 	public void testMain() throws Exception {
 		Scanner scanner = new Scanner(new File(basePath + "/Invoice.xml"));
-		xml = scanner.useDelimiter("\\Z").next();
-		xmlDoc	= utils.stringToXMLDOM(xml);												
-				
-		messages = new ArrayList<Message>();
+        String xml = scanner.useDelimiter("\\Z").next();
+        Document xmlDoc = utils.stringToXMLDOM(xml);
+
+        List<Message> messages = new ArrayList<>();
 		schematronTransformation.main(xmlDoc, basePath + "/UBL-T10-EUgen.xsl", messages);		
 		assertEquals(1, messages.size());
-		assertEquals("EUGEN-T10-R024", messages.get(0).schematronRuleId);		
+		assertEquals("EUGEN-T10-R024", messages.get(0).getSchematronRuleId());
 		
-		messages = new ArrayList<Message>();
+		messages = new ArrayList<>();
 		schematronTransformation.main(null, basePath + "/UBL-T10-EUgen.xsl", messages);
 		assertEquals(1, messages.size());
-		assertEquals(MessageType.Fatal, messages.get(0).messageType);
-		assertEquals(ValidationType.XSL, messages.get(0).validationType);
+		assertEquals(MessageType.Fatal, messages.get(0).getMessageType());
+		assertEquals(ValidationType.XSL, messages.get(0).getValidationType());
 		
 		scanner.close();
 	}

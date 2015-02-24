@@ -44,7 +44,7 @@ public class ValidateTest {
 		validate.xml = "<test>notwellformed</testtest>";
 		validate.main();
 		
-		assertEquals(MessageType.Fatal, validate.messages.get(0).messageType);
+		assertEquals(MessageType.Fatal, validate.messages.get(0).getMessageType());
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class ValidateTest {
 		validate.xml = "<test>we do not find any validation definition</test>";
 		validate.main();
 		
-		assertEquals(MessageType.Fatal, validate.messages.get(0).messageType);
+		assertEquals(MessageType.Fatal, validate.messages.get(0).getMessageType());
 	}
 	
 	@Test
@@ -157,19 +157,19 @@ public class ValidateTest {
 	private void compareResultWithConfiguration(NodeList errors, String msg, MessageType messageType) {
 		List<Message> tmpMessages = new ArrayList<Message>();
 		for (int i = 0; i < validate.messages.size(); i++) {
-			if (validate.messages.get(i).messageType == messageType) {
+			if (validate.messages.get(i).getMessageType() == messageType) {
 				tmpMessages.add(validate.messages.get(i));
 			}			
 		}
 
 		for(int x=0; x<tmpMessages.size(); x++){
-			if (tmpMessages.get(x).messageType == messageType) {				
-				System.out.println("\t\t" + msg + tmpMessages.get(x).schematronRuleId);
+			if (tmpMessages.get(x).getMessageType() == messageType) {
+				System.out.println("\t\t" + msg + tmpMessages.get(x).getSchematronRuleId());
 				
 				Element error = (Element) errors.item(x);
 				String schematronrule = error.getTextContent();			
 				
-				assertEquals(schematronrule, tmpMessages.get(x).schematronRuleId);
+				assertEquals(schematronrule, tmpMessages.get(x).getSchematronRuleId());
 			}
 		}
 	}
@@ -177,7 +177,7 @@ public class ValidateTest {
 	private void compareConfigurationWithResult(NodeList errors, String msg, MessageType messageType) {
 		List<Message> tmpMessages = new ArrayList<Message>();
 		for (int i = 0; i < validate.messages.size(); i++) {
-			if (validate.messages.get(i).messageType == messageType) {
+			if (validate.messages.get(i).getMessageType() == messageType) {
 				tmpMessages.add(validate.messages.get(i));
 			}			
 		}
@@ -188,24 +188,24 @@ public class ValidateTest {
 
 			System.out.println("\t\t" + msg + schematronrule);
 			
-			assertEquals(schematronrule, tmpMessages.get(x).schematronRuleId);
+			assertEquals(schematronrule, tmpMessages.get(x).getSchematronRuleId());
 		}
 	}
 
 	@Test
 	public void testMessagesAsXML() throws Exception {
 		Message message = new Message();
-		message.validationType = ValidationType.Configuration;
-		message.messageType = MessageType.Fatal;
-		message.title = "My test title";
-		message.description = "My test description";
-		message.schematronRuleId = "ASD-1234-BBB";
+		message.setValidationType(ValidationType.Configuration);
+		message.setMessageType(MessageType.Fatal);
+		message.setTitle("My test title");
+		message.setDescription("My test description");
+		message.setSchematronRuleId("ASD-1234-BBB");
 
 		Hint hint = new Hint();
-		hint.title = "My hint title";
-		hint.description = "My hint description";
+		hint.setTitle("My hint title");
+		hint.setDescription("My hint description");
 		
-		message.hints.add(hint);
+		message.addHint(hint);
 		
 		this.messages.add(message);
 		

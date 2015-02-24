@@ -1,42 +1,41 @@
 package no.difi.vefa.message;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class MessageTest {
-	
-	private Message message;
-	private Hint hint;
 
-	@Before
-	public void setUp() throws Exception {
-		hint = new Hint();
-		hint.description = "Hint description";
-		hint.title = "Hint title";
-		
-		message = new Message();
-		message.description = "This is my description";
-		message.messageType = MessageType.Fatal;
-		message.schematronRuleId = "BIRULE-0123-123";
-		message.title = "This is my title";
-		message.validationType = ValidationType.XSL;
-		message.hints.add(hint);		
-	}
+    private Message message;
 
-	@Test
-	public void test() {
-		assertEquals("This is my description", message.description);
-		assertEquals(MessageType.Fatal, message.messageType);
-		assertEquals("BIRULE-0123-123", message.schematronRuleId);
-		assertEquals("This is my title", message.title);
-		assertEquals(ValidationType.XSL, message.validationType);
+    @Before
+    public void setUp() throws Exception {
+        Hint hint = new Hint();
+        hint.setDescription("Hint description");
+        hint.setTitle("Hint title");
 
-		assertEquals(1, message.hints.size());
-		
-		assertEquals("Hint description", message.hints.get(0).description);
-		assertEquals("Hint title", message.hints.get(0).title);				
-	}
+        message = new Message();
+        message.setDescription("This is my description");
+        message.setMessageType(MessageType.Fatal);
+        message.setSchematronRuleId("BIRULE-0123-123");
+        message.setTitle("This is my title");
+        message.setValidationType(ValidationType.XSL);
+        message.addHint(hint);
+    }
+
+    @Test
+    public void test() {
+        assertEquals("This is my description", message.getDescription());
+        assertEquals(MessageType.Fatal, message.getMessageType());
+        assertEquals("BIRULE-0123-123", message.getSchematronRuleId());
+        assertEquals("This is my title", message.getTitle());
+        assertEquals(ValidationType.XSL, message.getValidationType());
+
+        assertEquals(1, message.getHints().size());
+
+        assertEquals("Hint description", message.getHints().iterator().next().getDescription());
+        assertEquals("Hint title", message.getHints().iterator().next().getTitle());
+    }
 
 }
