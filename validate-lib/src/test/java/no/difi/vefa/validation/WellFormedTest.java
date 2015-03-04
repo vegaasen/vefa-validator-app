@@ -1,8 +1,8 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.message.MessageType;
-import no.difi.vefa.message.Messages;
-import no.difi.vefa.message.ValidationType;
+import no.difi.vefa.model.message.MessageType;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.model.message.ValidationType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

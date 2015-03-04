@@ -1,9 +1,8 @@
-package no.difi.vefa.util.xml;
+package no.difi.vefa.utils.xml;
 
 import no.difi.vefa.cache.XSLTransformerCache;
-import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.utils.PropertiesUtils;
 import no.difi.vefa.validation.Validate;
-
 import org.w3c.dom.Document;
 
 import javax.xml.transform.Source;
@@ -15,7 +14,6 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,20 +24,14 @@ import java.io.StringWriter;
 /**
  * This class can be used to perform transformation of XML Document
  * with an XSL Document.
- *
+ * <p/>
  * This class is <b>not</b> thread safe and a new instance should be created for each transformation.
  * The parsed Templates object representing the xslFile will be fetched from the cache if it has been
  * used before so to improve performance.
  */
 public class XmlXslTransformation {
-    /**
-     * XSL Transformer cache
-     */	
-	private final XSLTransformerCache xslTransformerCache;
 
-    /**
-     * The templates object contains only one parsed xsl document.
-     */
+    private final XSLTransformerCache xslTransformerCache;
     private Templates templates;
 
 
@@ -48,14 +40,14 @@ public class XmlXslTransformation {
     }
 
     /**
-	 * Perform transformation of XML with XSL.
-	 * 
-	 * @param xmlDoc XML as Document
-	 * @param xslFile Path to XSL file as String
-	 * @return Document Result of transformation as Document
-	 * @throws Exception
-	 */	
-	public Document main(Document xmlDoc, String xslFile) throws Exception {
+     * Perform transformation of XML with XSL.
+     *
+     * @param xmlDoc  XML as Document
+     * @param xslFile Path to XSL file as String
+     * @return Document Result of transformation as Document
+     * @throws Exception
+     */
+    public Document main(Document xmlDoc, String xslFile) throws Exception {
 
         // Check if the xslFile Templates object is cached
         if (notCached(xslFile)) {
@@ -63,7 +55,7 @@ public class XmlXslTransformation {
         }
 
         return transform(xmlDoc);
-	}
+    }
 
     private boolean notCached(String xslFile) {
         templates = fetchFromCache(xslFile);
@@ -80,9 +72,9 @@ public class XmlXslTransformation {
     }
 
     private Templates parse(String xslFile) throws FileNotFoundException, TransformerConfigurationException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();        
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
         transformerFactory.setURIResolver(new XsltURIResolver());
-        
+
         FileReader fileReader = new FileReader(xslFile);
         return transformerFactory.newTemplates(new StreamSource(fileReader));
     }
@@ -100,21 +92,20 @@ public class XmlXslTransformation {
         // The writer contains the result of the transformation.
         return xmlUtils.stringToXMLDOM(writer.toString());
     }
-    
-    class XsltURIResolver implements URIResolver {
+
+    private static final class XsltURIResolver implements URIResolver {
 
         @Override
-        public Source resolve(String href, String base) throws TransformerException {        	
-            try{
-            	Validate validate = new Validate();
-            	PropertiesUtils propFile = validate.getPropertiesUtils();
-            	InputStream inputStream = new FileInputStream(propFile.dataDir + href);
-            	return new StreamSource(inputStream);
-            }
-            catch(Exception ex){
+        public Source resolve(String href, String base) throws TransformerException {
+            try {
+                Validate validate = new Validate();
+                PropertiesUtils propFile = validate.getPropertiesUtils();
+                InputStream inputStream = new FileInputStream(propFile.dataDir + href);
+                return new StreamSource(inputStream);
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 return null;
             }
         }
-    }    
+    }
 }

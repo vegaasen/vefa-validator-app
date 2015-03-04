@@ -1,4 +1,4 @@
-package no.difi.vefa.util.xml;
+package no.difi.vefa.utils.xml;
 
 import static org.junit.Assert.*;
 
@@ -29,7 +29,7 @@ public class XmlXslTransformationTest {
 		XmlUtils xmlUtils = new XmlUtils();
 		Document xmlDoc = xmlUtils.stringToXMLDOM(xmlFile);
 		
-		no.difi.vefa.util.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.util.xml.XmlXslTransformation();
+		no.difi.vefa.utils.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.utils.xml.XmlXslTransformation();
 		Document result = xmlXslTransformation.main(xmlDoc, xslFile);
 
 		assertEquals("true", result.getElementsByTagName("status").item(0).getTextContent());

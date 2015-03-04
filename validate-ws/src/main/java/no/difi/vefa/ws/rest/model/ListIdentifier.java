@@ -1,8 +1,8 @@
 package no.difi.vefa.ws.rest.model;
 
-import no.difi.vefa.configuration.Configuration;
-import no.difi.vefa.util.PropertiesUtils;
-import no.difi.vefa.util.xml.XmlUtils;
+import no.difi.vefa.utils.configuration.ConfigurationUtils;
+import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,17 +26,17 @@ public class ListIdentifier {
      */
     public String getIdentifier() throws Exception {
         // Setup
-        Configuration configuration = new Configuration();
+        ConfigurationUtils configurationUtils = new ConfigurationUtils();
 
         // Hastable to hold schemas
         LinkedHashSet<String[][]> table = new LinkedHashSet<>();
 
         // Add schema to table from Standard configuration file
-        Document standardConfig = configuration.fileToXMLDOM(propertiesUtils.dataDir + "/STANDARD/config.xml", propertiesUtils);
+        Document standardConfig = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/STANDARD/config.xml", propertiesUtils);
         this.addIdentifierToList(standardConfig, table);
 
         // Add schema to table from Custom configuration file
-        Document customConfig = configuration.fileToXMLDOM(propertiesUtils.dataDir + "/CUSTOM/config.xml", propertiesUtils);
+        Document customConfig = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/CUSTOM/config.xml", propertiesUtils);
         this.addIdentifierToList(customConfig, table);
 
         String v = "<schemas version=\"" + this.version + "\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";

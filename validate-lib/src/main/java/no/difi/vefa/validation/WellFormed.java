@@ -1,7 +1,13 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.message.Messages;
-import no.difi.vefa.util.MessageUtils;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.utils.MessageUtils;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.StringReader;
 
 /**
  * This class can be used to check if an XML string is contains
@@ -19,8 +25,14 @@ public class WellFormed {
      */
     public boolean main(String xml, Messages messages) {
         try {
-            no.difi.vefa.util.xml.WellFormed wellFormed = new no.difi.vefa.util.xml.WellFormed();
-            wellFormed.main(xml);
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setValidating(false);
+            factory.setNamespaceAware(true);
+
+            SAXParser parser = factory.newSAXParser();
+            XMLReader reader = parser.getXMLReader();
+
+            reader.parse(new InputSource(new StringReader(xml)));
             return true;
         } catch (Exception e) {
             messages.addMessage(MessageUtils.translate(e));

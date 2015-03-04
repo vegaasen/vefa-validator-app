@@ -1,7 +1,7 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.message.Messages;
-import no.difi.vefa.util.xml.XmlUtils;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.utils.xml.XmlUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

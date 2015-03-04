@@ -1,19 +1,19 @@
-package no.difi.vefa.util;
+package no.difi.vefa.utils;
 
 import no.difi.vefa.cache.PropertiesFileCache;
 
 import java.io.FileInputStream;
 import java.util.Properties;
 
-/**
- * This class can be used to read the application properties file
- */
 public class PropertiesUtils {
 
-    private PropertiesFileCache propertiesFileCache;
+    private static final String DATA_DIR = "DATA_DIR";
+    private static final String SUPPRESS_WARNINGS = "SUPPRESS_WARNINGS";
+    private static final String LOG_STATISTICS = "LOG_STATISTICS";
+
     public String dataDir;
-    public Boolean suppressWarnings;
-    public Boolean logStatistics;
+    public boolean suppressWarnings;
+    public boolean logStatistics;
 
     /**
      * Load properties file and set variables.
@@ -22,18 +22,15 @@ public class PropertiesUtils {
      * @throws Exception
      */
     public void main(String propertiesFile) throws Exception {
-        // Check if properties is cached
-        propertiesFileCache = new PropertiesFileCache();
+        PropertiesFileCache propertiesFileCache = new PropertiesFileCache();
         Properties configFile = propertiesFileCache.getProperties(propertiesFile);
-
         if (configFile == null) {
             configFile = new Properties();
             configFile.load(new FileInputStream(propertiesFile));
             propertiesFileCache.addProperties(propertiesFile, configFile);
         }
-
-        this.dataDir = configFile.getProperty("DATA_DIR");
-        this.suppressWarnings = "true".equals(configFile.getProperty("SUPPRESS_WARNINGS"));
-        this.logStatistics = "true".equals(configFile.getProperty("LOG_STATISTICS"));
+        this.dataDir = configFile.getProperty(DATA_DIR);
+        this.suppressWarnings = Boolean.parseBoolean(configFile.getProperty(SUPPRESS_WARNINGS));
+        this.logStatistics = Boolean.parseBoolean(configFile.getProperty(LOG_STATISTICS));
     }
 }

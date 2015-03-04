@@ -1,8 +1,8 @@
-package no.difi.vefa.util;
+package no.difi.vefa.utils;
 
-import no.difi.vefa.message.Message;
-import no.difi.vefa.message.MessageType;
-import no.difi.vefa.message.ValidationType;
+import no.difi.vefa.model.message.Message;
+import no.difi.vefa.model.message.MessageType;
+import no.difi.vefa.model.message.ValidationType;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

@@ -1,14 +1,14 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.configuration.Configuration;
-import no.difi.vefa.logging.StatLogger;
-import no.difi.vefa.message.Hint;
-import no.difi.vefa.message.Message;
-import no.difi.vefa.message.MessageType;
-import no.difi.vefa.message.Messages;
-import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.util.PropertiesUtils;
-import no.difi.vefa.util.xml.XmlUtils;
+import no.difi.vefa.utils.configuration.ConfigurationUtils;
+import no.difi.vefa.model.message.Hint;
+import no.difi.vefa.model.message.Message;
+import no.difi.vefa.model.message.MessageType;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.model.message.ValidationType;
+import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.logging.StatLogger;
+import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -85,7 +85,7 @@ public class Validate {
     public void render() throws Exception {
         // Setup
         XmlUtils xmlUtils = new XmlUtils();
-        Configuration configuration = new Configuration();
+        ConfigurationUtils configurationUtils = new ConfigurationUtils();
 
         // Set Saxon as XML parser
         System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
@@ -110,8 +110,8 @@ public class Validate {
         }
 
         // Get validations from config files	
-        NodeList standardValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/STANDARD/config.xml");
-        NodeList customValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/CUSTOM/config.xml");
+        NodeList standardValidates = this.getConfigurationValidation(configurationUtils, xmlUtils, this.propertiesUtils.dataDir + "/STANDARD/config.xml");
+        NodeList customValidates = this.getConfigurationValidation(configurationUtils, xmlUtils, this.propertiesUtils.dataDir + "/CUSTOM/config.xml");
 
         // We have not found anything in configuration to validate against
         if (!this.doesConfigurationContainValidationDefinitions(standardValidates, customValidates)) {
@@ -173,7 +173,7 @@ public class Validate {
     public void validate() throws Exception {
         // Setup
         XmlUtils xmlUtils = new XmlUtils();
-        Configuration configuration = new Configuration();
+        ConfigurationUtils configurationUtils = new ConfigurationUtils();
 
         // Set Saxon as XML parser
         System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
@@ -198,8 +198,8 @@ public class Validate {
         }
 
         // Get validations from config files	
-        NodeList standardValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/STANDARD/config.xml");
-        NodeList customValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/CUSTOM/config.xml");
+        NodeList standardValidates = this.getConfigurationValidation(configurationUtils, xmlUtils, this.propertiesUtils.dataDir + "/STANDARD/config.xml");
+        NodeList customValidates = this.getConfigurationValidation(configurationUtils, xmlUtils, this.propertiesUtils.dataDir + "/CUSTOM/config.xml");
 
         // We have not found anything in configuration to validate against
         if (!this.doesConfigurationContainValidationDefinitions(standardValidates, customValidates)) {
@@ -289,9 +289,9 @@ public class Validate {
      * @return NodeList
      * @throws Exception
      */
-    private NodeList getConfigurationValidation(Configuration configuration, XmlUtils xmlUtils, String config) throws Exception {
+    private NodeList getConfigurationValidation(ConfigurationUtils configurationUtils, XmlUtils xmlUtils, String config) throws Exception {
         return xmlUtils.xmlDOMXPathQuery(
-                configuration.fileToXMLDOM(config, this.propertiesUtils),
+                configurationUtils.fileToXMLDOM(config, this.propertiesUtils),
                 "/config/validate[@id='" + this.id + "' and @version='" + this.version + "']");
     }
 

@@ -1,10 +1,10 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.message.Message;
-import no.difi.vefa.message.MessageType;
-import no.difi.vefa.message.Messages;
-import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.util.MessageUtils;
+import no.difi.vefa.model.message.Message;
+import no.difi.vefa.model.message.MessageType;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.model.message.ValidationType;
+import no.difi.vefa.utils.MessageUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,7 +30,7 @@ public class SchematronTransformation {
     public void main(Document xmlDoc, String xslFile, Messages messages) {
         try {
             // Transform XML with XSL
-            no.difi.vefa.util.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.util.xml.XmlXslTransformation();
+            no.difi.vefa.utils.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.utils.xml.XmlXslTransformation();
             Document result = xmlXslTransformation.main(xmlDoc, xslFile);
 
             // Loop result of transformation and add to Message collection

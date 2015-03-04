@@ -1,7 +1,7 @@
 package no.difi.vefa.ws.soap.ws;
 
 import com.google.common.base.Strings;
-import no.difi.vefa.message.Messages;
+import no.difi.vefa.model.message.Messages;
 import no.difi.vefa.validation.Validate;
 import no.difi.vefa.ws.model.ErrorCode;
 import no.difi.vefa.ws.model.ResponseError;

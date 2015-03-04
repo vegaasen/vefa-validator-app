@@ -1,4 +1,4 @@
-package no.difi.vefa.util.xml;
+package no.difi.vefa.utils.xml;
 
 import org.junit.Before;
 import org.junit.Test;

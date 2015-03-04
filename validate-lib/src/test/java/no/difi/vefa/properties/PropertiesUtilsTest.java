@@ -2,7 +2,7 @@ package no.difi.vefa.properties;
 
 import static org.junit.Assert.*;
 
-import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.utils.PropertiesUtils;
 import org.junit.Test;
 
 public class PropertiesUtilsTest {

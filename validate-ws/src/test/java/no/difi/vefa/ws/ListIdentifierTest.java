@@ -2,7 +2,7 @@ package no.difi.vefa.ws;
 
 import static org.junit.Assert.*;
 
-import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.utils.PropertiesUtils;
 import no.difi.vefa.ws.rest.model.ListIdentifier;
 import org.junit.Before;
 import org.junit.Test;

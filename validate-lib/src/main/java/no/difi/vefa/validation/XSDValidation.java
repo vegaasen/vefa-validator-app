@@ -1,8 +1,8 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.message.Messages;
-import no.difi.vefa.util.PropertiesUtils;
-import no.difi.vefa.util.MessageUtils;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.MessageUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -22,7 +22,7 @@ public class XSDValidation {
      */
     public void main(Document xmlDoc, String xsdFile, Messages messages, PropertiesUtils propertiesUtils) {
         try {
-            no.difi.vefa.util.xml.XSDValidation xsdValidation = new no.difi.vefa.util.xml.XSDValidation();
+            no.difi.vefa.utils.xml.XSDValidation xsdValidation = new no.difi.vefa.utils.xml.XSDValidation();
             xsdValidation.main(xmlDoc, xsdFile, propertiesUtils);
         } catch (Exception e) {
             messages.addMessage(MessageUtils.translate(e));

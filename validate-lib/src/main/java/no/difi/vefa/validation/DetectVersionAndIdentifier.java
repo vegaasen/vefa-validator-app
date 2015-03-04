@@ -1,12 +1,12 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.configuration.Configuration;
-import no.difi.vefa.message.Message;
-import no.difi.vefa.message.MessageType;
-import no.difi.vefa.message.Messages;
-import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.util.PropertiesUtils;
-import no.difi.vefa.util.xml.XmlUtils;
+import no.difi.vefa.utils.configuration.ConfigurationUtils;
+import no.difi.vefa.model.message.Message;
+import no.difi.vefa.model.message.MessageType;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.model.message.ValidationType;
+import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -109,14 +109,14 @@ public class DetectVersionAndIdentifier {
      */
     private void setVersion(Messages messages) throws Exception {
         // Setup
-        Configuration configuration = new Configuration();
+        ConfigurationUtils configurationUtils = new ConfigurationUtils();
         Validate validate = new Validate();
         XmlUtils xmlUtils = new XmlUtils();
         PropertiesUtils propertiesUtils = validate.getPropertiesUtils();
 
         // Select all schemas in configuration files
-        Document standardXmlDoc = configuration.fileToXMLDOM(propertiesUtils.dataDir + "/STANDARD/config.xml", propertiesUtils);
-        Document customXmlDoc = configuration.fileToXMLDOM(propertiesUtils.dataDir + "/CUSTOM/config.xml", propertiesUtils);
+        Document standardXmlDoc = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/STANDARD/config.xml", propertiesUtils);
+        Document customXmlDoc = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/CUSTOM/config.xml", propertiesUtils);
         NodeList standardValidates = xmlUtils.xmlDOMXPathQuery(standardXmlDoc, "/config/validate[@id='" + this.id + "']");
         NodeList customValidates = xmlUtils.xmlDOMXPathQuery(customXmlDoc, "/config/validate[@id='" + this.id + "']");
 

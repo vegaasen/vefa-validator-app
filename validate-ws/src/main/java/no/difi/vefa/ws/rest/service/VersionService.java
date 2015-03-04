@@ -1,6 +1,6 @@
 package no.difi.vefa.ws.rest.service;
 
-import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.utils.PropertiesUtils;
 import no.difi.vefa.validation.Validate;
 import no.difi.vefa.ws.rest.common.RestAttributes;
 import no.difi.vefa.ws.rest.model.ListIdentifier;

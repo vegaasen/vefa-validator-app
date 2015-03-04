@@ -1,11 +1,11 @@
-package no.difi.vefa.util.xml;
+package no.difi.vefa.utils.xml;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.Scanner;
 
-import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.utils.PropertiesUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class XSDValidationTest {
 		XmlUtils xmlUtils = new XmlUtils();
 		Document xmlDoc = xmlUtils.stringToXMLDOM(xmlFile);
 		
-		no.difi.vefa.util.xml.XSDValidation xsdValidation = new no.difi.vefa.util.xml.XSDValidation();
+		no.difi.vefa.utils.xml.XSDValidation xsdValidation = new no.difi.vefa.utils.xml.XSDValidation();
 		
 		try {
 			xsdValidation.main(xmlDoc, xsdFile, propFile);
