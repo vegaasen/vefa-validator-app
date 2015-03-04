@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
+import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.util.MessageUtils;
 import org.w3c.dom.Document;
@@ -26,7 +27,7 @@ public class FilterMessage {
 	 * @param  messages  List of messages
 	 * @param  rule  What SCEMATRON rule to filter as String
 	 */
-	public void main(Document xmlDoc, String xslFile, List<Message> messages, String rule) {
+	public void main(Document xmlDoc, String xslFile, Messages messages, String rule) {
 		try {
 			// Status
 			Boolean status = false;
@@ -44,7 +45,7 @@ public class FilterMessage {
 						
 			// If result from XSL transformation is true then remove message from message collection where title = rule
 			if (status) {
-			    for (Iterator<Message> iterator = messages.iterator(); iterator.hasNext();) {
+			    for (Iterator<Message> iterator = messages.getMessages().iterator(); iterator.hasNext();) {
 			        Message message = iterator.next();
 			        
 			        if (message.getSchematronRuleId().equals(rule)) {
@@ -53,7 +54,7 @@ public class FilterMessage {
 			    }			
 			}			
 		} catch (Exception e) {
-			messages.add(MessageUtils.translate(e));
+			messages.addMessage(MessageUtils.translate(e));
 		}
 	}
 }

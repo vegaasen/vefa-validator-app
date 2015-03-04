@@ -3,6 +3,7 @@ package no.difi.vefa.ws;
 import static org.junit.Assert.*;
 
 import no.difi.vefa.properties.PropertiesFile;
+import no.difi.vefa.ws.rest.ListVersions;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -3,6 +3,7 @@ package no.difi.vefa.validation;
 import no.difi.vefa.configuration.Configuration;
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
+import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.properties.PropertiesFile;
 import no.difi.vefa.xml.Utils;
@@ -43,9 +44,9 @@ public class DetectVersionAndIdentifier {
      * @param messages List of messages
      * @throws Exception
      */
-    public void setVersionAndIdentifier(Document xmlDoc, List<Message> messages) throws Exception {
+    public void setVersionAndIdentifier(Document xmlDoc, Messages messages) throws Exception {
         this.setIdentifier(xmlDoc, messages);
-        this.setVersion(xmlDoc, messages);
+        this.setVersion(messages);
     }
 
     /**
@@ -55,14 +56,14 @@ public class DetectVersionAndIdentifier {
      * @param messages List of messages
      * @throws Exception
      */
-    private void setIdentifier(Document xmlDoc, List<Message> messages) throws Exception {
+    private void setIdentifier(Document xmlDoc, Messages messages) throws Exception {
         // Setup
         Utils utils = new Utils();
         String profileId = EMPTY;
         String customizationId = EMPTY;
 
         // Add XML Namespace
-        List<XMLNamespace> namespaces = new ArrayList<XMLNamespace>();
+        List<XMLNamespace> namespaces = new ArrayList<>();
         XMLNamespace ns = utils.new XMLNamespace();
         ns.prefix = "cbc";
         ns.url = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2";
@@ -78,7 +79,7 @@ public class DetectVersionAndIdentifier {
             message.setMessageType(MessageType.Fatal);
             message.setTitle("ProfileID is missing from XML document. Unable to choose validation profile.");
             message.setDescription(EMPTY);
-            messages.add(message);
+            messages.addMessage(message);
             this.detected = false;
         } else {
             profileId = pId.getTextContent();
@@ -90,7 +91,7 @@ public class DetectVersionAndIdentifier {
             message.setMessageType(MessageType.Fatal);
             message.setTitle("CustomizationID is missing from XML document. Unable to choose validation profile.");
             message.setDescription(EMPTY);
-            messages.add(message);
+            messages.addMessage(message);
             this.detected = false;
         } else {
             customizationId = cId.getTextContent();
@@ -104,17 +105,15 @@ public class DetectVersionAndIdentifier {
      * Tries to detect what version in configuration to validate against. Does this by selecting
      * all available identifiers (schema) and using the one with highest version number.
      *
-     * @param xmlDoc   XML as Document
      * @param messages List of messages
      * @throws Exception
      */
-    private void setVersion(Document xmlDoc, List<Message> messages) throws Exception {
+    private void setVersion(Messages messages) throws Exception {
         // Setup
         Configuration configuration = new Configuration();
         Validate validate = new Validate();
         Utils utils = new Utils();
-        PropertiesFile propertiesFile = new PropertiesFile();
-        propertiesFile = validate.getPropertiesFile();
+        PropertiesFile propertiesFile = validate.getPropertiesFile();
 
         // Select all schemas in configuration files
         Document standardXmlDoc = configuration.fileToXMLDOM(propertiesFile.dataDir + "/STANDARD/config.xml", propertiesFile);
@@ -128,11 +127,11 @@ public class DetectVersionAndIdentifier {
             message.setMessageType(MessageType.Fatal);
             message.setTitle("No validation definition is found in configuration.");
             message.setDescription("No entry is found in configuration for identificator '" + this.id + "', unable to perform validation!");
-            messages.add(message);
+            messages.addMessage(message);
             this.detected = false;
         } else {
             // Get highest version number
-            ArrayList<String> list = new ArrayList<String>();
+            ArrayList<String> list = new ArrayList<>();
 
             for (int i = 0; i < standardValidates.getLength(); i++) {
                 Element v = (Element) standardValidates.item(i);

@@ -8,45 +8,46 @@ import java.util.Scanner;
 /**
  * This class is used to validate a xml document from the command line.
  */
-public class App 
-{
-	/**
-	 * Performs automatic validation of input xml file
-	 * 
-	 * @param args Argument 1 should be an XML file. Optional argument 2 should be version and optional argument 3 should be id.
-	 * @throws Exception 
-	 */
-    public static void main( String[] args ) throws Exception
-    {
-    	if ((args == null || args.length == 0)) {
-    		System.out.println("No XML file is spesified!");
-    		System.exit(0);	
-    	}
+public class App {
+    /**
+     * Performs automatic validation of input xml file
+     *
+     * @param args Argument 1 should be an XML file. Optional argument 2 should be version and optional argument 3 should be id.
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        if ((args == null || args.length == 0)) {
+            System.out.println(String.format(
+                    "No XML file provided.%nUsage: java -jar %s <xml-file> (opt)<version> (opt)<id>",
+                    App.class.getSimpleName()
+            ));
+            System.exit(0);
+        }
 
-		String file = args[0];
-		Scanner scanner = new Scanner(new File(file));
-		String xml = scanner.useDelimiter("\\Z").next();
+        String file = args[0];
+        Scanner scanner = new Scanner(new File(file));
+        String xml = scanner.useDelimiter("\\Z").next();
 
-		Validate validate = new Validate();
-		
-		if (args.length == 1) {			
-			validate.autodetectVersionAndIdentifier = true;
-			validate.xml = xml;
-			validate.main();
-			System.out.println(validate.messagesAsXML());			
-		}
-		
-		if (args.length == 3) {
-			String version = args[1];
-			String id = args[2];			
-			
-			validate.xml = xml;
-			validate.version = version;
-			validate.id = id;
-			validate.main();
-			System.out.println(validate.messagesAsXML());			
-		}		
-		
-		scanner.close();
+        Validate validate = new Validate();
+
+        if (args.length == 1) {
+            validate.autodetectVersionAndIdentifier = true;
+            validate.xml = xml;
+            validate.validate();
+            System.out.println(validate.messagesAsXML());
+        }
+
+        if (args.length == 3) {
+            String version = args[1];
+            String id = args[2];
+
+            validate.xml = xml;
+            validate.version = version;
+            validate.id = id;
+            validate.validate();
+            System.out.println(validate.messagesAsXML());
+        }
+
+        scanner.close();
     }
 }

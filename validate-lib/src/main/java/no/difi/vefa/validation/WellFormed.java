@@ -1,9 +1,7 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.message.Message;
+import no.difi.vefa.message.Messages;
 import no.difi.vefa.util.MessageUtils;
-
-import java.util.List;
 
 /**
  * This class can be used to check if an XML string is contains
@@ -19,13 +17,13 @@ public class WellFormed {
      * @param messages List of messages
      * @return boolean Returns true or false
      */
-    public boolean main(String xml, List<Message> messages) {
+    public boolean main(String xml, Messages messages) {
         try {
             no.difi.vefa.xml.WellFormed wellFormed = new no.difi.vefa.xml.WellFormed();
             wellFormed.main(xml);
             return true;
         } catch (Exception e) {
-            messages.add(MessageUtils.translate(e));
+            messages.addMessage(MessageUtils.translate(e));
         }
         return false;
     }

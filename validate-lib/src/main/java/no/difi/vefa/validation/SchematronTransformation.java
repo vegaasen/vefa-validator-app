@@ -2,6 +2,7 @@ package no.difi.vefa.validation;
 
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
+import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.util.MessageUtils;
 import org.w3c.dom.Document;
@@ -27,7 +28,7 @@ public class SchematronTransformation {
      * @param xslFile  Path to XSL file as String
      * @param messages List of messages
      */
-    public void main(Document xmlDoc, String xslFile, List<Message> messages) {
+    public void main(Document xmlDoc, String xslFile, Messages messages) {
         try {
             // Transform XML with XSL
             no.difi.vefa.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.xml.XmlXslTransformation();
@@ -56,11 +57,11 @@ public class SchematronTransformation {
                 message.setTitle(text);
                 message.setDescription("Test: " + test + ", Location: " + location);
                 message.setSchematronRuleId(getSchematronRule(text));
-                messages.add(message);
+                messages.addMessage(message);
             }
 
         } catch (Exception e) {
-            messages.add(MessageUtils.translate(e));
+            messages.addMessage(MessageUtils.translate(e));
         }
     }
 

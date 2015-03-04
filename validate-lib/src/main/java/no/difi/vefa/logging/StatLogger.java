@@ -2,6 +2,7 @@ package no.difi.vefa.logging;
 
 import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
+import no.difi.vefa.message.Messages;
 import no.difi.vefa.validation.Validate;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -26,7 +27,7 @@ public class StatLogger {
      * @param valid    Is document valid as Boolean
      * @param messages List of messages
      */
-    public void logStats(String id, String version, Boolean valid, List<Message> messages) {
+    public void logStats(String id, String version, Boolean valid, Messages messages) {
         LOG.info(id + SEMI + version + SEMI + valid + SEMI + getSchematronRules(messages));
     }
 
@@ -36,9 +37,9 @@ public class StatLogger {
      * @param messages List of messages
      * @return String of SCHEMATRON rules as comma separated list
      */
-    private String getSchematronRules(List<Message> messages) {
+    private String getSchematronRules(Messages messages) {
         String r = "";
-        for (Message message : messages) {
+        for (Message message : messages.getMessages()) {
             if (message.getMessageType() == MessageType.Fatal && !Objects.equals(message.getSchematronRuleId(), "")) {
                 r += message.getSchematronRuleId() + DELIM;
             }
