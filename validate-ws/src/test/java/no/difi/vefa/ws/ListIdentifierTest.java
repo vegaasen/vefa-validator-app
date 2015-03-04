@@ -2,8 +2,8 @@ package no.difi.vefa.ws;
 
 import static org.junit.Assert.*;
 
-import no.difi.vefa.properties.PropertiesFile;
-import no.difi.vefa.ws.rest.ListIdentifier;
+import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.ws.rest.model.ListIdentifier;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,14 +14,14 @@ public class ListIdentifierTest {
 	@Before
 	public void setUp() throws Exception {
 		String path = new java.io.File("src/test/resources/validator.properties").getCanonicalPath();
-		PropertiesFile propFile = new PropertiesFile();
+		PropertiesUtils propFile = new PropertiesUtils();
 		propFile.main(path);
 		propFile.dataDir = new java.io.File("src/test/resources/").getCanonicalPath();
 		
 		listIdentifier = new ListIdentifier();
 		listIdentifier.version = "1.4";
 		listIdentifier.baseUri = "http://www.test.com/validate-ws/";
-		listIdentifier.propertiesFile = propFile;		
+		listIdentifier.propertiesUtils = propFile;
 	}
 
 	@Test

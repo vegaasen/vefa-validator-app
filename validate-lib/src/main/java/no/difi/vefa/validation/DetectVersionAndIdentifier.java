@@ -5,9 +5,8 @@ import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.properties.PropertiesFile;
-import no.difi.vefa.xml.Utils;
-import no.difi.vefa.xml.Utils.XMLNamespace;
+import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.util.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -58,20 +57,20 @@ public class DetectVersionAndIdentifier {
      */
     private void setIdentifier(Document xmlDoc, Messages messages) throws Exception {
         // Setup
-        Utils utils = new Utils();
+        XmlUtils xmlUtils = new XmlUtils();
         String profileId = EMPTY;
         String customizationId = EMPTY;
 
         // Add XML Namespace
-        List<XMLNamespace> namespaces = new ArrayList<>();
-        XMLNamespace ns = utils.new XMLNamespace();
+        List<XmlUtils.XMLNamespace> namespaces = new ArrayList<>();
+        XmlUtils.XMLNamespace ns = xmlUtils.new XMLNamespace();
         ns.prefix = "cbc";
         ns.url = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2";
         namespaces.add(ns);
 
         // Get ProfileID and CustomizationID from xml
-        Node pId = utils.xmlDOMXPathQueryWithNS(xmlDoc, "*/cbc:ProfileID", namespaces).item(0);
-        Node cId = utils.xmlDOMXPathQueryWithNS(xmlDoc, "*/cbc:CustomizationID", namespaces).item(0);
+        Node pId = xmlUtils.xmlDOMXPathQueryWithNS(xmlDoc, "*/cbc:ProfileID", namespaces).item(0);
+        Node cId = xmlUtils.xmlDOMXPathQueryWithNS(xmlDoc, "*/cbc:CustomizationID", namespaces).item(0);
 
         if (pId == null) {
             Message message = new Message();
@@ -112,14 +111,14 @@ public class DetectVersionAndIdentifier {
         // Setup
         Configuration configuration = new Configuration();
         Validate validate = new Validate();
-        Utils utils = new Utils();
-        PropertiesFile propertiesFile = validate.getPropertiesFile();
+        XmlUtils xmlUtils = new XmlUtils();
+        PropertiesUtils propertiesUtils = validate.getPropertiesUtils();
 
         // Select all schemas in configuration files
-        Document standardXmlDoc = configuration.fileToXMLDOM(propertiesFile.dataDir + "/STANDARD/config.xml", propertiesFile);
-        Document customXmlDoc = configuration.fileToXMLDOM(propertiesFile.dataDir + "/CUSTOM/config.xml", propertiesFile);
-        NodeList standardValidates = utils.xmlDOMXPathQuery(standardXmlDoc, "/config/validate[@id='" + this.id + "']");
-        NodeList customValidates = utils.xmlDOMXPathQuery(customXmlDoc, "/config/validate[@id='" + this.id + "']");
+        Document standardXmlDoc = configuration.fileToXMLDOM(propertiesUtils.dataDir + "/STANDARD/config.xml", propertiesUtils);
+        Document customXmlDoc = configuration.fileToXMLDOM(propertiesUtils.dataDir + "/CUSTOM/config.xml", propertiesUtils);
+        NodeList standardValidates = xmlUtils.xmlDOMXPathQuery(standardXmlDoc, "/config/validate[@id='" + this.id + "']");
+        NodeList customValidates = xmlUtils.xmlDOMXPathQuery(customXmlDoc, "/config/validate[@id='" + this.id + "']");
 
         if (standardValidates.getLength() == 0 && customValidates.getLength() == 0) {
             Message message = new Message();

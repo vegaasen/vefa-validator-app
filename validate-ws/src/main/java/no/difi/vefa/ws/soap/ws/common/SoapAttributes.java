@@ -1,12 +1,10 @@
-package no.difi.vefa.ws.common;
+package no.difi.vefa.ws.soap.ws.common;
 
 /**
- * ..what..
- *
  * @author <a href="mailto:vegaasen@gmail.com">vegaasen</a>
  */
-public final class WebServiceAttributes {
-    
+public final class SoapAttributes {
+
     public static final String NAMESPACE = "urn:no:difi:vefa:soap:soap.validation";
 
     public static final class Operations {
@@ -31,7 +29,7 @@ public final class WebServiceAttributes {
         public static final String VALIDATION = "validationService";
     }
 
-    private WebServiceAttributes() {
+    private SoapAttributes() {
     }
 
 }

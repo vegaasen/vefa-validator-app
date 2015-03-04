@@ -1,8 +1,12 @@
-.svn
+# IDE
 .classpath
 .project
-.settings
-target
 *.iml
 .idea
+.settings
+
+# Output
+target
+
+# OS
 .DS_Store

@@ -7,7 +7,6 @@ import no.difi.vefa.validation.Validate;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.util.List;
 import java.util.Objects;
 
 /**

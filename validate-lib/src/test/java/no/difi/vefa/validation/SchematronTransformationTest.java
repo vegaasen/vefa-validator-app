@@ -3,7 +3,7 @@ package no.difi.vefa.validation;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.xml.Utils;
+import no.difi.vefa.util.xml.XmlUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -16,13 +16,13 @@ import static org.junit.Assert.assertEquals;
 public class SchematronTransformationTest {
 
     private String basePath;
-    private Utils utils;
+    private XmlUtils xmlUtils;
     private SchematronTransformation schematronTransformation;
 
     @Before
     public void setUp() throws Exception {
         basePath = new java.io.File("src/test/resources/").getCanonicalPath();
-        utils = new Utils();
+        xmlUtils = new XmlUtils();
         schematronTransformation = new SchematronTransformation();
     }
 
@@ -30,7 +30,7 @@ public class SchematronTransformationTest {
     public void testMain() throws Exception {
         Scanner scanner = new Scanner(new File(basePath + "/Invoice.xml"));
         String xml = scanner.useDelimiter("\\Z").next();
-        Document xmlDoc = utils.stringToXMLDOM(xml);
+        Document xmlDoc = xmlUtils.stringToXMLDOM(xml);
 
         Messages messages = new Messages();
         schematronTransformation.main(xmlDoc, basePath + "/UBL-T10-EUgen.xsl", messages);

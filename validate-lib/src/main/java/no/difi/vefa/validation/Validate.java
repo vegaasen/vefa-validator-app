@@ -7,8 +7,8 @@ import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.properties.PropertiesFile;
-import no.difi.vefa.xml.Utils;
+import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.util.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -73,7 +73,7 @@ public class Validate {
     /**
      * Properties file as PropertiesFile object.
      */
-    private PropertiesFile propertiesFile;
+    private PropertiesUtils propertiesUtils;
 
     /**
      * Executes a rendering according to the given configuration,
@@ -84,14 +84,14 @@ public class Validate {
      */
     public void render() throws Exception {
         // Setup
-        Utils utils = new Utils();
+        XmlUtils xmlUtils = new XmlUtils();
         Configuration configuration = new Configuration();
 
         // Set Saxon as XML parser
         System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
 
         // Load properties file
-        this.propertiesFile = this.getPropertiesFile();
+        this.propertiesUtils = this.getPropertiesUtils();
 
         // Always hide warnings?
         this.hideWarnings();
@@ -102,7 +102,7 @@ public class Validate {
         }
 
         // Load XML string as XML DOM		
-        Document xmlDoc = utils.stringToXMLDOM(this.xml);
+        Document xmlDoc = xmlUtils.stringToXMLDOM(this.xml);
 
         // Autodetect version and schema?
         if (!this.tryToAutodetectVersionAndSchema(xmlDoc)) {
@@ -110,8 +110,8 @@ public class Validate {
         }
 
         // Get validations from config files	
-        NodeList standardValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/STANDARD/config.xml");
-        NodeList customValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/CUSTOM/config.xml");
+        NodeList standardValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/STANDARD/config.xml");
+        NodeList customValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/CUSTOM/config.xml");
 
         // We have not found anything in configuration to validate against
         if (!this.doesConfigurationContainValidationDefinitions(standardValidates, customValidates)) {
@@ -152,12 +152,12 @@ public class Validate {
                 if (id.equals("XSL")) {
                     // Perform XSL transformation
                     RenderXsl xmlXslTransformation = new RenderXsl();
-                    xmlXslTransformation.main(xmlDoc, this.propertiesFile.dataDir + file, this.messages);
+                    xmlXslTransformation.main(xmlDoc, this.propertiesUtils.dataDir + file, this.messages);
 
                     // Get XML utils and return DOM as string
                     if (xmlXslTransformation.result != null) {
-                        Utils utils = new Utils();
-                        this.renderResult = utils.xmlDOMToString(xmlXslTransformation.result);
+                        XmlUtils xmlUtils = new XmlUtils();
+                        this.renderResult = xmlUtils.xmlDOMToString(xmlXslTransformation.result);
                     }
                 }
             }
@@ -172,14 +172,14 @@ public class Validate {
      */
     public void validate() throws Exception {
         // Setup
-        Utils utils = new Utils();
+        XmlUtils xmlUtils = new XmlUtils();
         Configuration configuration = new Configuration();
 
         // Set Saxon as XML parser
         System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
 
         // Load properties file
-        this.propertiesFile = this.getPropertiesFile();
+        this.propertiesUtils = this.getPropertiesUtils();
 
         // Always hide warnings?
         this.hideWarnings();
@@ -190,7 +190,7 @@ public class Validate {
         }
 
         // Load XML string as XML DOM		
-        Document xmlDoc = utils.stringToXMLDOM(this.xml);
+        Document xmlDoc = xmlUtils.stringToXMLDOM(this.xml);
 
         // Autodetect version and schema?
         if (!this.tryToAutodetectVersionAndSchema(xmlDoc)) {
@@ -198,8 +198,8 @@ public class Validate {
         }
 
         // Get validations from config files	
-        NodeList standardValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/STANDARD/config.xml");
-        NodeList customValidates = this.getConfigurationValidation(configuration, utils, this.propertiesFile.dataDir + "/CUSTOM/config.xml");
+        NodeList standardValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/STANDARD/config.xml");
+        NodeList customValidates = this.getConfigurationValidation(configuration, xmlUtils, this.propertiesUtils.dataDir + "/CUSTOM/config.xml");
 
         // We have not found anything in configuration to validate against
         if (!this.doesConfigurationContainValidationDefinitions(standardValidates, customValidates)) {
@@ -223,14 +223,14 @@ public class Validate {
      * @return PropertiesFile
      * @throws Exception
      */
-    public PropertiesFile getPropertiesFile() throws Exception {
+    public PropertiesUtils getPropertiesUtils() throws Exception {
         String VEFAvalidatorDataDir = System.getProperty("no.difi.vefa.validation.configuration.datadir");
 
         if (VEFAvalidatorDataDir != null) {
             this.pathToPropertiesFile = VEFAvalidatorDataDir + "/validator.properties";
         }
 
-        PropertiesFile propFile = new PropertiesFile();
+        PropertiesUtils propFile = new PropertiesUtils();
         propFile.main(this.pathToPropertiesFile);
 
         if (VEFAvalidatorDataDir != null) {
@@ -245,7 +245,7 @@ public class Validate {
      * If so...set suppresswarning properties.
      */
     private void hideWarnings() {
-        if (this.propertiesFile.suppressWarnings) {
+        if (this.propertiesUtils.suppressWarnings) {
             this.suppressWarnings = true;
         }
     }
@@ -289,9 +289,9 @@ public class Validate {
      * @return NodeList
      * @throws Exception
      */
-    private NodeList getConfigurationValidation(Configuration configuration, Utils utils, String config) throws Exception {
-        return utils.xmlDOMXPathQuery(
-                configuration.fileToXMLDOM(config, this.propertiesFile),
+    private NodeList getConfigurationValidation(Configuration configuration, XmlUtils xmlUtils, String config) throws Exception {
+        return xmlUtils.xmlDOMXPathQuery(
+                configuration.fileToXMLDOM(config, this.propertiesUtils),
                 "/config/validate[@id='" + this.id + "' and @version='" + this.version + "']");
     }
 
@@ -341,18 +341,18 @@ public class Validate {
                     case "XSD":
                         // Perform XSD validation
                         XSDValidation xsdValidation = new XSDValidation();
-                        xsdValidation.main(xmlDoc, this.propertiesFile.dataDir + file, this.messages, this.propertiesFile);
+                        xsdValidation.main(xmlDoc, this.propertiesUtils.dataDir + file, this.messages, this.propertiesUtils);
                         break;
                     case "XSL":
                         // Perform XSL transformation
                         SchematronTransformation xmlXslTransformation = new SchematronTransformation();
-                        xmlXslTransformation.main(xmlDoc, this.propertiesFile.dataDir + file, this.messages);
+                        xmlXslTransformation.main(xmlDoc, this.propertiesUtils.dataDir + file, this.messages);
                         break;
                     case "FILTER":
                         String rule = step.getAttributes().getNamedItem("rule").getNodeValue();
 
                         FilterMessage filterMessage = new FilterMessage();
-                        filterMessage.main(xmlDoc, this.propertiesFile.dataDir + file, this.messages, rule);
+                        filterMessage.main(xmlDoc, this.propertiesUtils.dataDir + file, this.messages, rule);
                         break;
                 }
             }
@@ -381,9 +381,9 @@ public class Validate {
      * Performs stat logging to file
      */
     private void logStat() {
-        if (this.propertiesFile.logStatistics) {
+        if (this.propertiesUtils.logStatistics) {
             // Set path where to place log files
-            System.setProperty("no.difi.vefa.validation.logging.filepath", this.propertiesFile.dataDir + "/LOG");
+            System.setProperty("no.difi.vefa.validation.logging.filepath", this.propertiesUtils.dataDir + "/LOG");
 
             // Perform logging
             StatLogger statLogger = new StatLogger();
@@ -476,8 +476,8 @@ public class Validate {
         }
 
         // Get XML utils and return DOM as string
-        Utils utils = new Utils();
-        return utils.xmlDOMToString(doc);
+        XmlUtils xmlUtils = new XmlUtils();
+        return xmlUtils.xmlDOMToString(doc);
     }
 
     public Messages getMessages() {

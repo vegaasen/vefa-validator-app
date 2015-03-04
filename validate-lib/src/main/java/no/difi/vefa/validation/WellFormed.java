@@ -19,7 +19,7 @@ public class WellFormed {
      */
     public boolean main(String xml, Messages messages) {
         try {
-            no.difi.vefa.xml.WellFormed wellFormed = new no.difi.vefa.xml.WellFormed();
+            no.difi.vefa.util.xml.WellFormed wellFormed = new no.difi.vefa.util.xml.WellFormed();
             wellFormed.main(xml);
             return true;
         } catch (Exception e) {

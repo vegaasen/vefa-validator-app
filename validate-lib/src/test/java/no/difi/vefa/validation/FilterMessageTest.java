@@ -4,7 +4,7 @@ import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.xml.Utils;
+import no.difi.vefa.util.xml.XmlUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -18,19 +18,19 @@ public class FilterMessageTest {
 
     private String basePath;
     private Messages messages;
-    private Utils utils;
+    private XmlUtils xmlUtils;
 
     @Before
     public void setUp() throws Exception {
         basePath = new java.io.File("src/test/resources/").getCanonicalPath();
-        utils = new Utils();
+        xmlUtils = new XmlUtils();
     }
 
     @Test
     public void testMain() throws Exception {
         Scanner scanner = new Scanner(new File(basePath + "/Invoice.xml"));
         String xml = scanner.useDelimiter("\\Z").next();
-        Document xmlDoc = utils.stringToXMLDOM(xml);
+        Document xmlDoc = xmlUtils.stringToXMLDOM(xml);
         FilterMessage filterMessage = new FilterMessage();
 
         this.addMessage();

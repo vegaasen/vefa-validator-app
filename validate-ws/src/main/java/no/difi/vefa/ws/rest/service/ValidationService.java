@@ -1,54 +1,18 @@
-package no.difi.vefa.ws.rest;
+package no.difi.vefa.ws.rest.service;
 
-import no.difi.vefa.properties.PropertiesFile;
 import no.difi.vefa.validation.Validate;
+import no.difi.vefa.ws.rest.common.RestAttributes;
+import no.difi.vefa.ws.rest.service.abs.AbstractService;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 
-@Path("/")
-public class Ws {
-
-    @Context
-    UriInfo uri;
-
-    @GET
-    @Path("/")
-    @Produces({MediaType.APPLICATION_XML})
-    public String listVersions() throws Exception {
-        Validate validate = new Validate();
-        PropertiesFile propFile = new PropertiesFile();
-        propFile.main(validate.pathToPropertiesFile);
-
-        ListVersions listVersions = new ListVersions();
-        listVersions.baseUri = uri.getBaseUri().toString();
-        listVersions.propertiesFile = propFile;
-
-        return listVersions.getVersions();
-    }
-
-    @GET
-    @Path("/{version}")
-    @Produces({MediaType.APPLICATION_XML})
-    public String listSchemasForCurrentVersion(@PathParam("version") String version) throws Exception {
-        Validate validate = new Validate();
-        PropertiesFile propFile = new PropertiesFile();
-        propFile.main(validate.pathToPropertiesFile);
-
-        ListIdentifier listSchemas = new ListIdentifier();
-        listSchemas.version = version;
-        listSchemas.baseUri = uri.getBaseUri().toString();
-        listSchemas.propertiesFile = propFile;
-
-        return listSchemas.getIdentifier();
-    }
+@Path(RestAttributes.Route.VALIDATION)
+public class ValidationService extends AbstractService {
 
     @POST
     @Path("/")

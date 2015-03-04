@@ -5,8 +5,8 @@ import no.difi.vefa.message.Message;
 import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.Messages;
 import no.difi.vefa.message.ValidationType;
-import no.difi.vefa.properties.PropertiesFile;
-import no.difi.vefa.xml.Utils;
+import no.difi.vefa.util.PropertiesUtils;
+import no.difi.vefa.util.xml.XmlUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -25,14 +25,14 @@ public class ValidateTest {
     private Validate validate;
     private Messages messages;
     private String xml;
-    private PropertiesFile propFile;
+    private PropertiesUtils propFile;
     private String basePath;
 
     @Before
     public void setUp() throws Exception {
         validate = new Validate();
         messages = new Messages();
-        propFile = validate.getPropertiesFile();
+        propFile = validate.getPropertiesUtils();
         basePath = new java.io.File("src/test/resources/").getCanonicalPath();
     }
 
@@ -73,20 +73,20 @@ public class ValidateTest {
 
     @Test
     public void testFilesFromTestConfiguration() throws Exception {
-        Utils utils = new Utils();
+        XmlUtils xmlUtils = new XmlUtils();
         Scanner scanner;
 
         // Read standard test configuration
         scanner = new Scanner(new File(propFile.dataDir + "/STANDARD/configTestValidation.xml"));
         String standardConfigDoc = scanner.useDelimiter("\\Z").next();
-        Document standardXmlDoc = utils.stringToXMLDOM(standardConfigDoc);
-        NodeList standardTests = utils.xmlDOMXPathQuery(standardXmlDoc, "/config/test");
+        Document standardXmlDoc = xmlUtils.stringToXMLDOM(standardConfigDoc);
+        NodeList standardTests = xmlUtils.xmlDOMXPathQuery(standardXmlDoc, "/config/test");
 
         // Read custom test configuration
         scanner = new Scanner(new File(propFile.dataDir + "/CUSTOM/configTestValidation.xml"));
         String customConfigDoc = scanner.useDelimiter("\\Z").next();
-        Document customXmlDoc = utils.stringToXMLDOM(customConfigDoc);
-        NodeList customTests = utils.xmlDOMXPathQuery(customXmlDoc, "/config/test");
+        Document customXmlDoc = xmlUtils.stringToXMLDOM(customConfigDoc);
+        NodeList customTests = xmlUtils.xmlDOMXPathQuery(customXmlDoc, "/config/test");
 
         // Run tests
         this.validateTestFiles(standardTests, standardXmlDoc);
@@ -96,7 +96,7 @@ public class ValidateTest {
     }
 
     private void validateTestFiles(NodeList tests, Document xmlDoc) throws Exception {
-        Utils utils = new Utils();
+        XmlUtils xmlUtils = new XmlUtils();
 
         // Loop all test cases and perform validation
         for (int i = 0; i < tests.getLength(); i++) {
@@ -121,7 +121,7 @@ public class ValidateTest {
                 validate.validate();
 
                 // Get all error rules
-                NodeList errors = utils.xmlDOMXPathQuery(xmlDoc, "/config/test[@id='" + id + "']/errors/schematronrule");
+                NodeList errors = xmlUtils.xmlDOMXPathQuery(xmlDoc, "/config/test[@id='" + id + "']/errors/schematronrule");
 
                 System.out.println("\tStarting errortesting based on result:");
 
@@ -135,7 +135,7 @@ public class ValidateTest {
 
 
                 // Get all warning rules
-                NodeList warnings = utils.xmlDOMXPathQuery(xmlDoc, "/config/test[@id='" + id + "']/warnings/schematronrule");
+                NodeList warnings = xmlUtils.xmlDOMXPathQuery(xmlDoc, "/config/test[@id='" + id + "']/warnings/schematronrule");
 
                 System.out.println("\tStarting warningtesting based on result:");
 

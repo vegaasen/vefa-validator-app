@@ -1,7 +1,7 @@
 package no.difi.vefa.validation;
 
 import no.difi.vefa.message.Messages;
-import no.difi.vefa.xml.Utils;
+import no.difi.vefa.util.xml.XmlUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,25 +32,25 @@ public class DetectVersionAndIdentifierTest {
     public void testSetVersionAndIdentifier() throws Exception {
         Document xmlDoc;
         Messages messages = new Messages();
-        Utils utils = new Utils();
+        XmlUtils xmlUtils = new XmlUtils();
         Scanner scanner;
 
         scanner = new Scanner(new File(basePath + "/Invoice.xml"));
         xml = scanner.useDelimiter("\\Z").next();
-        xmlDoc = utils.stringToXMLDOM(xml);
+        xmlDoc = xmlUtils.stringToXMLDOM(xml);
         detectIdentifier.setVersionAndIdentifier(xmlDoc, messages);
         assertEquals(1, messages.getMessages().size());
 
         scanner = new Scanner(new File(basePath + "/InvoiceMissingProfileID.xml"));
         xml = scanner.useDelimiter("\\Z").next();
-        xmlDoc = utils.stringToXMLDOM(xml);
+        xmlDoc = xmlUtils.stringToXMLDOM(xml);
         messages = new Messages();
         detectIdentifier.setVersionAndIdentifier(xmlDoc, messages);
         assertEquals(2, messages.getMessages().size());
 
         scanner = new Scanner(new File(basePath + "/InvoiceMissingCustomizationID.xml"));
         xml = scanner.useDelimiter("\\Z").next();
-        xmlDoc = utils.stringToXMLDOM(xml);
+        xmlDoc = xmlUtils.stringToXMLDOM(xml);
         messages = new Messages();
         detectIdentifier.setVersionAndIdentifier(xmlDoc, messages);
         assertEquals(2, messages.getMessages().size());

@@ -9,7 +9,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +30,7 @@ public class SchematronTransformation {
     public void main(Document xmlDoc, String xslFile, Messages messages) {
         try {
             // Transform XML with XSL
-            no.difi.vefa.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.xml.XmlXslTransformation();
+            no.difi.vefa.util.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.util.xml.XmlXslTransformation();
             Document result = xmlXslTransformation.main(xmlDoc, xslFile);
 
             // Loop result of transformation and add to Message collection

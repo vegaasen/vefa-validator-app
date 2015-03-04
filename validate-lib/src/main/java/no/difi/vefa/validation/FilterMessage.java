@@ -1,13 +1,9 @@
 package no.difi.vefa.validation;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Iterator;
-import java.util.List;
+
 import no.difi.vefa.message.Message;
-import no.difi.vefa.message.MessageType;
 import no.difi.vefa.message.Messages;
-import no.difi.vefa.message.ValidationType;
 import no.difi.vefa.util.MessageUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -33,7 +29,7 @@ public class FilterMessage {
 			Boolean status = false;
 			
 			// Transform XML with XSL and return status of XSL check		
-			no.difi.vefa.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.xml.XmlXslTransformation();
+			no.difi.vefa.util.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.util.xml.XmlXslTransformation();
 			Document result = xmlXslTransformation.main(xmlDoc, xslFile);		
 								
 			// Get status from XML/XSL transformation			

@@ -2,7 +2,7 @@ package no.difi.vefa.validation;
 
 import no.difi.vefa.message.Messages;
 import no.difi.vefa.util.MessageUtils;
-import no.difi.vefa.xml.XmlXslTransformation;
+import no.difi.vefa.util.xml.XmlXslTransformation;
 import org.w3c.dom.Document;
 
 /**

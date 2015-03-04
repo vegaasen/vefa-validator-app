@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>validate-lib</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
