@@ -1,15 +1,18 @@
 package no.difi.vefa.utils.xml;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Closeables;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,16 +25,12 @@ public class XmlUtilsTest {
     @Before
     public void setUp() throws Exception {
         xmlUtils = new XmlUtils();
-        Scanner scanner;
-
-        String basePath = new java.io.File("src/test/resources/").getCanonicalPath();
-        scanner = new Scanner(new File(basePath + "/config.xml"));
-        xmlTestString = scanner.useDelimiter("\\Z").next();
-
-        scanner = new Scanner(new File(basePath + "/Invoice.xml"));
-        xmlTestInvoice = scanner.useDelimiter("\\Z").next();
-
-        scanner.close();
+        InputStream stream = ClassLoader.getSystemResourceAsStream("config.xml");
+        xmlTestString = CharStreams.toString(new InputStreamReader(stream, Charsets.UTF_8));
+        Closeables.closeQuietly(stream);
+        stream = ClassLoader.getSystemResourceAsStream("Invoice.xml");
+        xmlTestInvoice = CharStreams.toString(new InputStreamReader(stream, Charsets.UTF_8));
+        Closeables.closeQuietly(stream);
     }
 
     @Test
@@ -60,7 +59,7 @@ public class XmlUtilsTest {
 
     @Test
     public void testXmlDOMXPathQueryWithNS() throws Exception {
-        List<XmlUtils.XMLNamespace> namespaces = new ArrayList<XmlUtils.XMLNamespace>();
+        List<XmlUtils.XMLNamespace> namespaces = new ArrayList<>();
         XmlUtils.XMLNamespace ns = xmlUtils.new XMLNamespace();
         ns.prefix = "cbc";
         ns.url = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2";

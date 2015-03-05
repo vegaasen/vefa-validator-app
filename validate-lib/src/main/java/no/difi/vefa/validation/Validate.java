@@ -1,12 +1,12 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.model.message.Hint;
 import no.difi.vefa.model.message.Message;
 import no.difi.vefa.model.message.MessageType;
 import no.difi.vefa.model.message.Messages;
 import no.difi.vefa.model.message.ValidationType;
 import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.utils.logging.StatLogger;
 import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
@@ -86,9 +86,6 @@ public class Validate {
         // Setup
         XmlUtils xmlUtils = new XmlUtils();
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
-
-        // Set Saxon as XML parser
-        System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
 
         // Load properties file
         this.propertiesUtils = this.getPropertiesUtils();
@@ -175,9 +172,6 @@ public class Validate {
         XmlUtils xmlUtils = new XmlUtils();
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
 
-        // Set Saxon as XML parser
-        System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
-
         // Load properties file
         this.propertiesUtils = this.getPropertiesUtils();
 
@@ -224,17 +218,16 @@ public class Validate {
      * @throws Exception
      */
     public PropertiesUtils getPropertiesUtils() throws Exception {
-        String VEFAvalidatorDataDir = System.getProperty("no.difi.vefa.validation.configuration.datadir");
-
-        if (VEFAvalidatorDataDir != null) {
-            this.pathToPropertiesFile = VEFAvalidatorDataDir + "/validator.properties";
+        String vefaValidatorDir = System.getProperty("no.difi.vefa.validation.configuration.datadir");
+        if (vefaValidatorDir != null) {
+            this.pathToPropertiesFile = vefaValidatorDir.contains("validator.properties") ? vefaValidatorDir : vefaValidatorDir + "/validator.properties";
         }
 
         PropertiesUtils propFile = new PropertiesUtils();
         propFile.main(this.pathToPropertiesFile);
 
-        if (VEFAvalidatorDataDir != null) {
-            propFile.dataDir = VEFAvalidatorDataDir;
+        if (vefaValidatorDir != null) {
+            propFile.dataDir = vefaValidatorDir;
         }
 
         return propFile;

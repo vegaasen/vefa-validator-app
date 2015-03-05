@@ -18,7 +18,10 @@ public class ConfigurationUtilsTest {
         propFile.dataDir = new File(".").getCanonicalPath();
 
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
-        Document configDoc = configurationUtils.fileToXMLDOM(ClassLoader.getSystemResource("config.xml").getPath(), propFile);
+        Document configDoc = configurationUtils.fileToXMLDOM(
+                ClassLoader.getSystemResource("config.xml").getPath(),
+                propFile
+        );
 
         assertEquals(configDoc.getElementsByTagName("step").item(0).getAttributes().getNamedItem("id").getNodeValue(), "XSL");
     }
