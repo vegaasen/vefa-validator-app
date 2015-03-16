@@ -14,12 +14,11 @@ public class ConfigurationUtils {
     /**
      * Load configuration file into XML DOM
      *
-     * @param xmlFile         Path to XML as string
-     * @param propertiesUtils PropertiesFile
+     * @param xmlFile Path to XML as string
      * @return Document XML string as XMLDOM
      * @throws Exception
      */
-    public Document fileToXMLDOM(String xmlFile, final PropertiesUtils propertiesUtils) throws Exception {
+    public Document fileToXMLDOM(String xmlFile) throws Exception {
         ConfigurationCache configurationCache = new ConfigurationCache();
         Document doc = configurationCache.getConfiguration(xmlFile);
         if (doc == null) {
@@ -28,7 +27,7 @@ public class ConfigurationUtils {
             factory.setNamespaceAware(true);
             DocumentBuilder parser = factory.newDocumentBuilder();
             parser.setEntityResolver((publicId, systemId) -> {
-                String file = propertiesUtils.dataDir + systemId.replace("file://", "");
+                String file = PropertiesUtils.INSTANCE.getDataDir() + systemId.replace("file://", "");
                 return new InputSource(file);
             });
             doc = parser.parse(new FileInputStream(xmlFile));

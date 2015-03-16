@@ -60,7 +60,8 @@ public class SchematronTransformation {
             }
 
         } catch (Exception e) {
-            messages.addMessage(MessageUtils.translate(e));
+            e.printStackTrace();
+            messages.addMessage(MessageUtils.translate(e, ValidationType.XSL));
         }
     }
 

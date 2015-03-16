@@ -1,11 +1,11 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.model.message.Message;
 import no.difi.vefa.model.message.MessageType;
 import no.difi.vefa.model.message.Messages;
 import no.difi.vefa.model.message.ValidationType;
 import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -110,13 +110,10 @@ public class DetectVersionAndIdentifier {
     private void setVersion(Messages messages) throws Exception {
         // Setup
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
-        Validate validate = new Validate();
         XmlUtils xmlUtils = new XmlUtils();
-        PropertiesUtils propertiesUtils = validate.getPropertiesUtils();
-
         // Select all schemas in configuration files
-        Document standardXmlDoc = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/STANDARD/config.xml", propertiesUtils);
-        Document customXmlDoc = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/CUSTOM/config.xml", propertiesUtils);
+        Document standardXmlDoc = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+        Document customXmlDoc = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
         NodeList standardValidates = xmlUtils.xmlDOMXPathQuery(standardXmlDoc, "/config/validate[@id='" + this.id + "']");
         NodeList customValidates = xmlUtils.xmlDOMXPathQuery(customXmlDoc, "/config/validate[@id='" + this.id + "']");
 

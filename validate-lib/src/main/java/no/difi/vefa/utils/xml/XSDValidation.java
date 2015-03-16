@@ -27,12 +27,11 @@ public class XSDValidation {
     /**
      * Perform validation of XML Document with a XSD Document.
      *
-     * @param xmlDoc          XML as Document
-     * @param xsdFile         Path to XSD file as String
-     * @param propertiesUtils PropertiesFile
+     * @param xmlDoc  XML as Document
+     * @param xsdFile Path to XSD file as String
      * @throws Exception
      */
-    public void main(Document xmlDoc, String xsdFile, PropertiesUtils propertiesUtils) throws Exception {
+    public void main(Document xmlDoc, String xsdFile) throws Exception {
         XmlUtils xmlUtils = new XmlUtils();
         FileReader readerXsd = new FileReader(xsdFile);
         StringReader readerXml = new StringReader(xmlUtils.xmlDOMToString(xmlDoc));
@@ -40,7 +39,6 @@ public class XSDValidation {
         SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
         ClasspathResourceResolver classPathResourceResolver = new ClasspathResourceResolver();
-        classPathResourceResolver.propertiesUtils = propertiesUtils;
 
         factory.setResourceResolver(classPathResourceResolver);
 
@@ -57,7 +55,7 @@ public class XSDValidation {
         public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
             InputStream stream = null;
             try {
-                stream = new FileInputStream(this.propertiesUtils.dataDir + systemId);
+                stream = new FileInputStream(PropertiesUtils.INSTANCE.getDataDir() + systemId);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

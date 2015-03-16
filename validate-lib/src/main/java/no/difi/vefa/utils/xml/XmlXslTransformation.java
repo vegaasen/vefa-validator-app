@@ -2,7 +2,6 @@ package no.difi.vefa.utils.xml;
 
 import no.difi.vefa.cache.XSLTransformerCache;
 import no.difi.vefa.utils.PropertiesUtils;
-import no.difi.vefa.validation.Validate;
 import org.w3c.dom.Document;
 
 import javax.xml.transform.Source;
@@ -24,7 +23,7 @@ import java.io.StringWriter;
 /**
  * This class can be used to perform transformation of XML Document
  * with an XSL Document.
- * <p/>
+ * <p>
  * This class is <b>not</b> thread safe and a new instance should be created for each transformation.
  * The parsed Templates object representing the xslFile will be fetched from the cache if it has been
  * used before so to improve performance.
@@ -98,9 +97,7 @@ public class XmlXslTransformation {
         @Override
         public Source resolve(String href, String base) throws TransformerException {
             try {
-                Validate validate = new Validate();
-                PropertiesUtils propFile = validate.getPropertiesUtils();
-                InputStream inputStream = new FileInputStream(propFile.dataDir + href);
+                InputStream inputStream = new FileInputStream(PropertiesUtils.INSTANCE.getDataDir() + href);
                 return new StreamSource(inputStream);
             } catch (Exception ex) {
                 ex.printStackTrace();

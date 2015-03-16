@@ -18,7 +18,6 @@ import java.util.Set;
 public class ListVersions {
 
     public String baseUri;
-    public PropertiesUtils propertiesUtils;
 
     /**
      * Gets available version from configuration files as string.
@@ -28,9 +27,9 @@ public class ListVersions {
     public String getVersions() throws Exception {
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
         ArrayList<String> list = new ArrayList<>();
-        Document standardConfig = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/STANDARD/config.xml", propertiesUtils);
+        Document standardConfig = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
         this.addVersionToList(standardConfig, list);
-        Document customConfig = configurationUtils.fileToXMLDOM(propertiesUtils.dataDir + "/CUSTOM/config.xml", propertiesUtils);
+        Document customConfig = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
         this.addVersionToList(customConfig, list);
         Set<String> set = new HashSet<>(list);
         List<String> uniqueList = new ArrayList<>(set);

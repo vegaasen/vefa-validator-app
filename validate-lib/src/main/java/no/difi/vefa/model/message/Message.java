@@ -81,4 +81,15 @@ public class Message {
         getHints().addAll(hints);
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "validationType=" + validationType +
+                ", messageType=" + messageType +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", schematronRuleId='" + schematronRuleId + '\'' +
+                ", hints=" + hints +
+                '}';
+    }
 }

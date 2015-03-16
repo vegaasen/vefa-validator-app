@@ -1,7 +1,5 @@
 package no.difi.vefa.ws.rest.service;
 
-import no.difi.vefa.utils.PropertiesUtils;
-import no.difi.vefa.validation.Validate;
 import no.difi.vefa.ws.rest.common.RestAttributes;
 import no.difi.vefa.ws.rest.model.ListIdentifier;
 import no.difi.vefa.ws.rest.model.ListVersions;
@@ -19,14 +17,8 @@ public class VersionService extends AbstractService {
     @GET
     @Produces({MediaType.APPLICATION_XML})
     public String listAllVersions() throws Exception {
-        Validate validate = new Validate();
-        PropertiesUtils propFile = new PropertiesUtils();
-        propFile.main(validate.pathToPropertiesFile);
-
         ListVersions listVersions = new ListVersions();
         listVersions.baseUri = uri.getBaseUri().toString();
-        listVersions.propertiesUtils = propFile;
-
         return listVersions.getVersions();
     }
 
@@ -36,14 +28,9 @@ public class VersionService extends AbstractService {
     public String listSchemasForCurrentVersion(
             @PathParam(RestAttributes.Parameter.VERSION) final String version
     ) throws Exception {
-        Validate validate = new Validate();
-        PropertiesUtils propFile = new PropertiesUtils();
-        propFile.main(validate.pathToPropertiesFile);
-
         ListIdentifier listSchemas = new ListIdentifier();
         listSchemas.version = version;
         listSchemas.baseUri = uri.getBaseUri().toString();
-        listSchemas.propertiesUtils = propFile;
 
         return listSchemas.getIdentifier();
     }

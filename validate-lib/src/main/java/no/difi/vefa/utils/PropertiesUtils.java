@@ -1,36 +1,55 @@
 package no.difi.vefa.utils;
 
-import no.difi.vefa.cache.PropertiesFileCache;
-
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
-public class PropertiesUtils {
+public enum PropertiesUtils {
+
+    INSTANCE;
+
+    public static final String PROPERTY_DATA_DIR = "no.difi.vefa.validation.configuration.datadir";
 
     private static final String DATA_DIR = "DATA_DIR";
     private static final String SUPPRESS_WARNINGS = "SUPPRESS_WARNINGS";
     private static final String LOG_STATISTICS = "LOG_STATISTICS";
 
-    public String dataDir;
-    public boolean suppressWarnings;
-    public boolean logStatistics;
+    private String dataDir;
+    private boolean suppressWarnings;
+    private boolean logStatistics;
 
-    /**
-     * Load properties file and set variables.
-     *
-     * @param propertiesFile Path to properties file as String
-     * @throws Exception
-     */
-    public void main(String propertiesFile) throws Exception {
-        PropertiesFileCache propertiesFileCache = new PropertiesFileCache();
-        Properties configFile = propertiesFileCache.getProperties(propertiesFile);
-        if (configFile == null) {
-            configFile = new Properties();
-            configFile.load(new FileInputStream(propertiesFile));
-            propertiesFileCache.addProperties(propertiesFile, configFile);
+    private Properties properties = new Properties();
+
+    public String getProperty(final String key) {
+        return getProperties().getProperty(key);
+    }
+
+    public String getDataDir() {
+        return getProperty(DATA_DIR);
+    }
+
+    public boolean isSuppressWarnings() {
+        return Boolean.parseBoolean(getProperty(SUPPRESS_WARNINGS));
+    }
+
+    public boolean isLogStatistics() {
+        return Boolean.parseBoolean(getProperty(LOG_STATISTICS));
+    }
+
+    private Properties getProperties() {
+        if (properties.isEmpty()) {
+            loadProperties();
         }
-        this.dataDir = configFile.getProperty(DATA_DIR);
-        this.suppressWarnings = Boolean.parseBoolean(configFile.getProperty(SUPPRESS_WARNINGS));
-        this.logStatistics = Boolean.parseBoolean(configFile.getProperty(LOG_STATISTICS));
+        return properties;
+    }
+
+    private void loadProperties() {
+        String vefaValidatorDir = System.getProperty(PROPERTY_DATA_DIR);
+        vefaValidatorDir = vefaValidatorDir.contains("properties") ? vefaValidatorDir : vefaValidatorDir + "/validator.properties";
+        try {
+            properties.load(new FileInputStream(vefaValidatorDir));
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Missing required system property {%s}", PROPERTY_DATA_DIR));
+        }
     }
 }

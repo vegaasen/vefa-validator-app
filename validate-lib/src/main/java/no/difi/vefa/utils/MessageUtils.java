@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * ..what..
+ * Translate utilities for Messages. This can be used to translate from e.g an exception to a Message.
  *
  * @author <a href="mailto:vegaasen@gmail.com">vegaasen</a>
  */
@@ -18,15 +18,22 @@ public class MessageUtils {
     }
 
     public static Message translate(final Exception e) {
-        StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw));
-        String exceptionAsString = sw.toString();
-        Message message = new Message();
-        message.setValidationType(ValidationType.XSL);
-        message.setMessageType(MessageType.Fatal);
-        message.setTitle(e.getMessage());
-        message.setDescription(exceptionAsString);
-        return message;
+        return translate(e, ValidationType.XSL);
+    }
+
+    public static Message translate(final Exception e, final ValidationType validationType) {
+        if (e != null) {
+            final StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            final String exceptionAsString = sw.toString();
+            final Message message = new Message();
+            message.setValidationType(validationType);
+            message.setMessageType(MessageType.Fatal);
+            message.setTitle(e.getMessage());
+            message.setDescription(exceptionAsString);
+            return message;
+        }
+        return null;
     }
 
 }

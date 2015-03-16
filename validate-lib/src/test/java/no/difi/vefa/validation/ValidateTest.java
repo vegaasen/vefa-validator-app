@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import no.difi.vefa.model.message.MessageType;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.InputStreamReader;
@@ -14,9 +15,13 @@ public class ValidateTest {
 
     private Validate validate;
 
+    @BeforeClass
+    public static void initialize() {
+        System.setProperty("no.difi.vefa.validation.configuration.datadir", ClassLoader.getSystemResource("validator.properties").getPath());
+    }
+
     @Before
     public void setUp() throws Exception {
-        System.setProperty("no.difi.vefa.validation.configuration.datadir", ClassLoader.getSystemResource("validator.properties").getPath());
         validate = new Validate();
     }
 
@@ -28,7 +33,7 @@ public class ValidateTest {
         validate.xml = "<test>notwellformed</testtest>";
         validate.validate();
 
-        assertEquals(MessageType.Fatal, validate.messages.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.Fatal, validate.getMessages().getMessages().get(0).getMessageType());
     }
 
     @Test

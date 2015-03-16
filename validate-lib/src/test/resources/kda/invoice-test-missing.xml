@@ -1,0 +1,173 @@
+<ns0:Invoice xmlns:ns0="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+             xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+             xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2">
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+    <cbc:CustomizationID>
+        transaction:biitrns010:ver2.0:extended:urn:www.peppol.eu:bis:peppol5a:ver2.0:extended:urn:www.difi.no:ehf:faktura:ver2.0
+    </cbc:CustomizationID>
+    <cbc:ProfileID>urn:www.cenbii.eu:profile:bii05:ver2.0</cbc:ProfileID>
+    <cbc:ID>250/26035135</cbc:ID>
+    <cbc:IssueDate>2014-03-28</cbc:IssueDate>
+    <cbc:InvoiceTypeCode listID="UNCL1001">380</cbc:InvoiceTypeCode>
+    <cbc:DocumentCurrencyCode listID="ISO4217">NOK</cbc:DocumentCurrencyCode>
+    <cac:OrderReference>
+        <cbc:ID>411000053</cbc:ID>
+    </cac:OrderReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="NO:ORGNR">978614582</cbc:EndpointID>
+            <cac:PartyName>
+                <cbc:Name>KONGSBERG DEFENCE &amp; AEROSPACE AS</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>Kirkegårdsveien 45</cbc:StreetName>
+                <cbc:AdditionalStreetName>P.O.Box 1003</cbc:AdditionalStreetName>
+                <cbc:CityName>Kongsberg</cbc:CityName>
+                <cbc:PostalZone>N-3601</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode listID="ISO3166-1:Alpha2">NO</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>KONGSBERG DEFENCE &amp; AEROSPACE AS</cbc:RegistrationName>
+                <cbc:CompanyID schemeID="NO:ORGNR" schemeName="Foretaksregisteret">978614582</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="GLN">200000045</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>FLO/Materielldivisjonen</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>Norwegian Defence Logistics, Organisation/Forsyning Materiellstyring, Etterforsyning
+                    Landsystemer, Hovemoen 62
+                </cbc:StreetName>
+                <cbc:CityName>Lillehammer</cbc:CityName>
+                <cbc:PostalZone>2604</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode listID="ISO3166-1:Alpha2">NO</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID schemeID="NO:VAT">****TODO:Angir kundens MVA nummer. Organisasjonsnummer etterfulgt av
+                    bokstavene “MVA”.****
+                </cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>FLO/Materielldivisjonen</cbc:RegistrationName>
+                <cbc:CompanyID schemeID="NO:ORGNR">****Todo:Kundens organisasjonsnummer***</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:ID>****Todo: Navn eller identifikator som angir kundes referanse, for eksempel ansattnr. (Ders
+                    ref.)****
+                </cbc:ID>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingCustomerParty>
+    <cac:Delivery>
+        <cac:DeliveryLocation>
+            <cac:Address>
+                <cbc:StreetName></cbc:StreetName>
+                <cbc:CityName>LILLEHAMMER</cbc:CityName>
+                <cbc:PostalZone>2624</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode listID="ISO3166-1:Alpha2">NO</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:Address>
+        </cac:DeliveryLocation>
+    </cac:Delivery>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode listID="UNCL4461">31</cbc:PaymentMeansCode>
+        <cbc:PaymentDueDate>2014-04-27</cbc:PaymentDueDate>
+        <cbc:PaymentID>***TODO: Unik id for betalingen utstedt av selgeren som en referanse. I Norge er dette KID
+            nummer.***
+        </cbc:PaymentID>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID schemeID="BBAN">81013370796</cbc:ID>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentTerms>
+        <cbc:Note>Net 30 days</cbc:Note>
+    </cac:PaymentTerms>
+    <cac:TaxTotal>
+        <cbc:TaxAmount currencyID="NOK">88531.00</cbc:TaxAmount>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="NOK">354124.00</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="NOK">88531.00</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID schemeID="UNCL5305">S</cbc:ID>
+                <cbc:Percent>25</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="NOK">354124.00</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="NOK">354124.00</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="NOK">442655.00</cbc:TaxInclusiveAmount>
+        <cbc:PayableAmount currencyID="NOK">442655.00</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+    <cac:InvoiceLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="NAR" unitCodeListID="UNECERec20">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="NOK">298516.00</cbc:LineExtensionAmount>
+        <cbc:AccountingCost>***TODO: Er Recomended. Mappe til InvoiceLine-&gt;FirstReference eller noe annet?***
+        </cbc:AccountingCost>
+        <cac:OrderLineReference>
+            <cbc:LineID>***TODO: Er Recomended. Mappe til InvoiceLine-&gt;FirstReference eller noe annet?***
+            </cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Name>MS06 Contractor Logistic Support
+                CLS will be paid in arrears on quarterly basis
+                CLS Contract Value / 24 Months (8 quarters)
+                2.388.130 / 8 = 298.516,25
+                Q1-2014
+            </cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>****TODO: mandatory. Se mappingdokument***</cbc:ID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="NOK">298516.00</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="NAR" unitCodeListID="UNECERec20">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="NOK">55608.00</cbc:LineExtensionAmount>
+        <cbc:AccountingCost>***TODO: Er Recomended. Mappe til InvoiceLine-&gt;FirstReference eller noe annet?***
+        </cbc:AccountingCost>
+        <cac:OrderLineReference>
+            <cbc:LineID>***TODO: Er Recomended. Mappe til InvoiceLine-&gt;FirstReference eller noe annet?***
+            </cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Name>Price Escalation iaw Article 1.3.1
+                Q1-2014
+                See attachment for details
+            </cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>****TODO: mandatory. Se mappingdokument***</cbc:ID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="NOK">55608.00</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+</ns0:Invoice>

@@ -2,6 +2,7 @@ package no.difi.vefa.validation;
 
 import no.difi.vefa.model.message.Message;
 import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.model.message.ValidationType;
 import no.difi.vefa.utils.MessageUtils;
 import no.difi.vefa.utils.xml.XmlXslTransformation;
 import org.w3c.dom.Document;
@@ -44,14 +45,13 @@ public class FilterMessage {
             if (status) {
                 for (Iterator<Message> iterator = messages.getMessages().iterator(); iterator.hasNext(); ) {
                     Message message = iterator.next();
-
                     if (message.getSchematronRuleId().equals(rule)) {
                         iterator.remove();
                     }
                 }
             }
         } catch (Exception e) {
-            messages.addMessage(MessageUtils.translate(e));
+            messages.addMessage(MessageUtils.translate(e, ValidationType.Filter));
         }
     }
 }
