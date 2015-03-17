@@ -5,7 +5,6 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,13 +27,8 @@ public class XSDValidationTest {
 
     @Test
     public void testMain() throws Exception {
-        XmlUtils xmlUtils = new XmlUtils();
-        Document xmlDoc = xmlUtils.stringToXMLDOM(xmlFile);
-
-        no.difi.vefa.utils.xml.XSDValidation xsdValidation = new no.difi.vefa.utils.xml.XSDValidation();
-
         try {
-            xsdValidation.main(xmlDoc, xsdFile);
+            XSDValidation.validate(XmlUtils.stringToDocument(xmlFile), xsdFile, null);
         } catch (Exception e) {
             fail("XML has failed XSD validation");
         }

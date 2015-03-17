@@ -21,7 +21,7 @@ public class ValidationService extends AbstractService {
     public String validateVersionAndSchemaAuto(String xml) throws Exception {
         Validate validate = new Validate();
         validate.autodetectVersionAndIdentifier = true;
-        validate.xml = xml;
+        validate.source = xml;
         validate.validate();
 
         return validate.messagesAsXML();
@@ -34,7 +34,7 @@ public class ValidationService extends AbstractService {
     public String validateVersionAndSchemaAutoFilterWarnings(String xml) throws Exception {
         Validate validate = new Validate();
         validate.autodetectVersionAndIdentifier = true;
-        validate.xml = xml;
+        validate.source = xml;
         validate.suppressWarnings = true;
         validate.validate();
 
@@ -49,7 +49,7 @@ public class ValidationService extends AbstractService {
         Validate validate = new Validate();
         validate.version = version;
         validate.id = schema;
-        validate.xml = xml;
+        validate.source = xml;
         validate.validate();
 
         return validate.messagesAsXML();
@@ -63,7 +63,7 @@ public class ValidationService extends AbstractService {
         Validate validate = new Validate();
         validate.version = version;
         validate.id = schema;
-        validate.xml = xml;
+        validate.source = xml;
         validate.suppressWarnings = true;
         validate.validate();
 
@@ -78,7 +78,7 @@ public class ValidationService extends AbstractService {
         Validate validate = new Validate();
         validate.version = version;
         validate.id = schema;
-        validate.xml = xml;
+        validate.source = xml;
         validate.render();
 
         if (validate.renderResult != null) {

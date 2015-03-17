@@ -16,7 +16,7 @@ public class ConfigurationCache {
      * @param id       The ID of the widget
      * @param document The Configuration itself
      */
-    public void addConfiguration(String id, Document document) {
+    public static void addConfiguration(String id, Document document) {
         CACHE.put(id, document);
     }
 
@@ -26,7 +26,7 @@ public class ConfigurationCache {
      * @param id The ID of the Configuration to retrieve
      * @return The requested Configuration or null if the Configuration is not in the cache
      */
-    public Document getConfiguration(String id) {
+    public static Document getConfiguration(String id) {
         if (!Strings.isNullOrEmpty(id) && CACHE.containsKey(id)) {
             return CACHE.get(id);
         }

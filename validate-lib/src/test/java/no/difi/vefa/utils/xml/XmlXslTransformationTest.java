@@ -25,11 +25,9 @@ public class XmlXslTransformationTest {
 
     @Test
     public void testMain() throws Exception {
-        XmlUtils xmlUtils = new XmlUtils();
-        Document xmlDoc = xmlUtils.stringToXMLDOM(xmlFile);
+        Document xmlDoc = XmlUtils.stringToDocument(xmlFile);
 
-        no.difi.vefa.utils.xml.XmlXslTransformation xmlXslTransformation = new no.difi.vefa.utils.xml.XmlXslTransformation();
-        Document result = xmlXslTransformation.main(xmlDoc, ClassLoader.getSystemResource("Test.xsl").getPath());
+        Document result = XmlXslTransformation.transform(xmlDoc, ClassLoader.getSystemResource("Test.xsl").getPath(), null);
 
         assertEquals("true", result.getElementsByTagName("status").item(0).getTextContent());
     }

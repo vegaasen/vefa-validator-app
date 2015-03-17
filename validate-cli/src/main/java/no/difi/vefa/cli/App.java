@@ -32,7 +32,7 @@ public class App {
 
         if (args.length == 1) {
             validate.autodetectVersionAndIdentifier = true;
-            validate.xml = xml;
+            validate.source = xml;
             validate.validate();
             System.out.println(validate.messagesAsXML());
         }
@@ -41,7 +41,7 @@ public class App {
             String version = args[1];
             String id = args[2];
 
-            validate.xml = xml;
+            validate.source = xml;
             validate.version = version;
             validate.id = id;
             validate.validate();

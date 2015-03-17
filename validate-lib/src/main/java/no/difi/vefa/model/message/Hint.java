@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * This stuff is not in use. Why?
+ */
 @XmlRootElement(name = "hint")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Hint {

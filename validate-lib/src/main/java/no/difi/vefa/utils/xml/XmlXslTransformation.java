@@ -2,6 +2,8 @@ package no.difi.vefa.utils.xml;
 
 import net.sf.saxon.TransformerFactoryImpl;
 import no.difi.vefa.cache.XSLTransformerCache;
+import no.difi.vefa.model.message.Messages;
+import no.difi.vefa.utils.MessageUtils;
 import no.difi.vefa.utils.xml.resolver.XsltURIResolver;
 import org.w3c.dom.Document;
 
@@ -26,14 +28,6 @@ import java.io.StringWriter;
  */
 public class XmlXslTransformation {
 
-    private final XSLTransformerCache xslTransformerCache;
-    private Templates templates;
-
-
-    public XmlXslTransformation() {
-        this.xslTransformerCache = new XSLTransformerCache();
-    }
-
     /**
      * Perform transformation of XML with XSL.
      *
@@ -42,31 +36,24 @@ public class XmlXslTransformation {
      * @return Document Result of transformation as Document
      * @throws Exception
      */
-    public Document main(Document xmlDoc, String xslFile) throws Exception {
-
-        // Check if the xslFile Templates object is cached
-        if (notCached(xslFile)) {
-            parseAndCache(xslFile);
+    public static Document transform(Document xmlDoc, String xslFile, Messages messages) throws Exception {
+        try {
+            return transform(xmlDoc, notCached(xslFile) ? parseAndCache(xslFile) : fetchFromCache(xslFile));
+        } catch (Exception e) {
+            messages.addMessage(MessageUtils.translate(e));
         }
-
-        return transform(xmlDoc);
+        return null;
     }
 
-    private boolean notCached(String xslFile) {
-        templates = fetchFromCache(xslFile);
-        return templates == null;
+    private static boolean notCached(String xslFile) {
+        return !XSLTransformerCache.exists(xslFile);
     }
 
-    private Templates fetchFromCache(String xslFile) {
-        return xslTransformerCache.getTemplate(xslFile);
+    private static Templates fetchFromCache(String xslFile) {
+        return XSLTransformerCache.getTemplate(xslFile);
     }
 
-    private void parseAndCache(String xslFile) throws TransformerConfigurationException, FileNotFoundException {
-        templates = parse(xslFile);
-        cache(xslFile, templates);
-    }
-
-    private Templates parse(String xslFile) throws FileNotFoundException, TransformerConfigurationException {
+    private static Templates parse(String xslFile) throws FileNotFoundException, TransformerConfigurationException {
         final TransformerFactory transformerFactory = TransformerFactory.newInstance(TransformerFactoryImpl.class.getName(), null);
         transformerFactory.setURIResolver(new XsltURIResolver());
         final File file = new File(xslFile);
@@ -76,18 +63,21 @@ public class XmlXslTransformation {
         throw new FileNotFoundException("File not found");
     }
 
-    private void cache(String xslFile, Templates templates) {
-        xslTransformerCache.addTemplate(xslFile, templates);
+    private static Document transform(Document xmlDoc, Templates templates) throws Exception {
+        try (StringWriter writer = new StringWriter()) {
+            templates.newTransformer().transform(new DOMSource(xmlDoc), new StreamResult(writer));
+            return XmlUtils.stringToDocument(writer.toString());
+        }
     }
 
-    private Document transform(Document xmlDoc) throws Exception {
-        XmlUtils xmlUtils = new XmlUtils();
-        StringWriter writer = new StringWriter();
+    private static Templates parseAndCache(String xslFile) throws TransformerConfigurationException, FileNotFoundException {
+        Templates templates = parse(xslFile);
+        cache(xslFile, templates);
+        return templates;
+    }
 
-        templates.newTransformer().transform(new DOMSource(xmlDoc), new StreamResult(writer));
-
-        // The writer contains the result of the transformation.
-        return xmlUtils.stringToXMLDOM(writer.toString());
+    private static void cache(String xslFile, Templates templates) {
+        XSLTransformerCache.addTemplate(xslFile, templates);
     }
 
 }

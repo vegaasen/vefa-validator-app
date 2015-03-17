@@ -30,7 +30,7 @@ public class ValidateTest {
         validate = new Validate();
         validate.version = "test";
         validate.id = "test";
-        validate.xml = "<test>notwellformed</testtest>";
+        validate.source = "<test>notwellformed</testtest>";
         validate.validate();
 
         assertEquals(MessageType.Fatal, validate.getMessages().getMessages().get(0).getMessageType());
@@ -40,7 +40,7 @@ public class ValidateTest {
     public void testAutoDetectionOfVersionAndSchema() throws Exception {
         validate = new Validate();
         validate.autodetectVersionAndIdentifier = true;
-        validate.xml = CharStreams.toString(new InputStreamReader(
+        validate.source = CharStreams.toString(new InputStreamReader(
                 ClassLoader.getSystemResourceAsStream("Invoice.xml"),
                 Charsets.UTF_8));
         validate.validate();

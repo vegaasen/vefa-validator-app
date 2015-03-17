@@ -1,11 +1,12 @@
 package no.difi.vefa.utils.xml;
 
+import no.difi.vefa.model.xml.namespace.SimpleNamespaceContext;
+import no.difi.vefa.model.xml.namespace.XMLNamespace;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -17,7 +18,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,7 +32,7 @@ public class XmlUtils {
      * @return String XML DOM as string
      * @throws Exception
      */
-    public String xmlDOMToString(Document document) throws Exception {
+    public static String documentToString(Document document) throws Exception {
         // Set up a transformer
         TransformerFactory transfac = TransformerFactory.newInstance();
         Transformer trans = transfac.newTransformer();
@@ -55,7 +55,7 @@ public class XmlUtils {
      * @return Document XML string as XMLDOM
      * @throws Exception
      */
-    public Document stringToXMLDOM(String xml) throws Exception {
+    public static Document stringToDocument(String xml) throws Exception {
         final DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         docFactory.setNamespaceAware(true);
         return docFactory.newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
@@ -69,7 +69,7 @@ public class XmlUtils {
      * @return NodeLIst Result of XPath Query as NodeList
      * @throws Exception
      */
-    public NodeList xmlDOMXPathQuery(Document document, String xPath) throws Exception {
+    public static NodeList xmlDOMXPathQuery(Document document, String xPath) throws Exception {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
         return (NodeList) XPathFactory.newInstance().newXPath().compile(xPath).evaluate(document, XPathConstants.NODESET);
@@ -84,7 +84,7 @@ public class XmlUtils {
      * @return NodeLIst Result of XPath Query as NodeList
      * @throws Exception
      */
-    public NodeList xmlDOMXPathQueryWithNS(Document document, String xPath, final List<XMLNamespace> namespaces) throws Exception {
+    public static NodeList xmlDOMXPathQueryWithNS(Document document, String xPath, final List<XMLNamespace> namespaces) throws Exception {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
         XPath xpath = XPathFactory.newInstance().newXPath();
@@ -99,47 +99,12 @@ public class XmlUtils {
      * @return innerXML of Node as String
      * @throws Exception
      */
-    public String innerXml(Node node) throws Exception {
+    public static String innerXml(Node node) throws Exception {
         StringWriter sw = new StringWriter();
         Transformer t = TransformerFactory.newInstance().newTransformer();
         t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         t.setOutputProperty(OutputKeys.INDENT, "no");
         t.transform(new DOMSource(node), new StreamResult(sw));
         return sw.toString();
-    }
-
-    private static final class SimpleNamespaceContext implements NamespaceContext {
-
-        private final List<XMLNamespace> namespaces;
-
-        public SimpleNamespaceContext(List<XMLNamespace> namespaces) {
-            this.namespaces = namespaces;
-        }
-
-        @SuppressWarnings("rawtypes")
-        @Override
-        public Iterator getPrefixes(String namespaceURI) {
-            return null;
-        }
-
-        @Override
-        public String getPrefix(String namespaceURI) {
-            return null;
-        }
-
-        @Override
-        public String getNamespaceURI(String prefix) {
-            for (XMLNamespace ns : namespaces) {
-                if (ns.prefix.equals(prefix)) {
-                    return ns.url;
-                }
-            }
-            return null;
-        }
-    }
-
-    public final class XMLNamespace {
-        public String prefix;
-        public String url;
     }
 }

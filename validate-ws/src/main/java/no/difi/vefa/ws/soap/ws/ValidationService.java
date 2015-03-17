@@ -19,7 +19,11 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
+ * Soap-services related to the validation service provided by DIFI.
+ * This was implemented in relation to cases where REST-based services is not an option.
+ *
  * @author <a href="mailto:vegaasen@gmail.com">vegaasen</a>
+ * @version 1.0
  */
 @WebService(targetNamespace = SoapAttributes.NAMESPACE, name = SoapAttributes.Services.VALIDATION)
 @SOAPBinding(
@@ -51,21 +55,26 @@ public class ValidationService extends AbstractWebService {
         LOG.info(String.format("Validating invoice {%s} by schema {%s} with version {%s} and suppressingWarnings {%s}", invoice, schema, version, suppressWarnings));
         final Validate validate = new Validate();
         if (!Strings.isNullOrEmpty(schema)) {
-            validate.id = schema;
+            validate.setId(schema);
         } else {
-            validate.autodetectVersionAndIdentifier = true;
+            validate.setAutodetectVersionAndIdentifier(true);
         }
         if (!Strings.isNullOrEmpty(version)) {
-            validate.version = version;
+            validate.setVersion(version);
         }
-        validate.suppressWarnings = suppressWarnings == null ? false : suppressWarnings;
-        validate.xml = invoice;
+        validate.setSuppressWarnings(suppressWarnings == null ? false : suppressWarnings);
+        validate.setSource(invoice);
         try {
             validate.validate();
             return validate.getMessages();
         } catch (Exception e) {
-            throw new ValidationSoapServiceException(ResponseError.create(ErrorCode.NOT_FOUND, String.format("Unable to validate invoice {%s}", invoice)), e);
+            throw new ValidationSoapServiceException(ResponseError.create(ErrorCode.NOT_FOUND,
+                    String.format("Unable to validate invoice {%s}.%n%n%s", invoice, usage())), e);
         }
+    }
+
+    private static String usage() {
+        return String.format("Example-usage: %nSchema: urn:www.cenbii.eu:profile:bii05:ver2.0#urn:www.cenbii.eu:transaction:biitrns014:ver2.0:extended:urn:www.peppol.eu:bis:peppol5a:ver2.0:extended:urn:www.difi.no:ehf:kreditnota:ver2.0%nVersion: 2.0");
     }
 
 }

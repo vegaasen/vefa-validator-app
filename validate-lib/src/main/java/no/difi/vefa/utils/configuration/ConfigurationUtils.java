@@ -11,6 +11,9 @@ import java.io.FileInputStream;
 
 public class ConfigurationUtils {
 
+    private static final String REPLACEABLE = "file://";
+    private static final String EMPTY = "";
+
     /**
      * Load configuration file into XML DOM
      *
@@ -18,20 +21,19 @@ public class ConfigurationUtils {
      * @return Document XML string as XMLDOM
      * @throws Exception
      */
-    public Document fileToDocument(String xmlFile) throws Exception {
-        ConfigurationCache configurationCache = new ConfigurationCache();
-        Document doc = configurationCache.getConfiguration(xmlFile);
+    public static Document fileToDocument(String xmlFile) throws Exception {
+        Document doc = ConfigurationCache.getConfiguration(xmlFile);
         if (doc == null) {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setXIncludeAware(true);
             factory.setNamespaceAware(true);
             DocumentBuilder parser = factory.newDocumentBuilder();
             parser.setEntityResolver((publicId, systemId) -> {
-                String file = PropertiesUtils.INSTANCE.getDataDir() + systemId.replace("file://", "");
+                String file = PropertiesUtils.INSTANCE.getDataDir() + systemId.replace(REPLACEABLE, EMPTY);
                 return new InputSource(file);
             });
             doc = parser.parse(new FileInputStream(xmlFile));
-            configurationCache.addConfiguration(xmlFile, doc);
+            ConfigurationCache.addConfiguration(xmlFile, doc);
         }
         return doc;
     }

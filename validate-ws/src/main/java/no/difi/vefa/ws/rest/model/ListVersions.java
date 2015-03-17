@@ -1,7 +1,7 @@
 package no.difi.vefa.ws.rest.model;
 
-import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -25,13 +25,11 @@ public class ListVersions {
      * @throws Exception
      */
     public String getVersions() throws Exception {
-        ConfigurationUtils configurationUtils = new ConfigurationUtils();
-        ArrayList<String> list = new ArrayList<>();
-        Document standardConfig = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
-        this.addVersionToList(standardConfig, list);
-        Document customConfig = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
-        this.addVersionToList(customConfig, list);
-        Set<String> set = new HashSet<>(list);
+        Set<String> set = new HashSet<>();
+        Document standardConfig = ConfigurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+        addVersionToList(standardConfig, set);
+        Document customConfig = ConfigurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
+        addVersionToList(customConfig, set);
         List<String> uniqueList = new ArrayList<>(set);
         Collections.sort(uniqueList);
         // Loop and return versions
@@ -51,13 +49,9 @@ public class ListVersions {
      * @param list     List to hold versions as ArrayList
      * @throws Exception
      */
-    private void addVersionToList(Document document, ArrayList<String> list) throws Exception {
-        // Setup
-        XmlUtils xmlUtils = new XmlUtils();
-
+    private void addVersionToList(Document document, Set<String> list) throws Exception {
         // Get available versions
-        NodeList versions = xmlUtils.xmlDOMXPathQuery(document, "/config/validate[not(@version=preceding-sibling::validate/@version)]/@version");
-
+        NodeList versions = XmlUtils.xmlDOMXPathQuery(document, "/config/validate[not(@version=preceding-sibling::validate/@version)]/@version");
         // Add versions to list
         for (int i = 0; i < versions.getLength(); i++) {
             list.add(versions.item(i).getNodeValue());

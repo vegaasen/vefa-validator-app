@@ -12,6 +12,9 @@ import java.io.StringReader;
 
 public class WellFormatted {
 
+    private WellFormatted() {
+    }
+
     /**
      * Checks if xml string is valid XML.
      * Add a message to message collection if this is not the case.
@@ -33,9 +36,6 @@ public class WellFormatted {
             messages.addMessage(MessageUtils.translate(e, ValidationType.XMLWellFormed));
         }
         return false;
-    }
-
-    private WellFormatted() {
     }
 
 }
