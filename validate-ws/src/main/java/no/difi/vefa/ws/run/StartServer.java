@@ -18,7 +18,7 @@ public class StartServer {
             System.out.println(usage());
             return;
         }
-        JettyContainer.INSTANCE.start((args != null && args.length > 0) ? Integer.parseInt(args[0]) : 7007);
+        JettyContainer.INSTANCE.start((args != null && args.length > 0) ? Integer.parseInt(args[0]) : DEFAULT_PORT);
     }
 
     private static String usage() {
