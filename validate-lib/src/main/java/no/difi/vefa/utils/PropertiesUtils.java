@@ -14,10 +14,6 @@ public enum PropertiesUtils {
     private static final String SUPPRESS_WARNINGS = "SUPPRESS_WARNINGS";
     private static final String LOG_STATISTICS = "LOG_STATISTICS";
 
-    private String dataDir;
-    private boolean suppressWarnings;
-    private boolean logStatistics;
-
     private Properties properties = new Properties();
 
     public String getProperty(final String key) {

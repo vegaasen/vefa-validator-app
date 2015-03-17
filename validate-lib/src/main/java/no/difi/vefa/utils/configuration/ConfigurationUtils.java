@@ -18,7 +18,7 @@ public class ConfigurationUtils {
      * @return Document XML string as XMLDOM
      * @throws Exception
      */
-    public Document fileToXMLDOM(String xmlFile) throws Exception {
+    public Document fileToDocument(String xmlFile) throws Exception {
         ConfigurationCache configurationCache = new ConfigurationCache();
         Document doc = configurationCache.getConfiguration(xmlFile);
         if (doc == null) {

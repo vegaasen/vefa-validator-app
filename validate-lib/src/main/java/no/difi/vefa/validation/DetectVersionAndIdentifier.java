@@ -112,8 +112,8 @@ public class DetectVersionAndIdentifier {
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
         XmlUtils xmlUtils = new XmlUtils();
         // Select all schemas in configuration files
-        Document standardXmlDoc = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
-        Document customXmlDoc = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
+        Document standardXmlDoc = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+        Document customXmlDoc = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
         NodeList standardValidates = xmlUtils.xmlDOMXPathQuery(standardXmlDoc, "/config/validate[@id='" + this.id + "']");
         NodeList customValidates = xmlUtils.xmlDOMXPathQuery(customXmlDoc, "/config/validate[@id='" + this.id + "']");
 

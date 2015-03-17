@@ -210,7 +210,7 @@ public class Validate {
      */
     private NodeList getConfigurationValidation(ConfigurationUtils configurationUtils, XmlUtils xmlUtils, String config) throws Exception {
         return xmlUtils.xmlDOMXPathQuery(
-                configurationUtils.fileToXMLDOM(config),
+                configurationUtils.fileToDocument(config),
                 "/config/validate[@id='" + this.id + "' and @version='" + this.version + "']");
     }
 

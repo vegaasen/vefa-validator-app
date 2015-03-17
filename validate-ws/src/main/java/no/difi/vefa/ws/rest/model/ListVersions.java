@@ -27,9 +27,9 @@ public class ListVersions {
     public String getVersions() throws Exception {
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
         ArrayList<String> list = new ArrayList<>();
-        Document standardConfig = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+        Document standardConfig = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
         this.addVersionToList(standardConfig, list);
-        Document customConfig = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
+        Document customConfig = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
         this.addVersionToList(customConfig, list);
         Set<String> set = new HashSet<>(list);
         List<String> uniqueList = new ArrayList<>(set);

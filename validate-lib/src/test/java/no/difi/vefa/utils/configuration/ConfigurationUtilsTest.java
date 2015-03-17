@@ -10,7 +10,7 @@ public class ConfigurationUtilsTest {
     @Test
     public void testFileToXMLDOM() throws Exception {
         ConfigurationUtils configurationUtils = new ConfigurationUtils();
-        Document configDoc = configurationUtils.fileToXMLDOM(
+        Document configDoc = configurationUtils.fileToDocument(
                 ClassLoader.getSystemResource("config.xml").getPath()
         );
 

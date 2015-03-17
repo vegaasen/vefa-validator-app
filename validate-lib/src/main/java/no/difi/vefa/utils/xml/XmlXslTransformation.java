@@ -1,22 +1,18 @@
 package no.difi.vefa.utils.xml;
 
+import net.sf.saxon.TransformerFactoryImpl;
 import no.difi.vefa.cache.XSLTransformerCache;
-import no.difi.vefa.utils.PropertiesUtils;
+import no.difi.vefa.utils.xml.resolver.XsltURIResolver;
 import org.w3c.dom.Document;
 
-import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
 import java.io.StringWriter;
 
 
@@ -71,11 +67,13 @@ public class XmlXslTransformation {
     }
 
     private Templates parse(String xslFile) throws FileNotFoundException, TransformerConfigurationException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        final TransformerFactory transformerFactory = TransformerFactory.newInstance(TransformerFactoryImpl.class.getName(), null);
         transformerFactory.setURIResolver(new XsltURIResolver());
-
-        FileReader fileReader = new FileReader(xslFile);
-        return transformerFactory.newTemplates(new StreamSource(fileReader));
+        final File file = new File(xslFile);
+        if (file.exists()) {
+            return transformerFactory.newTemplates(new StreamSource(file));
+        }
+        throw new FileNotFoundException("File not found");
     }
 
     private void cache(String xslFile, Templates templates) {
@@ -92,17 +90,4 @@ public class XmlXslTransformation {
         return xmlUtils.stringToXMLDOM(writer.toString());
     }
 
-    private static final class XsltURIResolver implements URIResolver {
-
-        @Override
-        public Source resolve(String href, String base) throws TransformerException {
-            try {
-                InputStream inputStream = new FileInputStream(PropertiesUtils.INSTANCE.getDataDir() + href);
-                return new StreamSource(inputStream);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return null;
-            }
-        }
-    }
 }

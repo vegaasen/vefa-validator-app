@@ -32,11 +32,11 @@ public class ListIdentifier {
         LinkedHashSet<String[][]> table = new LinkedHashSet<>();
 
         // Add schema to table from Standard configuration file
-        Document standardConfig = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+        Document standardConfig = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
         this.addIdentifierToList(standardConfig, table);
 
         // Add schema to table from Custom configuration file
-        Document customConfig = configurationUtils.fileToXMLDOM(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
+        Document customConfig = configurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
         this.addIdentifierToList(customConfig, table);
 
         String v = "<schemas version=\"" + this.version + "\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
