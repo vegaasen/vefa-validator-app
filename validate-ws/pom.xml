@@ -50,6 +50,16 @@
             <artifactId>jetty-servlet</artifactId>
             <version>${server.jetty.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-jsp</artifactId>
+            <version>${server.jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
         <!--SERVLET-->
         <dependency>
             <groupId>javax.servlet</groupId>

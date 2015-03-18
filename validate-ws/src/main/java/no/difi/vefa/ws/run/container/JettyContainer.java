@@ -13,6 +13,8 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,9 +49,11 @@ public enum JettyContainer {
             }
             webServer = new Server();
             webServer.setConnectors(assembleConnectors(port, webServer));
-            final ServletContextHandler applicationContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+            final WebAppContext applicationContext = new WebAppContext();
+            //final ServletContextHandler applicationContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
             applicationContext.setContextPath(CONTEXT_PATH);
             applicationContext.setSessionHandler(new SessionHandler());
+            applicationContext.setBaseResource(Resource.newClassPathResource("webapp", true, true));
             configureJersey(applicationContext);
             configureCxf(applicationContext);
             webServer.setHandler(applicationContext);

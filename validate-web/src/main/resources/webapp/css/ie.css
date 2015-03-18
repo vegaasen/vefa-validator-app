@@ -1,0 +1,22 @@
+/* IE spesific rules */
+
+.main {	
+	background-color: #FCFCFC;  /* fallback/image non-cover color */
+	background-image: url(../img/main_bg_gradient.png);
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
+
+.box .mod-bd {	
+	background-color: #fcfcfc;  /* fallback/image non-cover color */
+	background-image: url(../img/box_bg_gradient.png);
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
+
+.featurebox .mod-bd {	
+	background-color: #fafdfd;  /* fallback/image non-cover color */
+	background-image: url(../img/featurebox_bg_gradient.png);
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
