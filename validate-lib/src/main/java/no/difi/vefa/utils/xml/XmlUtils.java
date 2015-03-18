@@ -1,5 +1,6 @@
 package no.difi.vefa.utils.xml;
 
+import com.google.common.base.Strings;
 import no.difi.vefa.cache.ConfigurationCache;
 import no.difi.vefa.model.message.Messages;
 import no.difi.vefa.model.message.ValidationType;
@@ -101,6 +102,10 @@ public class XmlUtils {
      * @return boolean Returns true or false
      */
     public static boolean isWellFormatted(String xml, Messages messages) {
+        if (Strings.isNullOrEmpty(xml)) {
+            messages.addMessage(MessageUtils.translate(new IllegalArgumentException("Required parameter XML missing. Unable to verify if the message is well formatted."), ValidationType.XMLWellFormed));
+            return false;
+        }
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setValidating(false);
