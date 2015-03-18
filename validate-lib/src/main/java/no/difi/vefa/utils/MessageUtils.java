@@ -2,8 +2,11 @@ package no.difi.vefa.utils;
 
 import no.difi.vefa.model.message.Message;
 import no.difi.vefa.model.message.MessageType;
+import no.difi.vefa.model.message.Messages;
 import no.difi.vefa.model.message.ValidationType;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -34,6 +37,24 @@ public class MessageUtils {
             return message;
         }
         return null;
+    }
+
+    /**
+     * Returns the validation message collection as XML.
+     *
+     * @return String Messages as XML
+     * @throws Exception
+     */
+    public static String messagesToXml(final Messages messages) {
+        try {
+            Marshaller jaxbMarshaller = JAXBContext.newInstance(Messages.class).createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter stringWriter = new StringWriter();
+            jaxbMarshaller.marshal(messages, stringWriter);
+            return stringWriter.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Unable to marshal messages {%s}", messages.toString()), e);
+        }
     }
 
 }

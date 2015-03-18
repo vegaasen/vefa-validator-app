@@ -1,6 +1,5 @@
 package no.difi.vefa.validation;
 
-import no.difi.vefa.model.message.Hint;
 import no.difi.vefa.model.message.Message;
 import no.difi.vefa.model.message.MessageType;
 import no.difi.vefa.model.message.Messages;
@@ -16,9 +15,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 /**
  * This class is used to validate a xml document according to the
  * given configuration.
@@ -33,18 +29,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * - autodetectVersionAndIdentifier: Should we try to autodetect what version to validate against? If set to true,
  * validator will try to autodetect version and identifier based on xml content. Default false;
  * <p>
- * todo: refactor so that this becomes a util-class, not what it is right now.
  */
 public class Validate {
 
-    public String id;
-    public String version;
-    public String source;
-    public boolean suppressWarnings = false;
-    public boolean valid;
-    public boolean autodetectVersionAndIdentifier = false;
-    public String renderResult;
-
+    private String id;
+    private String version;
+    private String source;
+    private boolean suppressWarnings = false;
+    private boolean valid;
+    private boolean autodetectVersionAndIdentifier = false;
+    private String renderResult;
     private Messages messages = new Messages();
 
     /**
@@ -55,40 +49,25 @@ public class Validate {
      * @throws Exception
      */
     public void render() throws Exception {
-        // Always hide warnings?
-        this.hideWarnings();
-
-        // Check if XML string is well formed
-        if (!this.isXMLWellFormed()) {
+        hideWarnings();
+        if (!XmlUtils.isWellFormatted(getSource(), getMessages())) {
+            logErrorMessage();
             return;
         }
-
-        // Load XML string as XML DOM		
-        Document xmlDoc = XmlUtils.stringToDocument(this.source);
-
-        // Autodetect version and schema?
-        if (!this.tryToAutodetectVersionAndSchema(xmlDoc)) {
+        Document xmlDoc = XmlUtils.stringToDocument(getSource());
+        if (!autodetectVersionAndSchema(xmlDoc)) {
+            logErrorMessage();
             return;
         }
-
-        // Get validations from config files	
-        NodeList standardValidates = this.getConfigurationValidation(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
-        NodeList customValidates = this.getConfigurationValidation(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
-
-        // We have not found anything in configuration to validate against
-        if (!this.doesConfigurationContainValidationDefinitions(standardValidates, customValidates)) {
+        NodeList standardValidates = getStandardValidates();
+        NodeList customValidates = getCustomValidates();
+        if (!doesConfigurationContainValidationDefinitions(standardValidates, customValidates)) {
+            logErrorMessage();
             return;
         }
-
-        // Perform validation
-        this.renderXML(standardValidates, xmlDoc);
-        this.renderXML(customValidates, xmlDoc);
-
-        // Set valid attribute
-        this.setIsValid();
-
-        // Log statistics
-        //this.logStat();
+        renderXML(standardValidates, xmlDoc);
+        renderXML(customValidates, xmlDoc);
+        setIsValid();
     }
 
     /**
@@ -99,29 +78,33 @@ public class Validate {
      */
     public void validate() throws Exception {
         hideWarnings();
-        if (!isXMLWellFormed()) {
+        if (!XmlUtils.isWellFormatted(getSource(), getMessages())) {
+            logErrorMessage();
             return;
         }
         Document xmlDoc = XmlUtils.stringToDocument(getSource());
-        if (!tryToAutodetectVersionAndSchema(xmlDoc)) {
+        if (!autodetectVersionAndSchema(xmlDoc)) {
+            logErrorMessage();
             return;
         }
-        NodeList standardValidates = getConfigurationValidation(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
-        NodeList customValidates = getConfigurationValidation(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
-
-        // We have not found anything in configuration to validate against
+        NodeList standardValidates = getStandardValidates();
+        NodeList customValidates = getCustomValidates();
         if (!doesConfigurationContainValidationDefinitions(standardValidates, customValidates)) {
+            logErrorMessage();
             return;
         }
-        // Perform validation
         validation(xmlDoc, standardValidates, customValidates);
-
         setIsValid();
-
-        // Log statistics
         logStat();
     }
 
+    public String getRenderResult() {
+        return renderResult;
+    }
+
+    public void setRenderResult(String renderResult) {
+        this.renderResult = renderResult;
+    }
 
     public String getId() {
         return id;
@@ -175,23 +158,32 @@ public class Validate {
         this.autodetectVersionAndIdentifier = autodetectVersionAndIdentifier;
     }
 
+    private void logErrorMessage() {
+        Message message = new Message();
+        message.setTitle("Missing required parameters");
+        message.setDescription("Either id, source or version was nilled. Unable to validate.");
+        message.setValidationType(ValidationType.UNKNOWN);
+        message.setMessageType(MessageType.Fatal);
+        message.setSchematronRuleId("-1");
+        getMessages().addMessage(message);
+    }
+
+    private NodeList getStandardValidates() throws Exception {
+        return getConfigurationValidation(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+    }
+
+    private NodeList getCustomValidates() throws Exception {
+        return getConfigurationValidation(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
+    }
+
     /**
      * Checks if supperss warnings is set in properties files.
      * If so...set suppresswarning properties.
      */
     private void hideWarnings() {
-        if (PropertiesUtils.INSTANCE.isSuppressWarnings()) {
+        if (PropertiesUtils.INSTANCE.isSuppressWarnings() && !isSuppressWarnings()) {
             setSuppressWarnings(true);
         }
-    }
-
-    /**
-     * Checks if XML is well formed.
-     *
-     * @return Boolean
-     */
-    private Boolean isXMLWellFormed() {
-        return XmlUtils.isWellFormatted(source, messages);
     }
 
     /**
@@ -200,10 +192,10 @@ public class Validate {
      * @return Boolean
      * @throws Exception
      */
-    private boolean tryToAutodetectVersionAndSchema(Document xmlDoc) throws Exception {
+    private boolean autodetectVersionAndSchema(Document xmlDoc) throws Exception {
         boolean detected = true;
         if (isAutodetectVersionAndIdentifier()) {
-            Schema version = SchemaInformation.detectSchemaInformation(xmlDoc, this.messages);
+            Schema version = SchemaInformation.detectSchemaInformation(xmlDoc, getMessages());
             setId(version.getId());
             setVersion(version.getVersion());
             if (!version.isDetected()) {
@@ -222,29 +214,26 @@ public class Validate {
     private NodeList getConfigurationValidation(String config) throws Exception {
         return XmlUtils.xmlDOMXPathQuery(
                 XmlUtils.fileToDocument(config),
-                "/config/validate[@id='" + this.id + "' and @version='" + this.version + "']");
+                "/config/validate[@id='" + getId() + "' and @version='" + getVersion() + "']");
     }
 
     /**
      * Checks if standard and custom validation files contain any validation definitions
      * for given version and schema.
      *
-     * @return Boolean
+     * @return valid/not valid
      */
-    private Boolean doesConfigurationContainValidationDefinitions(NodeList standardValidates, NodeList customValidates) {
-        Boolean r = true;
-
+    private boolean doesConfigurationContainValidationDefinitions(NodeList standardValidates, NodeList customValidates) {
         if (standardValidates.getLength() == 0 && customValidates.getLength() == 0) {
             Message message = new Message();
             message.setValidationType(ValidationType.Configuration);
             message.setMessageType(MessageType.Fatal);
             message.setTitle("No validation definition is found in configuration.");
-            message.setDescription("No entry is found in configuration for version '" + this.version + "' and identificator '" + this.id + "', unable to perform validation!");
-            this.messages.addMessage(message);
-            r = false;
+            message.setDescription("No entry is found in configuration for version '" + getVersion() + "' and identificator '" + getId() + "', unable to perform validation!");
+            getMessages().addMessage(message);
+            return false;
         }
-
-        return r;
+        return true;
     }
 
     /**
@@ -270,7 +259,7 @@ public class Validate {
                             getMessages());
                     // Get XML utils and return DOM as string
                     if (transformationResult != null) {
-                        this.renderResult = XmlUtils.documentToString(transformationResult);
+                        setRenderResult(XmlUtils.documentToString(transformationResult));
                     }
                 }
             }
@@ -301,7 +290,6 @@ public class Validate {
     private void validateNode(Document xmlDoc, Node step) {
         String id = step.getAttributes().getNamedItem("id").getNodeValue();
         String file = step.getAttributes().getNamedItem("file").getNodeValue();
-        System.out.println(id + " " + file);
         switch (id) {
             case "XSD":
                 // Perform XSD validation
@@ -333,96 +321,7 @@ public class Validate {
      */
     private void logStat() {
         if (PropertiesUtils.INSTANCE.isLogStatistics()) {
-            LogStatistics.log(this.id, this.version, this.valid, this.messages);
+            LogStatistics.log(getId(), getVersion(), isValid(), getMessages());
         }
     }
-
-    /**
-     * Returns the validation message collection as XML.
-     *
-     * @return String Messages as XML
-     * @throws Exception
-     */
-    public String messagesAsXML() throws Exception {
-        // Build XML document
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-        Document doc = docBuilder.newDocument();
-        Element rootElement = doc.createElement("messages");
-        doc.appendChild(rootElement);
-
-        // Add message attribute id
-        rootElement.setAttribute("id", getId());
-
-        // Add message attribute valid
-        rootElement.setAttribute("valid", Boolean.toString(isValid()));
-
-        // Add message attribute version
-        rootElement.setAttribute("version", getVersion());
-
-        // Iterate messages
-        for (Message message : getMessages().getMessages()) {
-            if (isSuppressWarnings() && message.getMessageType() == MessageType.Warning) {
-            } else {
-                // Create message
-                Element msg = doc.createElement("message");
-                rootElement.appendChild(msg);
-
-                // Add message attribute version
-                msg.setAttribute("validationType", message.getValidationType().toString());
-
-                // Add messagetype
-                Element messageType = doc.createElement("messageType");
-                messageType.appendChild(doc.createTextNode(message.getMessageType().toString()));
-                msg.appendChild(messageType);
-
-                // Add title
-                Element title = doc.createElement("title");
-                title.appendChild(doc.createTextNode(message.getTitle()));
-                msg.appendChild(title);
-
-                // Add description
-                Element desc = doc.createElement("description");
-                desc.appendChild(doc.createTextNode(message.getDescription()));
-                msg.appendChild(desc);
-
-                // Add schematron rule id
-                Element schematronRuleId = doc.createElement("schematronRuleId");
-                schematronRuleId.appendChild(doc.createTextNode(message.getSchematronRuleId()));
-                msg.appendChild(schematronRuleId);
-
-                // Add hints to message
-                if (message.getHints() != null) {
-                    // Create hints
-                    Element hints = doc.createElement("hints");
-
-                    for (Hint h : message.getHints()) {
-                        // Create hint
-                        Element hint = doc.createElement("hint");
-
-                        // Add title
-                        Element hintTitle = doc.createElement("title");
-                        hintTitle.appendChild(doc.createTextNode(h.getTitle()));
-                        hint.appendChild(hintTitle);
-
-                        // Add description
-                        Element hintDesc = doc.createElement("description");
-                        hintDesc.appendChild(doc.createTextNode(h.getDescription()));
-                        hint.appendChild(hintDesc);
-
-                        // Add hint
-                        hints.appendChild(hint);
-                    }
-
-                    // Add hints
-                    msg.appendChild(hints);
-                }
-            }
-        }
-
-        // Get XML utils and return DOM as string
-        return XmlUtils.documentToString(doc);
-    }
-
 }

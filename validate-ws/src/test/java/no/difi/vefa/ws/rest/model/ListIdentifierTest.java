@@ -1,4 +1,4 @@
-package no.difi.vefa.ws;
+package no.difi.vefa.ws.rest.model;
 
 import no.difi.vefa.common.DifiConstants;
 import no.difi.vefa.ws.rest.model.ListIdentifier;

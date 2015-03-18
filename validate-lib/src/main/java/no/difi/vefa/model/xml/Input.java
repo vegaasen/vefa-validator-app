@@ -1,5 +1,7 @@
 package no.difi.vefa.model.xml;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.ls.LSInput;
 
 import java.io.BufferedInputStream;
@@ -11,6 +13,8 @@ import java.io.Reader;
  * @author <a href="vegaasen@gmail.com">vegardaasen</a>
  */
 public class Input implements LSInput {
+
+    private static final Logger LOG = LogManager.getLogger(Input.class.getName());
 
     private final BufferedInputStream inputStream;
     private String publicId;
@@ -99,8 +103,7 @@ public class Input implements LSInput {
                 inputStream.read(input);
                 return new String(input);
             } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Exception " + e);
+                LOG.warn("Unable to read the wanted inputStream.", e);
                 return null;
             }
         }

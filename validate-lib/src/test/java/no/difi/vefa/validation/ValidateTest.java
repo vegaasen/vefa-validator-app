@@ -31,9 +31,9 @@ public class ValidateTest {
     @Test
     public void testNotWellFormedXML() throws Exception {
         validate = new Validate();
-        validate.version = "test";
-        validate.id = "test";
-        validate.source = "<test>notwellformed</testtest>";
+        validate.setVersion("test");
+        validate.setId("test");
+        validate.setSource("<test>notwellformed</testtest>");
         validate.validate();
 
         assertEquals(MessageType.Fatal, validate.getMessages().getMessages().get(0).getMessageType());
@@ -42,10 +42,10 @@ public class ValidateTest {
     @Test
     public void testAutoDetectionOfVersionAndSchema() throws Exception {
         validate = new Validate();
-        validate.autodetectVersionAndIdentifier = true;
-        validate.source = CharStreams.toString(new InputStreamReader(
+        validate.setAutodetectVersionAndIdentifier(true);
+        validate.setSource(CharStreams.toString(new InputStreamReader(
                 ClassLoader.getSystemResourceAsStream("Invoice.xml"),
-                Charsets.UTF_8));
+                Charsets.UTF_8)));
         validate.validate();
     }
 

@@ -14,8 +14,7 @@ public class DefaultService extends AbstractService {
 
     @GET
     public Response welcome() {
-        return Response.ok().entity("welcome").build();
+        return Response.ok().build();
     }
-
 
 }

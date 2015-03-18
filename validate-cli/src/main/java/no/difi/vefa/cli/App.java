@@ -1,5 +1,6 @@
 package no.difi.vefa.cli;
 
+import no.difi.vefa.utils.MessageUtils;
 import no.difi.vefa.validation.Validate;
 
 import java.io.File;
@@ -23,31 +24,26 @@ public class App {
             ));
             System.exit(0);
         }
-
         String file = args[0];
         Scanner scanner = new Scanner(new File(file));
         String xml = scanner.useDelimiter("\\Z").next();
-
         Validate validate = new Validate();
-
         if (args.length == 1) {
-            validate.autodetectVersionAndIdentifier = true;
-            validate.source = xml;
+            validate.setAutodetectVersionAndIdentifier(true);
+            validate.setSource(xml);
             validate.validate();
-            System.out.println(validate.messagesAsXML());
+            System.out.println(MessageUtils.messagesToXml(validate.getMessages()));
         }
-
         if (args.length == 3) {
             String version = args[1];
             String id = args[2];
 
-            validate.source = xml;
-            validate.version = version;
-            validate.id = id;
+            validate.setSource(xml);
+            validate.setVersion(version);
+            validate.setId(id);
             validate.validate();
-            System.out.println(validate.messagesAsXML());
+            System.out.println(MessageUtils.messagesToXml(validate.getMessages()));
         }
-
         scanner.close();
     }
 }

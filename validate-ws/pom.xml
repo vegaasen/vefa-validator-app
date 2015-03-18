@@ -131,6 +131,30 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-classloading-xstream</artifactId>
+            <version>${test.powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${test.powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${test.powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4-rule</artifactId>
+            <version>${test.powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -186,10 +210,7 @@
         <server.jackson-json.version>1.9.13</server.jackson-json.version>
         <jersey.version>1.19</jersey.version>
         <spring.version>4.1.5.RELEASE</spring.version>
-        <util.guava.version>18.0</util.guava.version>
-        <test.junit.version>4.11</test.junit.version>
-        <test.mockito.version>1.9.5</test.mockito.version>
-        <test.powermock.version>1.5.4</test.powermock.version>
+        <test.powermock.version>1.6.2</test.powermock.version>
         <manifest.spec-vendor>DIFI</manifest.spec-vendor>
     </properties>
 

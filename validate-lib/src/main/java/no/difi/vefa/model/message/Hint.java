@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * This stuff is not in use. Why?
  */
 @XmlRootElement(name = "hint")
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class Hint {
 
     private String title;

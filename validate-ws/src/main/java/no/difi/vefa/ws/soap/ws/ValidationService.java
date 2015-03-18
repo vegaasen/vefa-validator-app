@@ -19,7 +19,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * Soap-services related to the validation service provided by DIFI.
+ * Soap-services related to the validation library provided by DIFI.
  * This was implemented in relation to cases where REST-based services is not an option.
  *
  * @author <a href="mailto:vegaasen@gmail.com">vegaasen</a>

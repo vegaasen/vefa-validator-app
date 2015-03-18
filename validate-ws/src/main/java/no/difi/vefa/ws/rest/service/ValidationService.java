@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path(RestAttributes.Route.VALIDATION)
 public class ValidationService extends AbstractService {
@@ -18,75 +19,67 @@ public class ValidationService extends AbstractService {
     @Path("/")
     @Produces({MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_XML})
-    public String validateVersionAndSchemaAuto(String xml) throws Exception {
+    public Response validateVersionAndSchemaAuto(String xml) throws Exception {
         Validate validate = new Validate();
-        validate.autodetectVersionAndIdentifier = true;
-        validate.source = xml;
+        validate.setAutodetectVersionAndIdentifier(true);
+        validate.setSource(xml);
         validate.validate();
-
-        return validate.messagesAsXML();
+        return Response.ok().entity(validate.getMessages()).build();
     }
 
     @POST
     @Path("/suppresswarnings")
     @Produces({MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_XML})
-    public String validateVersionAndSchemaAutoFilterWarnings(String xml) throws Exception {
+    public Response validateVersionAndSchemaAutoFilterWarnings(String xml) throws Exception {
         Validate validate = new Validate();
-        validate.autodetectVersionAndIdentifier = true;
-        validate.source = xml;
-        validate.suppressWarnings = true;
+        validate.setAutodetectVersionAndIdentifier(true);
+        validate.setSuppressWarnings(true);
         validate.validate();
-
-        return validate.messagesAsXML();
+        return Response.ok().entity(validate.getMessages()).build();
     }
 
     @POST
     @Path("/{version}/{schema}")
     @Produces({MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_XML})
-    public String validateSchema(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
+    public Response validateSchema(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
         Validate validate = new Validate();
-        validate.version = version;
-        validate.id = schema;
-        validate.source = xml;
+        validate.setVersion(version);
+        validate.setId(schema);
+        validate.setSource(xml);
         validate.validate();
-
-        return validate.messagesAsXML();
+        return Response.ok().entity(validate.getMessages()).build();
     }
 
     @POST
     @Path("/{version}/{schema}/suppresswarnings")
     @Produces({MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_XML})
-    public String validateSchemaFilterWarnings(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
+    public Response validateSchemaFilterWarnings(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
         Validate validate = new Validate();
-        validate.version = version;
-        validate.id = schema;
-        validate.source = xml;
-        validate.suppressWarnings = true;
+        validate.setVersion(version);
+        validate.setId(schema);
+        validate.setSource(xml);
+        validate.setSuppressWarnings(true);
         validate.validate();
-
-        return validate.messagesAsXML();
+        return Response.ok().entity(validate.getMessages()).build();
     }
 
     @POST
     @Path("/{version}/{schema}/render")
     @Produces({MediaType.TEXT_HTML})
     @Consumes({MediaType.APPLICATION_XML})
-    public String renderSchema(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
+    public Response renderSchema(@PathParam("version") String version, @PathParam("schema") String schema, String xml) throws Exception {
         Validate validate = new Validate();
-        validate.version = version;
-        validate.id = schema;
-        validate.source = xml;
+        validate.setVersion(version);
+        validate.setId(schema);
+        validate.setSource(xml);
         validate.render();
-
-        if (validate.renderResult != null) {
-            return validate.renderResult;
+        if (validate.getRenderResult() != null) {
+            return Response.ok().entity(validate.getRenderResult()).build();
         } else {
-            return validate.messagesAsXML();
+            return Response.ok().entity(validate.getMessages()).build();
         }
-
-
     }
 }
