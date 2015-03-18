@@ -48,7 +48,7 @@ public class SchemaInformation {
             return null;
         }
         final String version = getVersion(identifier, messages);
-        return Schema.create(identifier, version, Strings.isNullOrEmpty(version) || !Strings.isNullOrEmpty(identifier));
+        return Schema.create(identifier, version, !Strings.isNullOrEmpty(version) && !Strings.isNullOrEmpty(identifier));
     }
 
     /**
