@@ -53,3 +53,21 @@ Here, you have the following bits and pieces:
     validate-ws-1.0.0.jar
     # PORT (optional, the default port is 7007)
     7003
+
+# Accessing the services
+
+## Web interface
+
+Navigate to [http://localhost:port/](http://localhost:port/)
+
+## REST services
+
+For a full list, please see the package related to the rest-services.
+
+Navigate to [http://localhost:port/rest/](http://localhost:port/rest/)
+
+## SOAP services
+
+For a full list, please see the package related to the SOAP-services.
+
+Navigate to [http://localhost:port/services/](http://localhost:port/services/)
