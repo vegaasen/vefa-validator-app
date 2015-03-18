@@ -8,10 +8,12 @@ public class HintTest {
 
     @Test
     public void constructor_normalProcedure() {
+        String expectedDescription = "This is my description";
+        String expectedTitle = "This is my title";
         Hint hint = new Hint();
-        hint.setTitle("This is my title");
-        hint.setDescription("This is my description");
-        assertEquals("This is my title", hint.getTitle());
-        assertEquals("This is my description", hint.getDescription());
+        hint.setTitle(expectedTitle);
+        hint.setDescription(expectedDescription);
+        assertEquals(expectedTitle, hint.getTitle());
+        assertEquals(expectedDescription, hint.getDescription());
     }
 }

@@ -1,7 +1,6 @@
 package no.difi.vefa.ws.rest.model;
 
 import no.difi.vefa.utils.PropertiesUtils;
-import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,11 +28,11 @@ public class ListIdentifier {
         Set<String[][]> table = new LinkedHashSet<>();
 
         // Add schema to table from Standard configuration file
-        Document standardConfig = ConfigurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+        Document standardConfig = XmlUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
         this.addIdentifierToList(standardConfig, table);
 
         // Add schema to table from Custom configuration file
-        Document customConfig = ConfigurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
+        Document customConfig = XmlUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
         this.addIdentifierToList(customConfig, table);
 
         String v = "<schemas version=\"" + this.version + "\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";

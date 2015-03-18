@@ -1,5 +1,6 @@
 package no.difi.vefa.ws;
 
+import no.difi.vefa.common.DifiConstants;
 import no.difi.vefa.ws.rest.model.ListIdentifier;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,10 @@ public class ListIdentifierTest {
 
     @Before
     public void setUp() throws Exception {
-        String path = new java.io.File("src/test/resources/validator.properties").getCanonicalPath();
+        System.setProperty(
+                DifiConstants.Properties.PROPERTY_DATA_DIR,
+                ClassLoader.getSystemResource("validator.properties").getPath()
+        );
 
         listIdentifier = new ListIdentifier();
         listIdentifier.version = "1.4";
@@ -29,7 +33,6 @@ public class ListIdentifierTest {
                 "\t\t</name>" +
                 "</schema>" +
                 "</schemas>";
-
         assertEquals(result, listIdentifier.getIdentifier());
     }
 

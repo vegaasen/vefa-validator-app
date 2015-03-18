@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigurationCache {
+public final class ConfigurationCache {
 
     private static final Map<String, Document> CACHE = new HashMap<>();
 

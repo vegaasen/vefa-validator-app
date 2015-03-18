@@ -7,15 +7,10 @@ import no.difi.vefa.model.message.Messages;
 import no.difi.vefa.model.message.ValidationType;
 import no.difi.vefa.model.schema.Schema;
 import no.difi.vefa.utils.PropertiesUtils;
-import no.difi.vefa.utils.configuration.ConfigurationUtils;
-import no.difi.vefa.utils.logging.StatLogger;
-import no.difi.vefa.utils.xml.FilterMessage;
+import no.difi.vefa.utils.logging.LogStatistics;
 import no.difi.vefa.utils.xml.SchemaInformation;
-import no.difi.vefa.utils.xml.SchematronTransformation;
-import no.difi.vefa.utils.xml.WellFormatted;
-import no.difi.vefa.utils.xml.XSDValidation;
 import no.difi.vefa.utils.xml.XmlUtils;
-import no.difi.vefa.utils.xml.XmlXslTransformation;
+import no.difi.vefa.utils.xml.XslUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -196,7 +191,7 @@ public class Validate {
      * @return Boolean
      */
     private Boolean isXMLWellFormed() {
-        return WellFormatted.isValidXml(source, messages);
+        return XmlUtils.isWellFormatted(source, messages);
     }
 
     /**
@@ -226,7 +221,7 @@ public class Validate {
      */
     private NodeList getConfigurationValidation(String config) throws Exception {
         return XmlUtils.xmlDOMXPathQuery(
-                ConfigurationUtils.fileToDocument(config),
+                XmlUtils.fileToDocument(config),
                 "/config/validate[@id='" + this.id + "' and @version='" + this.version + "']");
     }
 
@@ -269,7 +264,7 @@ public class Validate {
                 String id = step.getAttributes().getNamedItem("id").getNodeValue();
                 String file = step.getAttributes().getNamedItem("file").getNodeValue();
                 if (id.equals("XSL")) {
-                    final Document transformationResult = XmlXslTransformation.transform(
+                    final Document transformationResult = XslUtils.transform(
                             xmlDoc,
                             PropertiesUtils.INSTANCE.getDataDir() + file,
                             getMessages());
@@ -310,14 +305,14 @@ public class Validate {
         switch (id) {
             case "XSD":
                 // Perform XSD validation
-                XSDValidation.validate(xmlDoc, PropertiesUtils.INSTANCE.getDataDir() + file, getMessages());
+                XmlUtils.validateXmlByXsd(xmlDoc, PropertiesUtils.INSTANCE.getDataDir() + file, getMessages());
                 break;
             case "XSL":
                 // Perform XSL transformation
-                SchematronTransformation.validate(xmlDoc, PropertiesUtils.INSTANCE.getDataDir() + file, getMessages());
+                XslUtils.validate(xmlDoc, PropertiesUtils.INSTANCE.getDataDir() + file, getMessages());
                 break;
             case "FILTER":
-                FilterMessage.validate(xmlDoc, PropertiesUtils.INSTANCE.getDataDir() + file, getMessages(), step.getAttributes().getNamedItem("rule").getNodeValue());
+                XslUtils.filterMessages(xmlDoc, PropertiesUtils.INSTANCE.getDataDir() + file, getMessages(), step.getAttributes().getNamedItem("rule").getNodeValue());
                 break;
         }
     }
@@ -338,7 +333,7 @@ public class Validate {
      */
     private void logStat() {
         if (PropertiesUtils.INSTANCE.isLogStatistics()) {
-            StatLogger.logStats(this.id, this.version, this.valid, this.messages);
+            LogStatistics.log(this.id, this.version, this.valid, this.messages);
         }
     }
 

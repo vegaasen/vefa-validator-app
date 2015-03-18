@@ -2,6 +2,7 @@ package no.difi.vefa.validation;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import no.difi.vefa.common.DifiConstants;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class KdaValidateTest {
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("no.difi.vefa.validation.configuration.datadir",
+        System.setProperty(DifiConstants.Properties.PROPERTY_DATA_DIR,
                 ClassLoader.getSystemResource("validator.properties").getPath());
         validate = new Validate();
     }

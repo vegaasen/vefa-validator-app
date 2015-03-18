@@ -1,20 +1,26 @@
 package no.difi.vefa.utils;
 
+import no.difi.vefa.common.DifiConstants;
+
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public enum PropertiesUtils {
 
     INSTANCE;
 
-    public static final String PROPERTY_DATA_DIR = "no.difi.vefa.validation.configuration.datadir";
-
     private static final String DATA_DIR = "DATA_DIR";
     private static final String SUPPRESS_WARNINGS = "SUPPRESS_WARNINGS";
     private static final String LOG_STATISTICS = "LOG_STATISTICS";
 
     private Properties properties = new Properties();
+
+    static {
+        System.setProperty(DifiConstants.Properties.LOGGING, INSTANCE.getDataDir() + "/LOG");
+    }
 
     public String getProperty(final String key) {
         return getProperties().getProperty(key);
@@ -40,12 +46,15 @@ public enum PropertiesUtils {
     }
 
     private void loadProperties() {
-        String vefaValidatorDir = System.getProperty(PROPERTY_DATA_DIR);
-        vefaValidatorDir = vefaValidatorDir.contains("properties") ? vefaValidatorDir : vefaValidatorDir + "/validator.properties";
+        String vefaVaidatorPropertiesFile = System.getProperty(DifiConstants.Properties.PROPERTY_DATA_DIR);
         try {
-            properties.load(new FileInputStream(vefaValidatorDir));
-        } catch (IOException e) {
-            throw new RuntimeException(String.format("Missing required system property {%s}", PROPERTY_DATA_DIR));
+            if (Files.exists(Paths.get(vefaVaidatorPropertiesFile))) {
+                properties.load(new FileInputStream(vefaVaidatorPropertiesFile));
+            } else {
+                throw new RuntimeException(String.format("VEFAValidator file candidate {%s} not found. Verify the path", vefaVaidatorPropertiesFile));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Missing required system property {%s}", DifiConstants.Properties.PROPERTY_DATA_DIR));
         }
     }
 }

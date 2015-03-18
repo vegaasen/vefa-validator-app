@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<config>
 
     <validate
             id="urn:www.cenbii.eu:profile:bii04:ver1.0#urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0#urn:www.difi.no:ehf:faktura:ver1"
@@ -8,7 +9,7 @@
             <en>EHF invoice in Norway, profile invoice only</en>
             <no>EHF faktura i Norge, profil kun faktura</no>
         </name>
-        <xi:include href="UBL-T10-BiiCore.xml"/>
+        <step id="XSL" file="UBL-T10-BiiCore.xsl"/>
     </validate>
 
 </config>

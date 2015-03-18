@@ -11,28 +11,26 @@
 
     <div class="row submenues">
         <!-- the submenus in the nav element are moved to this element with Javascript for none mobil screens. -->
-    </div>
-    <!-- /.row submenues -->
+    </div><!-- /.row submenues -->
 
     <div class="row">
         <div class="ninecol">
-            <p>This tool allows you to validate an XML sample against different sets of business rules. </p>
+            <p>This tool allows you to validate an XML sample against different sets of business rules. The validator uses validation artifacts based on profileId and customizationId in the document.</p>
 
             <form id="xmlSourceForm" action="#">
 
-                <label for="xsltSelect">Validation artifact:</label>
-                <select id="xsltSelect"></select>
+                <input type="hidden" name="xsltSelect" value="AUTODETECT" id="xsltSelect" />
 
-                <label for="xmlTextSource">Paste XML data:</label>
+                <!-- <label for="xsltSelect">Validation artifact:</label>
+                <select id="xsltSelect"></select> -->
 
-                <p>
-                    <small>Copy and paste the XML into the text input box.</small>
-                </p>
+                <label for="xmlTextSource">XML data:</label>
                 <textarea id="xmlTextSource" rows="10" cols="100" style="width: 100%;"></textarea>
+                <p><small>Copy and paste the XML into the textarea before validating.</small></p>
             </form>
 
             <button id="readFileButton">Validate XML</button>
-            <button id="renderFileButton">Render XML as HTML</button>
+            <!-- <button id="renderFileButton">Render XML as HTML</button> -->
 
         </div>
         <div class="threecol last">
@@ -41,35 +39,26 @@
                 <div class="mod-wrap">
                     <div class="mod-hd">
                         <h1>See also</h1>
-                    </div>
-                    <!-- /.mod-hd -->
+                    </div><!-- /.mod-hd -->
                     <div class="mod-bd">
                         <h2 class="first">Links</h2>
-
                         <p><a href="http://anskaffelser.no/e-handel/faktura">Electronic invoice</a></p>
-
-                        <p><a href="http://anskaffelser.no/e-handel/faktura/teknisk-informasjon">Technical
-                            information</a></p>
+                        <p><a href="http://anskaffelser.no/e-handel/faktura/teknisk-informasjon">Technical information</a></p>
 
                         <h2>Files</h2>
-
-                        <p><a href="documentation/Documentation.rtf">Documentation</a></p>
+                        <p><a href="documentation/Documentation.rtf">Validator documentation</a></p>
+                        <p><a href="https://github.com/difi/vefa-validator-conf">Guides and validation rules (EHF)</a></p>
+                        <p><a href="https://github.com/difi/vefa-ehf-xslt">XSLTs for presentation (EHF)</a></p>
 
                         <h2>Services</h2>
-
                         <p><a href="/validate-ws">Web service</a></p>
-
                         <p><a href="/validate-ws/application.wadl">Web service WADL</a></p>
-                    </div>
-                    <!-- /.mod-bd -->
-                </div>
-                <!-- /.mod-wrap -->
+                    </div><!-- /.mod-bd -->
+                </div><!-- /.mod-wrap -->
             </section>
 
-        </div>
-        <!-- /.ninecol -->
-    </div>
-    <!-- /.row -->
+        </div><!-- /.ninecol -->
+    </div><!-- /.row -->
 
     <div class="row">
 
@@ -81,84 +70,87 @@
 
     </div>
 
-</div>
-<!-- /.container main -->
+</div><!-- /.container main -->
 
 <jsp:include page="includes/footer.jsp"/>
 
 <jsp:include page="includes/js.jsp"/>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        var wsUrl = '/validate-ws';
+    $(document).ready(function(){
+        var wsUrl = '/rest/validation/';
 
-        // Get available versions
-        $.ajax({
-            url: wsUrl,
-            dataType: 'xml',
-            success: getVersions,
-            async: false
-        });
+        /*
+         // Get available versions
+         $.ajax({
+         url: wsUrl,
+         dataType: 'xml',
+         success: getVersions,
+         async: false
+         });
 
-        function getVersions(xml) {
-            // Get versions and add to array
-            var versions = [];
+         function getVersions(xml){
+         // Get versions and add to array
+         var versions = [];
 
-            $(xml).find('version').each(function () {
-                var version = $(this).text();
+         $(xml).find('version').each(function(){
+         var version = $(this).text();
 
-                versions.push({
-                    version: version
-                });
-            });
+         versions.push({
+         version: version
+         });
+         });
 
-            // Sort array descending to get highest versions first, eg. 1.5, 1.4 etc
-            //versions.sort();
-            versions.reverse();
+         // Sort array descending to get highest versions first, eg. 1.5, 1.4 etc
+         //versions.sort();
+         versions.reverse();
 
-            $('#xsltSelect').append($("<option>(Autodetect EHF version)</option>").attr("value", 'AUTODETECT'));
+         $('#xsltSelect').append($("<option>(Autodetect EHF version)</option>").attr("value",'AUTODETECT'));
 
-            // For each version get available schemas
-            $.each(versions, function (i, val) {
-                var version = versions[i].version;
+         // For each version get available schemas
+         $.each(versions, function(i, val) {
+         var version = versions[i].version;
 
-                // Get available schemas for version
-                $.ajax({
-                    url: wsUrl + '/' + version,
-                    dataType: 'xml',
-                    success: getSchemas,
-                    async: false
-                });
+         // Get available schemas for version
+         $.ajax({
+         url: wsUrl + '/' + version,
+         dataType: 'xml',
+         success: getSchemas,
+         async: false
+         });
 
-                function getSchemas(xml) {
-                    $(xml).find('schema').each(function () {
-                        var id = $(this).attr('id');
-                        var href = $(this).attr('xlink:href');
-                        var render = $(this).attr('render') == null ? "false" : $(this).attr('render');
+         function getSchemas(xml){
+         $(xml).find('schema').each(function(){
+         var id = $(this).attr('id');
+         var href = $(this).attr('xlink:href');
+         var render = $(this).attr('render') == null? "false" : $(this).attr('render');
 
-                        var name = '';
-                        $(this).find('name').each(function () {
-                            name = $(this).find('en').text();
-                        });
+         var name = '';
+         $(this).find('name').each(function(){
+         name = $(this).find('en').text();
+         });
 
-                        var label = version + ' - ';
-                        if (render == 'true')
-                            label += '* ';
-                        label += name;
+         var label = version + ' - ';
+         if (render == 'true')
+         label += '* ';
+         label += name;
 
-                        $('#xsltSelect').append($("<option></option>").attr("value", version + '/' + id).attr("render", render).text(label));
-                    });
-                };
-            });
-            $('#xsltSelect').change(function () {
-                ($("#xsltSelect option:selected").attr("render") == "true") ? $("#renderFileButton").show() : $("#renderFileButton").hide();
-            });
-            $('#xsltSelect').change();
-        }
+         $('#xsltSelect').append($("<option></option>").attr("value",version + '/' + id).attr("render", render).text(label));
+         });
+         };
+         });
+         $('#xsltSelect').change(function() {
+         ($("#xsltSelect option:selected").attr("render") == "true")?$("#renderFileButton").show() : $("#renderFileButton").hide();
+         });
+         $('#xsltSelect').change();
+         }
+         */
 
         // Send XML to ws and prosess result
-        $("#readFileButton,#renderFileButton").click(function () {
+        $("#readFileButton,#renderFileButton").click(function() {
             var r = '';
+
+            $('#xmlTextSource').val($('#xmlTextSource').val().trim());
 
             if ($('#xmlTextSource').val() == '') {
                 r = '<div style="height: 20px;"></div>';
@@ -177,11 +169,11 @@
             $('#transformResult').html(r);
 
             // Get result
-            var url = wsUrl + '/' + escape($('#xsltSelect :selected').val());
-
-            if (url == '/validate-ws/AUTODETECT') {
-                url = wsUrl + '/';
-            }
+            // var url = wsUrl + '/' + escape($('#xsltSelect :selected').val());
+            var url = '/rest/validation/';
+            /* if (url=='/validate-ws/AUTODETECT') {
+             url = wsUrl + '/';
+             } */
 
             // Render button clicked...
             if ($(this).attr("id") == "renderFileButton")
@@ -198,19 +190,19 @@
             });
         });
 
-        function getResult(xml) {
+        function getResult(xml){
             var rOuter = '<div style="height: 20px"></div>';
 
 
-            if ($('#xsltSelect :selected').val() == 'AUTODETECT') {
-                rOuter += '<h2>' + $("#xsltSelect option[value$='" + $(xml).find('messages').attr('id') + "']").text() + '</h2>';
-            } else {
-                rOuter += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
-            }
+            // if ($('#xsltSelect :selected').val()=='AUTODETECT') {
+            rOuter += '<h2>' + $("#xsltSelect option[value$='" + $(xml).find('messages').attr('id') + "']").text() + '</h2>';
+            /*} else {
+             rOuter += '<h2>' + $('#xsltSelect :selected').text() + '</h2>';
+             }*/
 
             var rInner = '';
 
-            $(xml).find('message').each(function () {
+            $(xml).find('message').each(function(){
                 var schema = $(this).attr('schema');
                 var validationType = $(this).attr('validationType');
                 var version = $(this).attr('version');

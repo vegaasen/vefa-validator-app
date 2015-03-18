@@ -5,19 +5,40 @@
     <groupId>no.difi.vefa</groupId>
     <artifactId>validering</artifactId>
     <version>1.0.0</version>
-    <packaging>pom</packaging>
 
     <name>validering</name>
+
+    <packaging>pom</packaging>
 
     <modules>
         <module>validate-lib</module>
         <module>validate-cli</module>
-        <module>validate-ws</module>
         <module>validate-web</module>
+        <module>validate-ws</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+            </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>Saxon-HE</artifactId>
@@ -52,7 +73,7 @@
     </build>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <logging.version>1.7.10</logging.version>
         <jdk.version>1.8</jdk.version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

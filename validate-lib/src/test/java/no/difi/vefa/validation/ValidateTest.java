@@ -2,6 +2,7 @@ package no.difi.vefa.validation;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import no.difi.vefa.common.DifiConstants;
 import no.difi.vefa.model.message.MessageType;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -17,7 +18,9 @@ public class ValidateTest {
 
     @BeforeClass
     public static void initialize() {
-        System.setProperty("no.difi.vefa.validation.configuration.datadir", ClassLoader.getSystemResource("validator.properties").getPath());
+        System.setProperty(
+                DifiConstants.Properties.PROPERTY_DATA_DIR,
+                ClassLoader.getSystemResource("validator.properties").getPath());
     }
 
     @Before

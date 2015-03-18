@@ -12,7 +12,7 @@ import java.io.InputStream;
 /**
  * @author <a href="vegaasen@gmail.com">vegardaasen</a>
  */
-public class XsltURIResolver implements URIResolver {
+public final class XsltURIResolver implements URIResolver {
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {

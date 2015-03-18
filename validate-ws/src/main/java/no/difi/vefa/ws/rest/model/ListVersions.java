@@ -1,7 +1,6 @@
 package no.difi.vefa.ws.rest.model;
 
 import no.difi.vefa.utils.PropertiesUtils;
-import no.difi.vefa.utils.configuration.ConfigurationUtils;
 import no.difi.vefa.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -26,9 +25,9 @@ public class ListVersions {
      */
     public String getVersions() throws Exception {
         Set<String> set = new HashSet<>();
-        Document standardConfig = ConfigurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
+        Document standardConfig = XmlUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/STANDARD/config.xml");
         addVersionToList(standardConfig, set);
-        Document customConfig = ConfigurationUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
+        Document customConfig = XmlUtils.fileToDocument(PropertiesUtils.INSTANCE.getDataDir() + "/CUSTOM/config.xml");
         addVersionToList(customConfig, set);
         List<String> uniqueList = new ArrayList<>(set);
         Collections.sort(uniqueList);

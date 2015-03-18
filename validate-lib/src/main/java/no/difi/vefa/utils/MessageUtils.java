@@ -18,7 +18,7 @@ public class MessageUtils {
     }
 
     public static Message translate(final Exception e) {
-        return translate(e, ValidationType.XSL);
+        return translate(e, ValidationType.UNKNOWN);
     }
 
     public static Message translate(final Exception e, final ValidationType validationType) {

@@ -18,7 +18,7 @@ public class VersionService extends AbstractService {
     @Produces({MediaType.APPLICATION_XML})
     public String listAllVersions() throws Exception {
         ListVersions listVersions = new ListVersions();
-        listVersions.baseUri = uri.getBaseUri().toString();
+        listVersions.baseUri = uri.getAbsolutePath().toString();
         return listVersions.getVersions();
     }
 
@@ -30,8 +30,7 @@ public class VersionService extends AbstractService {
     ) throws Exception {
         ListIdentifier listSchemas = new ListIdentifier();
         listSchemas.version = version;
-        listSchemas.baseUri = uri.getBaseUri().toString();
-
+        listSchemas.baseUri = uri.getAbsolutePath().toString();
         return listSchemas.getIdentifier();
     }
 
