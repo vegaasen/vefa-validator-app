@@ -11,10 +11,17 @@ public final class RestAttributes {
         public static final String
                 VALIDATION = "validation",
                 VERSION = "version";
+        public static final String
+                KILL_BASE = "kill",
+                KILL = Parameter.ME + "/{" + Parameter.PASSCODE + "}",
+                KILL_WORD = Parameter.PASSCODE + "/{" + Parameter.SHOW + "}";
     }
 
     public static final class Parameter {
         public static final String VERSION = "version";
+        public static final String SHOW = "show";
+        public static final String PASSCODE = "passcode";
+        public static final String ME = "me";
         public static final String VERSION_PARAM = L_MUSTACHE + VERSION + R_MUSTACHE;
 
     }

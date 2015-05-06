@@ -43,7 +43,7 @@ You will also need to add the java System parameter which should point to the va
 
 In order to run the jar-file which has been built using Maven, you can use the following command in any command prompt:
 
-    java -jar -Dno.difi.vefa.validation.configuration.datadir=/path/to/your/validator.properties validate-ws-1.0.0.jar 7003
+    java -jar -Dno.difi.vefa.validation.configuration.datadir=/path/to/your/validator.properties validate-ws-1.0.0.jar start 7003
 
 Here, you have the following bits and pieces:
 
@@ -51,6 +51,8 @@ Here, you have the following bits and pieces:
     -Dno.difi.vefa.validation.configuration.datadir=/path/to/your/validator.properties
     # FILE
     validate-ws-1.0.0.jar
+    # OPERATION (mandatory, either start or stop)
+    start
     # PORT (optional, the default port is 7007)
     7003
 

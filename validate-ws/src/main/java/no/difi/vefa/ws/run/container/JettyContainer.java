@@ -31,11 +31,12 @@ public enum JettyContainer {
 
     INSTANCE;
 
+    public static final String ENDPOINT_URI = "validationService", WEB_SERVICE_URI = "services", REST_SERVICE_URI = "rest";
+
     private static final Logger LOG = LoggerFactory.getLogger(JettyContainer.class);
     private static final String SLASH = "/";
     private static final String CONTEXT_PATH = SLASH;
     private static final String PATH_SPEC = "/*";
-    private static final String ENDPOINT_URI = "validationService", WEB_SERVICE_URI = "services", REST_SERVICE_URI = "rest";
     private static final String WS_PATH_SPEC = "/" + WEB_SERVICE_URI + "/*";
     private static final String REST_PATH_SPEC = "/" + REST_SERVICE_URI + "/*";
 
@@ -74,12 +75,15 @@ public enum JettyContainer {
                 return;
             }
             try {
+                Thread.sleep(1000);
                 while (!webServer.isStopped()) {
                     webServer.stop();
                 }
             } catch (Exception e) {
-                LOG.error("Unable to stop the running server.", e);
+                LOG.error("Unable to stop the running server", e);
             }
+            LOG.warn("Killing service regardless..");
+            Runtime.getRuntime().addShutdownHook(new Thread());
         }
     }
 
